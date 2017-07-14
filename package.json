@@ -2,7 +2,7 @@
   "name": "hera2",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://mbb70.github.io/hera2",
+  "homepage": "http://hera2.xyz",
   "dependencies": {
     "bootstrap": "^4.0.0-alpha.6",
     "classnames": "^2.2.5",
