@@ -6,6 +6,15 @@ import Tournament from './containers/Tournament'
 import Hutils from './utils/hutils'
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
+import _ from 'lodash';
+
+
+const mockLS = {};
+window.localStorage = {
+  getItem: (k) => mockLS[k],
+  setItem: (k, v) => mockLS[k] = v,
+};
+
 
 let store = createStore(reducer);
 it('renders without crashing', () => {
@@ -19,8 +28,15 @@ it('renders without crashing', () => {
 
 function initialState() {
   return {
-    players: new Map(),
-    pairs: [],
+    players: {},
+    matches: {},
+    settings: {
+      newTournament: true,
+      tournamentName: 'My Tournament',
+      winPoints: 3,
+      lossPoints: 0,
+      drawPoints: 1,
+    }
   };
 }
 
@@ -56,7 +72,7 @@ it('pairs players', () => {
   state.players = players;
 
   const store = mockStore(state);
-  store.dispatch(pairPlayers(players));
+  store.dispatch(pairPlayers(_.map(players, (p) => p.id)));
   let action = store.getActions()[0];
   state = reducer(state, action);
   expect(state.pairs.map(pr => pr.map(p => p.id))).toEqual([
@@ -67,7 +83,7 @@ it('pairs players', () => {
 it('dispatch play round', () => {
   const state = initialState();
   const store = mockStore(state);
-  store.dispatch(pairPlayers(state.players));
+  store.dispatch(pairPlayers(_.map(state.players, (p) => p.id)));
   reducer(initialState, store.getActions()[0]);
   let winners = [0, 1, 0, 1];
   store.dispatch(playRound(winners));
@@ -84,7 +100,7 @@ it('play round', () => {
   state.players = players;
 
   const store = mockStore(state);
-  store.dispatch(pairPlayers(players));
+  store.dispatch(pairPlayers(_.map(state.players, (p) => p.id)));
   state = reducer(state, store.getActions()[0]);
   let pairs = state.pairs;
   let winners = [0, 0, 1, 0];

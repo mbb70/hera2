@@ -2,6 +2,16 @@ import blossom from 'edmonds-blossom';
 import _ from 'lodash';
 
 
+function defaultSettings() {
+  return {
+    newTournament: true,
+    tournamentName: 'My Tournament',
+    winPoints: 3,
+    lossPoints: 0,
+    drawPoints: 1,
+  };
+}
+
 function generatePlayers() {
   const players = {};
   players[0] = {
@@ -89,4 +99,4 @@ function pairPlayers(playerIds, players, settings) {
   return [...pairs.entries()];
 }
 
-export default { generatePlayers, pairPlayers, getScore };
+export default { defaultSettings, generatePlayers, pairPlayers, getScore };

@@ -20,16 +20,8 @@ export const actions = {
 function newInitialState() {
   return {
     players: Hutils.generatePlayers(),
+    settings: Hutils.defaultSettings(),
     matches: {},
-    settings: {
-      newTournament: true,
-      tournamentName: 'My Tournament',
-      driveSync: false,
-      syncId: undefined,
-      winPoints: 3,
-      lossPoints: 0,
-      drawPoints: 1,
-    }
   }
 };
 

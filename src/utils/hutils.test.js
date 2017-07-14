@@ -1,17 +1,34 @@
 import Hutils from './hutils';
+import _ from 'lodash';
 
 it('pairs up', () => {
   const players = Hutils.generatePlayers();
-  const pairs = Hutils.pairPlayers(players);
-  const pairIds = pairs.map(pr => pr.map(p => p.ids));
+  const settings = Hutils.defaultSettings();
+  const pairIds = Hutils.pairPlayers(_.map(players, (p) => p.id), players, settings);
   expect(pairIds).toEqual([
-    [1, 0], [3, 2], [5, 4], [7, 6]
+    ['8', '1'], ['7', '2'], ['6', '3'], ['5', '4'],
+    ['4', '5'], ['3', '6'], ['2', '7'], ['1', '8']
   ]);
+});
+
+it('only selects pairs once', () => {
+  const players = Hutils.generatePlayers();
+  const playerIds = _.map(players, p => p.id);
+  const settings = Hutils.defaultSettings();
+  _.times(3, (i) => {
+    const pairIds = Hutils.pairPlayers(playerIds, players, settings);
+    _.each(pairIds, ([p1, p2]) => players[p1].playedIds[p2] = 1)
+    const newPairIds = Hutils.pairPlayers(playerIds, players, settings);
+    _.each(newPairIds, (newPr) => {
+      _.each(pairIds, (pr) => expect(newPr).not.toEqual(pr))
+    });
+  });
 });
 
 it('plays round', () => {
   const players = Hutils.generatePlayers();
-  const pairs = Hutils.pairPlayers(players);
+  const settings = Hutils.defaultSettings();
+  const pairIds = Hutils.pairPlayers(_.map(players, (p) => p.id), players, settings);
   const winners = [1, 0, 0, 1];
   const updatedPlayers = Hutils.playRound(pairs, winners);
   pairs.forEach((pair, i) => {
