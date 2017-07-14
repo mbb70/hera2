@@ -13,7 +13,7 @@ class ValidatedFormGroup extends Component {
       <FormGroup color={name}>
         { this.props.children }
         <Input className={"form-control form-control-`name`"}
-               type="text"
+               type={this.props.type || 'text'}
                value={this.props.value}
                onChange={this.handleKeyPress}
         />

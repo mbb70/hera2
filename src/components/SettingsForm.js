@@ -34,19 +34,20 @@ class SettingsForm extends Component {
     const invalid = !this.valid();
     const fields = [
       { field: 'tournamentName', label: 'Tournament Title', valid: ValidationUtils.notEmpty},
-      { field: 'winPoints',  label: 'Win Points',  valid: ValidationUtils.isNumber },
-      { field: 'lossPoints', label: 'Loss Points', valid: ValidationUtils.isNumber },
-      { field: 'drawPoints', label: 'Draw Points', valid: ValidationUtils.isNumber },
+      { field: 'winPoints',  label: 'Win Points',  valid: ValidationUtils.isNumber, type: 'number' },
+      { field: 'lossPoints', label: 'Loss Points', valid: ValidationUtils.isNumber, type: 'number' },
+      { field: 'drawPoints', label: 'Draw Points', valid: ValidationUtils.isNumber, type: 'number' },
     ]
     return (
       <BasicFormModal {...{invalid, entryPoint, header, submitText, resetForm, onFormSubmit}}>
-        {fields.map(({ field, label, valid }, i) => {
+        {fields.map(({ field, label, valid, type }, i) => {
           return (
             <ValidatedFormGroup
               key={i}
               field={field}
               value={this.state[field]}
               valid={valid}
+              type={type}
               onChange={this.handleKeyPress}
             >
               <Label>{label}</Label>
