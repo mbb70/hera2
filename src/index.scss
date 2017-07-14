@@ -1,0 +1,102 @@
+$orange: #DF691A;
+$off-white: #EBEBEB;
+$dark-blue: #2B3E50;
+$off-dark-blue: #4E5D6C;
+
+.jumbotron {
+  color: $dark-blue;
+  border-radius: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background-color: $dark-blue;
+  color: $off-white;
+}
+
+.container {
+  padding-bottom: 15px
+}
+
+.btn {
+  border-radius: 0;
+}
+
+nav {
+  background-color: $dark-blue;
+}
+
+.btn-link {
+  color: $orange;
+  &:hover {
+    color: $orange;
+    cursor: pointer;
+  }
+}
+
+button.close {
+  color: $off-white;
+}
+
+.form-control {
+  border-radius: 0;
+}
+
+.modal-body {
+  background-color: $off-dark-blue;
+  border: 0;
+}
+
+.modal-header, .modal-footer {
+  background-color: #485563;
+  border: 0;
+}
+
+$add-player-plus: url("data:image/svg+xml;charset=utf6,<svg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'><path stroke='grey' fill='grey' d='M10 0 h10 v10 h10 v10 h-10 v10 h-10 v-10 h-10 v-10 h10 z'/></svg>");
+
+.card {
+  border-radius: 3px;
+  box-shadow: 2px 2px 1px #888;
+  margin: 5px;
+  border: $off-white solid thin;
+  background-color: $off-dark-blue;
+  color: $orange !important;
+
+  .card-title {
+    margin-bottom: 0.2rem;
+  }
+
+  .card-playing {
+    color: $off-white;
+  }
+
+  &.add-player-card {
+    background-color: $off-dark-blue;
+    color: $orange;
+    .add-player-icon {
+      margin-right: 10px;
+      float: left;
+      width: 25px;
+      height: 25px;
+      background-image: $add-player-plus;
+    }
+  }
+}
+
+.button-row {
+  button {
+    width: 100%;
+    border: 0;
+    &.active {
+      box-shadow: inset 0 0 10px #000;
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  .hidden-xxs-down {
+    display: none !important;
+  }
+}
