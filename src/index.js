@@ -1,7 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-reboot.css';
 import 'bootstrap/dist/css/bootstrap-grid.css';
-import 'react-select/dist/react-select.css';
 import './index.css';
 
 import React from 'react';
