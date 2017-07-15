@@ -7,7 +7,6 @@ import { CardGroup, Container, Row, Col } from 'reactstrap';
 
 class PlayerCards extends Component {
   state = {
-    searchBar: '',
     sortBy: 'name',
   };
 
@@ -19,7 +18,7 @@ class PlayerCards extends Component {
     }).filter((p) => {
       const searchEmpty = this.props.searchText === '';
       const searchMatches = p.name.toUpperCase().includes(this.props.searchText.toUpperCase());
-      return (searchEmpty || searchMatches) && !p.bye && !p.deleted;
+      return (searchEmpty || searchMatches) && !p.bye && !p.deleted && !(p.dropped && this.props.uiState.hideDropped);
     });
     list = _.sortBy(list, this.state.sortBy);
     return (

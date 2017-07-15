@@ -10,11 +10,13 @@ const UPDATE_MATCH = 'hera/tournament/UPDATE_MATCH';
 const CLEAR_LOCAL_STORAGE = 'hera/tournament/CLEAR_LOCAL_STORAGE';
 const LOAD_STATE_FROM_STORAGE = 'hera/tournament/LOAD_STATE_FROM_STORAGE';
 const CREATE_TOURNAMENT = 'hera/tournament/CREATE_TOURNAMENT';
+const TOGGLE_DROPPED_FILTER = 'hera/tournament/TOGGLE_DROPPED_FILTER';
 
 export const actions = {
   ADD_PLAYERS, PAIR_PLAYERS, SAVE_SETTINGS,
   UPDATE_PLAYER, UPDATE_MATCH, CLEAR_LOCAL_STORAGE,
-  CREATE_TOURNAMENT, LOAD_STATE_FROM_STORAGE
+  CREATE_TOURNAMENT, LOAD_STATE_FROM_STORAGE,
+  TOGGLE_DROPPED_FILTER
 };
 
 function newInitialState() {
@@ -22,6 +24,9 @@ function newInitialState() {
     players: Hutils.generatePlayers(),
     settings: Hutils.defaultSettings(),
     matches: {},
+    uiState: {
+      hideDropped: false,
+    },
   }
 };
 
@@ -81,11 +86,18 @@ export default function reducer(state = initialState, action) {
       const pairs = Hutils.pairPlayers(action.players, state.players, state.settings);
       const matches = {...state.matches};
       const players = {};
+      _.each(state.players, (p) => {
+        if (p.playing !== undefined) {
+          const unfinishedMatchId = p.matchIds.pop();
+          delete matches[unfinishedMatchId];
+        }
+      });
       _.each(pairs, ([p1, p2]) => {
         const matchId = _.size(matches).toString();
         if (players[p1] !== undefined || players[p2] !== undefined) {
           return;
         }
+
         const p1Copy = { ...state.players[p1] };
         const p2Copy = { ...state.players[p2] };
         p1Copy.playing = p2;
@@ -160,6 +172,15 @@ export default function reducer(state = initialState, action) {
       });
       return saveState({ ...state, players, matches });
     }
+    case TOGGLE_DROPPED_FILTER: {
+      return saveState({
+        ...state,
+        uiState: {
+          ...state.uiState,
+          hideDropped: action.hideDropped
+        }
+      });
+    }
     default:
       return state;
   }
@@ -195,4 +216,8 @@ export function createTournament(tournament) {
 
 export function loadStateFromStorage(syncId) {
   return { type: LOAD_STATE_FROM_STORAGE, syncId };
+}
+
+export function toggleDroppedFilter(hideDropped) {
+  return { type: TOGGLE_DROPPED_FILTER, hideDropped };
 }

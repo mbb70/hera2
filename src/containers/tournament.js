@@ -12,6 +12,7 @@ const mapDispatchToProps = (dispatch) => ({
   updateMatch: (match) => dispatch(r.updateMatch(match)),
   clearLocalStorage: () => dispatch(r.clearLocalStorage()),
   createTournament: (tournament) => dispatch(r.createTournament(tournament)),
+  toggleDroppedFilter: (hideDropped) => dispatch(r.toggleDroppedFilter(hideDropped)),
 });
 
 const Tournament = connect(

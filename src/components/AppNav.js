@@ -21,7 +21,13 @@ class AppNav extends Component {
     this.props.onSetOpen(false);
   }
 
+  handleToggleDroppedFilter = () => {
+    this.props.toggleDroppedFilter(!this.props.uiState.hideDropped);
+    this.props.onSetOpen(false);
+  }
+
   render() {
+    const hasDroppedPlayers = _.some(this.props.players, (p) => p.dropped);
     return (
       <div className="p-3" style={{backgroundColor: 'white', height: '100%'}} >
         <Nav navbar>
@@ -38,6 +44,15 @@ class AppNav extends Component {
               />
             </NavLink>
           </NavItem>
+          {hasDroppedPlayers && (
+            <NavItem>
+              <NavLink tag="span">
+                <Button onClick={this.handleToggleDroppedFilter} color="link">
+                {this.props.uiState.hideDropped ? 'Show Dropped' : 'Hide Dropped'}
+                </Button>
+              </NavLink>
+            </NavItem>
+          )}
           <NavItem>
             <NavLink tag="span">
               <Button onClick={this.handleClearStorage} color="link">
