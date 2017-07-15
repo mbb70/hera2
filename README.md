@@ -10,13 +10,14 @@ However it does have some features that should be noted, which is a great lead-i
 * Saves data on device in localStorage
 * Drop players from the tournament with the option to readd them at any time
 * Can be "Added to Home Screen" on mobile to simulate app feel and function
+* Handle multiple tournaments at once
 
 
 I once read somewhere that if you aren't midly embarrassed to deploy something, you waited too long. With that in mind, another list:
 ### Future Features
-* Handle multiple tournaments simultaneously
 * Cloud Sync via Google Drive, Dropbox, and others
 * Export Tournament data as Excel sheet
+* Manual Mode (manually edit score, pairings, match outcomes, etc.)
 * Max Difference Pairing mode (pair players to maximize the average difference in scores)
 * Match Level View (as opposed to current Player level view)
 * Fancier filtering and sorting

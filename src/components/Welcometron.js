@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Input, Label, Jumbotron, Button } from 'reactstrap';
+import { Form, FormGroup, Input, Label, Jumbotron, Button, Container, Row, Col } from 'reactstrap';
 import _ from 'lodash';
 import ValidatedFormGroup from './ValidatedFormGroup';
 import ValidationUtils from '../utils/validationUtils';
@@ -66,31 +66,47 @@ class Welcometron extends Component {
     const tournaments = _.sortBy(_.toPairs(this.props.tournaments), ([k, v]) => v);
     return (
       <Jumbotron>
-        <h2>Welcome Hera2</h2>
-        <subtitle>A Simple Swiss Tournament Manager</subtitle>
-        <hr/>
-        {_.map(tournaments, ([id, name]) => {
-          return (
-            <Button key={id} onClick={() => this.props.switchTournament(id)}>{name}</Button>
-          );
-        })}
-        <Form onSubmit={this.handleGetStarted}>
-          <ValidatedFormGroup
-            field='name'
-            value={this.state.name}
-            valid={ValidationUtils.notEmpty}
-            onChange={this.handleKeyPress}
-          >
-            <Label>Tournament Name</Label>
-          </ValidatedFormGroup>
-          {false && <FormGroup check>
-            <Label check>
-              <Input type="checkbox" onChange={this.handleGoogleAuth} checked={this.state.driveSync}/>{' '}
-              Sync with Google Drive
-            </Label>
-          </FormGroup>}
-          <Button disabled={this.state.signingIn} type="submit">Get Started</Button>
-        </Form>
+        <Container>
+          <Row>
+            <Col md='9'>
+              <h2>Welcome to Hera2</h2>
+              <subtitle>A Simple Swiss Style Tournament Manager</subtitle>
+              <hr/>
+            </Col>
+          </Row>
+          <Row>
+            <Col md='6'>
+              {tournaments.length > 0 && (
+                <div className="pb-3">
+                  <Label className="d-block">Open an Existing Tournament</Label>
+                  {_.map(tournaments, ([id, name]) => {
+                    return (
+                      <Button className="mr-1" key={id} onClick={() => this.props.switchTournament(id)}>{name}</Button>
+                    );
+                  })}
+                  <Label className="mt-3 mb-0 d-block">OR</Label>
+                </div>
+              )}
+              <Form onSubmit={this.handleGetStarted}>
+                <ValidatedFormGroup
+                  field='name'
+                  value={this.state.name}
+                  valid={ValidationUtils.notEmpty}
+                  onChange={this.handleKeyPress}
+                >
+                  <Label>Start a New Tournament</Label>
+                </ValidatedFormGroup>
+                {false && <FormGroup check>
+                  <Label check>
+                    <Input type="checkbox" onChange={this.handleGoogleAuth} checked={this.state.driveSync}/>{' '}
+                    Sync with Google Drive
+                  </Label>
+                </FormGroup>}
+                <Button disabled={this.state.signingIn} type="submit">Get Started</Button>
+              </Form>
+            </Col>
+          </Row>
+        </Container>
       </Jumbotron>
     );
   }

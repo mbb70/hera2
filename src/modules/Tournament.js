@@ -34,12 +34,11 @@ function newInitialState() {
 };
 
 function getInitialState() {
-  return newInitialState();
-  //return JSON.parse(window.localStorage.getItem('state/state')) || newInitialState();
+  return JSON.parse(window.localStorage.getItem('state/state')) || newInitialState();
 }
 
 function saveState(state, firstTime) {
-  //window.localStorage.setItem('state/state', JSON.stringify(state));
+  window.localStorage.setItem('state/state', JSON.stringify(state));
   if (state.settings.driveSync) {
     DriveUtils.saveState(state, firstTime);
   }
