@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Form, FormGroup, Input, Label, Jumbotron, Button } from 'reactstrap';
+import _ from 'lodash';
 import ValidatedFormGroup from './ValidatedFormGroup';
 import ValidationUtils from '../utils/validationUtils';
 import DriveUtils from '../utils/driveUtils';
@@ -62,11 +63,17 @@ class Welcometron extends Component {
   }
 
   render() {
+    const tournaments = _.sortBy(_.toPairs(this.props.tournaments), ([k, v]) => v);
     return (
       <Jumbotron>
         <h2>Welcome Hera2</h2>
         <subtitle>A Simple Swiss Tournament Manager</subtitle>
         <hr/>
+        {_.map(tournaments, ([id, name]) => {
+          return (
+            <Button key={id} onClick={() => this.props.switchTournament(id)}>{name}</Button>
+          );
+        })}
         <Form onSubmit={this.handleGetStarted}>
           <ValidatedFormGroup
             field='name'

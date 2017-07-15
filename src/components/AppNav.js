@@ -6,8 +6,8 @@ import shuffle from 'lodash/shuffle';
 
 class AppNav extends Component {
   handlePairPlayers = () => {
-    const ids = shuffle(_.keys(this.props.players));
-    this.props.pairPlayers(ids);
+    const activePlayers = _.pickBy(this.props.players, p => !(p.deleted || p.dropped));
+    this.props.pairPlayers(shuffle(_.keys(activePlayers)));
     this.props.onSetOpen(false);
   }
 
@@ -16,8 +16,18 @@ class AppNav extends Component {
     this.props.onSetOpen(false);
   }
 
-  handleClearStorage = () => {
-    this.props.clearLocalStorage();
+  handleSwitchTournament = () => {
+    this.props.switchTournament();
+    this.props.onSetOpen(false);
+  }
+
+  handleNewTournament = () => {
+    this.props.newTournament();
+    this.props.onSetOpen(false);
+  }
+
+  handleDeleteTournament = () => {
+    this.props.deleteTournament(this.props.currentTournament);
     this.props.onSetOpen(false);
   }
 
@@ -55,8 +65,15 @@ class AppNav extends Component {
           )}
           <NavItem>
             <NavLink tag="span">
-              <Button onClick={this.handleClearStorage} color="link">
-                Reset Tournament
+              <Button onClick={this.handleSwitchTournament} color="link">
+                Switch Tournament
+              </Button>
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink tag="span">
+              <Button onClick={this.handleDeleteTournament} color="link">
+                Delete Tournament
               </Button>
             </NavLink>
           </NavItem>

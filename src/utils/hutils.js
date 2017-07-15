@@ -24,17 +24,6 @@ function generatePlayer(details) {
   }
 }
 
-function generatePlayers() {
-  return {
-    0: generatePlayer({
-      id: '0',
-      name: 'Bye',
-      bye: true,
-      draws: 5000,
-    })
-  };
-}
-
 function getScore(p, settings) {
   return settings.winPoints  * p.wins   -
          settings.lossPoints * p.losses +
@@ -52,11 +41,9 @@ function generatePlayerGraph(playerIds, players, settings) {
   const ids = _.keys(players);
   _.each(playerIds, (id) => {
     const player = players[id];
-    if (player.dropped) return;
     _.each(ids, (otherId) => {
       if (id !== otherId && player.playedIds[otherId] === undefined) {
         const otherPlayer = players[otherId];
-        if (otherPlayer.dropped) return;
         const weight = calculateWeight(player, otherPlayer, settings);
         graph.push([+id, +otherId, weight]);
       }
@@ -65,9 +52,10 @@ function generatePlayerGraph(playerIds, players, settings) {
   return graph;
 }
 
-function pairPlayers(playerIds, players, settings) {
+function pairPlayers(playerIds, players, settings, currentTournament) {
   const pairs = new Map();
-  const graph = generatePlayerGraph(playerIds, players, settings);
+  const filterdPlayers = _.pickBy(players, p => (p.tournamentId === currentTournament) && !(p.dropped || p.deleted));
+  const graph = generatePlayerGraph(playerIds, filterdPlayers, settings);
   const pairing = blossom(graph);
   _.each(pairing, (gopId, gid) => {
     if (players[gopId] !== undefined) {
@@ -77,4 +65,4 @@ function pairPlayers(playerIds, players, settings) {
   return [...pairs.entries()];
 }
 
-export default { defaultSettings, generatePlayer, generatePlayers, pairPlayers, getScore };
+export default { defaultSettings, generatePlayer, pairPlayers, getScore };

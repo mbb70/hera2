@@ -7,35 +7,39 @@ const PAIR_PLAYERS = 'hera/tournament/PAIR_PLAYERS';
 const SAVE_SETTINGS = 'hera/tournament/SAVE_SETTINGS';
 const UPDATE_PLAYER = 'hera/tournament/UPDATE_PLAYER';
 const UPDATE_MATCH = 'hera/tournament/UPDATE_MATCH';
-const CLEAR_LOCAL_STORAGE = 'hera/tournament/CLEAR_LOCAL_STORAGE';
-const LOAD_STATE_FROM_STORAGE = 'hera/tournament/LOAD_STATE_FROM_STORAGE';
 const CREATE_TOURNAMENT = 'hera/tournament/CREATE_TOURNAMENT';
+const NEW_TOURNAMENT = 'hera/tournament/NEW_TOURNAMENT';
+const SWITCH_TOURNAMENT = 'hera/tournament/SWITCH_TOURNAMENT';
+const DELETE_TOURNAMENT = 'hera/tournament/DELETE_TOURNAMENT';
 const TOGGLE_DROPPED_FILTER = 'hera/tournament/TOGGLE_DROPPED_FILTER';
 
 export const actions = {
   ADD_PLAYERS, PAIR_PLAYERS, SAVE_SETTINGS,
-  UPDATE_PLAYER, UPDATE_MATCH, CLEAR_LOCAL_STORAGE,
-  CREATE_TOURNAMENT, LOAD_STATE_FROM_STORAGE,
-  TOGGLE_DROPPED_FILTER
+  UPDATE_PLAYER, UPDATE_MATCH, CREATE_TOURNAMENT,
+  DELETE_TOURNAMENT, SWITCH_TOURNAMENT,
+  NEW_TOURNAMENT, TOGGLE_DROPPED_FILTER,
 };
 
 function newInitialState() {
   return {
-    players: Hutils.generatePlayers(),
-    settings: Hutils.defaultSettings(),
+    players: {},
+    tournaments: {},
+    settings: {},
     matches: {},
-    uiState: {
-      hideDropped: false,
-    },
+    uiState: {},
+    maxPlayerId: 0,
+    maxMatchId: 0,
+    maxTournamentId: 0,
   }
 };
 
 function getInitialState() {
-  return JSON.parse(window.localStorage.getItem('state/state')) || newInitialState();
+  return newInitialState();
+  //return JSON.parse(window.localStorage.getItem('state/state')) || newInitialState();
 }
 
 function saveState(state, firstTime) {
-  window.localStorage.setItem('state/state', JSON.stringify(state));
+  //window.localStorage.setItem('state/state', JSON.stringify(state));
   if (state.settings.driveSync) {
     DriveUtils.saveState(state, firstTime);
   }
@@ -46,49 +50,92 @@ const initialState = getInitialState();
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
+    case NEW_TOURNAMENT: {
+      return { ...state, currentTournament: undefined };
+    }
+    case SWITCH_TOURNAMENT: {
+      return { ...state, currentTournament: action.tournament };
+    }
+    case DELETE_TOURNAMENT: {
+      const tournaments = _.pickBy(state.tournaments, (t, id) => {
+        return id !== state.currentTournament;
+      });
+      const settings = _.pickBy(state.settings, (t, id) => {
+        return id !== state.currentTournament;
+      });
+      const players = _.pickBy(state.players, (p, id) => {
+        return p.tournamentId !== state.currentTournament;
+      });
+      const matches = _.pickBy(state.matches, (m, id) => {
+        return m.tournamentId !== state.currentTournament;
+      });
+      return { ...state, settings, tournaments, players, matches, currentTournament: undefined };
+    }
     case CREATE_TOURNAMENT: {
       const t = action.tournament;
-      const newState = {...state};
-      const newSettings = {...newState.settings};
-      newSettings.tournamentName = t.name;
-      newSettings.driveSync = t.driveSync;
-      newSettings.newTournament = false;
-      newSettings.syncId = t.syncId;
-      newState.settings = newSettings;
+      const players = { ...state.players };
+      const maxTournamentId = state.maxTournamentId + 1;
+      const maxPlayerId = state.maxPlayerId + 1;
+      const tournamentId = maxTournamentId.toString();
+      const id = maxPlayerId.toString();
+      players[id] = Hutils.generatePlayer({
+        draws: 5000,
+        name: 'Bye',
+        bye: true,
+        tournamentId,
+        id,
+      });
+      const tournaments = {...state.tournaments, [tournamentId]: t.name };
+      const settings = {...state.settings,
+        [tournamentId]: {
+          tournamentName: t.name,
+          driveSync: t.driveSync,
+          newTournament: false,
+          syncId: t.syncId,
+          winPoints: 3,
+          drawPoints: 1,
+          lossPoints: 0,
+        },
+      };
+      const newState = {...state,
+        players,
+        settings,
+        tournaments,
+        maxTournamentId,
+        maxPlayerId,
+        currentTournament: tournamentId,
+      };
       return saveState(newState, true);
-    }
-    case LOAD_STATE_FROM_STORAGE: {
-      const syncId = action.syncId;
-      return window.localStorage.getItem('state/' + syncId);
-    }
-    case CLEAR_LOCAL_STORAGE: {
-      window.localStorage.removeItem('state/state');
-      return saveState(newInitialState());
     }
     case ADD_PLAYERS: {
       const players = {...state.players};
+      let maxPlayerId = state.maxPlayerId;
       _.each(action.names, (name) => {
-        const id = _.size(players).toString();
-        players[id] = Hutils.generatePlayer({ name, id });
+        maxPlayerId += 1;
+        const id = maxPlayerId.toString();
+        const tournamentId = state.currentTournament;
+        players[id] = Hutils.generatePlayer({ name, id, tournamentId });
       });
-      return saveState({...state, players });
+      return saveState({...state, players, maxPlayerId });
     }
     case PAIR_PLAYERS: {
-      const pairs = Hutils.pairPlayers(action.players, state.players, state.settings);
+      const pairs = Hutils.pairPlayers(action.players, state.players, state.settings[state.currentTournament], state.currentTournament);
       const matches = {...state.matches};
+      let maxMatchId = state.maxMatchId;
       const players = {};
       _.each(state.players, (p) => {
-        if (p.playing !== undefined) {
+        if (p.tournamentId === state.currentTournament && p.playing !== undefined) {
           const unfinishedMatchId = p.matchIds.pop();
           delete matches[unfinishedMatchId];
         }
       });
       _.each(pairs, ([p1, p2]) => {
-        const matchId = _.size(matches).toString();
         if (players[p1] !== undefined || players[p2] !== undefined) {
           return;
         }
 
+        maxMatchId += 1;
+        const matchId = maxMatchId.toString();
         const p1Copy = { ...state.players[p1] };
         const p2Copy = { ...state.players[p2] };
         p1Copy.playing = p2;
@@ -98,6 +145,7 @@ export default function reducer(state = initialState, action) {
         p1Copy.matchIds.push(matchId);
         p2Copy.matchIds.push(matchId);
         matches[matchId] = {
+          tournamentId: state.currentTournament,
           p1: p1Copy.id,
           p2: p2Copy.id,
           round: 0,
@@ -113,19 +161,21 @@ export default function reducer(state = initialState, action) {
           players[pCopy.id] = pCopy;
         }
       });
-      return saveState({ ...state, players, matches });
+      return saveState({ ...state, players, matches, maxMatchId });
     }
     case SAVE_SETTINGS: {
-      return saveState({ ...state, settings: action.settings });
+      return saveState({ ...state,
+        settings: {...state.settings, [state.currentTournament]: action.settings },
+        tournaments: {...state.tournaments,
+          [state.currentTournament]: action.settings.tournamentName || state.tournaments[state.currentTournament]
+        },
+      });
     }
     case UPDATE_PLAYER: {
       const players = {};
       _.each(state.players, (p, id) => {
         if (id === action.player.id) {
-          const newPlayer = {...p, ...action.player };
-          if (!newPlayer.deleted || newPlayer.matchIds.length > 0) {
-            players[id] = newPlayer;
-          }
+          players[id] = {...p, ...action.player};
         } else {
           players[id] = p;
         }
@@ -168,7 +218,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         uiState: {
           ...state.uiState,
-          hideDropped: action.hideDropped
+          hideDropped: action.hideDropped,
         }
       });
     }
@@ -197,16 +247,20 @@ export function updateMatch(match) {
   return { type: UPDATE_MATCH, match };
 }
 
-export function clearLocalStorage() {
-  return { type: CLEAR_LOCAL_STORAGE };
+export function newTournament() {
+  return { type: NEW_TOURNAMENT };
 }
 
 export function createTournament(tournament) {
   return { type: CREATE_TOURNAMENT, tournament };
 }
 
-export function loadStateFromStorage(syncId) {
-  return { type: LOAD_STATE_FROM_STORAGE, syncId };
+export function switchTournament(tournament) {
+  return { type: SWITCH_TOURNAMENT, tournament };
+}
+
+export function deleteTournament(tournament) {
+  return { type: DELETE_TOURNAMENT, tournament };
 }
 
 export function toggleDroppedFilter(hideDropped) {

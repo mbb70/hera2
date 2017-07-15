@@ -20,8 +20,12 @@ class TournamentComponent extends Component {
   }
 
   render() {
-    if (this.props.settings.newTournament) {
-      return (<Welcometron getStarted={this.handleGetStarted}/>);
+    if (!this.props.settings) {
+      return (<Welcometron
+          tournaments={this.props.tournaments}
+          switchTournament={this.props.switchTournament}
+          getStarted={this.handleGetStarted}
+          />);
     } else {
       return (
         <ResponsiveSidebar {...this.props} searchText={this.state.searchText} onSearchChange={this.handleSearchChange}>
