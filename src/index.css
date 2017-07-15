@@ -59,6 +59,9 @@ button.close {
       height: 25px;
       background-image: url("data:image/svg+xml;charset=utf6,<svg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'><path stroke='grey' fill='grey' d='M10 0 h10 v10 h10 v10 h-10 v10 h-10 v-10 h-10 v-10 h10 z'/></svg>"); }
 
+.btn-neutral {
+  background-color: silver; }
+
 .button-row button {
   width: 100%;
   border: 0; }

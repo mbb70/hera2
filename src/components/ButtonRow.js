@@ -8,7 +8,7 @@ class ButtonRow extends Component {
 
   render() {
     return (
-      <Row className="no-gutters button-row">
+      <Row className="my-1 no-gutters button-row">
         {React.Children.map(this.props.children, (c, i) => {
           return (
             <Col>{React.cloneElement(c, {
