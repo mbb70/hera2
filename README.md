@@ -14,6 +14,7 @@ However it does have some features that should be noted, which is a great lead-i
 
 I once read somewhere that if you aren't midly embarrassed to deploy something, you waited too long. With that in mind, another list:
 ### Future Features
+* Handle multiple tournaments simultaneously
 * Cloud Sync via Google Drive, Dropbox, and others
 * Export Tournament data as Excel sheet
 * Max Difference Pairing mode (pair players to maximize the average difference in scores)
@@ -26,10 +27,10 @@ I once read somewhere that if you aren't midly embarrassed to deploy something, 
 
 ### Tech Stack
 This was my first foray into modern javascript development so it's far from best practices but oh well, add best practices to 'Future Features'
-* Create React App (so React/Webpack/Babel/Jest etc.)
-* Redux
-* Lodash
-* Bootstrap v4
+* [Create React App](https://github.com/facebookincubator/create-react-app) (so React/Webpack/Babel/Jest etc.)
+* [Redux](http://redux.js.org/)
+* [Lodash](https://lodash.com/)
+* [Bootstrap v4](https://v4-alpha.getbootstrap.com/)
 * [Reactstrap](https://github.com/reactstrap/reactstrap) (Bootstrap v4 components)
 * [EdmondsBlossom](https://github.com/mattkrick/EdmondsBlossom) for pairing algorithm
 * Sass styles loosly inspired by Superhero [Bootswitch](https://bootswatch.com) theme
