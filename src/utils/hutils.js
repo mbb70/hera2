@@ -12,49 +12,27 @@ function defaultSettings() {
   };
 }
 
-function generatePlayers() {
-  const players = {};
-  players[0] = {
-    name: 'Bye',
-    wins: 0,
+function generatePlayer(details) {
+  return {
     losses: 0,
-    draws: 5000,
-    id: '0',
-    bye: true,
+    wins: 0,
+    draws: 0,
     playedIds: {},
     matchIds: [],
     dropped: false,
+    ...details,
+  }
+}
+
+function generatePlayers() {
+  return {
+    0: generatePlayer({
+      id: '0',
+      name: 'Bye',
+      bye: true,
+      draws: 5000,
+    })
   };
-  _.each([
-  //'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
-   //'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
-   //'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
-   //'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
-   //'y', 'z', '0', '1', '2', '3', '4', '5',
-   //'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
-   //'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
-   //'y', 'z', '0', '1', '2', '3', '4', '5',
- 'Adrienne Morales',
- 'Joy Arnold',
- 'Sheri Mcbride',
- 'Leroy Little',
- 'Mercedes Bowman',
- 'Brendan Robertson',
- 'Chad Gross',
- 'Damon Hamilton'
-  ], (p, i) => {
-    players[i+1] = {
-      name: p,
-      wins: 0,
-      losses: 0,
-      draws: 0,
-      id: (i+1).toString(),
-      playedIds: {},
-      matchIds: [],
-      dropped: false,
-    };
-  });
-  return players;
 }
 
 function getScore(p, settings) {
@@ -99,4 +77,4 @@ function pairPlayers(playerIds, players, settings) {
   return [...pairs.entries()];
 }
 
-export default { defaultSettings, generatePlayers, pairPlayers, getScore };
+export default { defaultSettings, generatePlayer, generatePlayers, pairPlayers, getScore };

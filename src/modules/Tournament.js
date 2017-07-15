@@ -68,17 +68,8 @@ export default function reducer(state = initialState, action) {
     case ADD_PLAYERS: {
       const players = {...state.players};
       _.each(action.names, (name) => {
-        const id = _.size(players);
-        players[id] = {
-          name: name,
-          losses: 0,
-          wins: 0,
-          draws: 0,
-          id: id.toString(),
-          playedIds: {},
-          matchIds: [],
-          dropped: false,
-        }
+        const id = _.size(players).toString();
+        players[id] = Hutils.generatePlayer({ name, id });
       });
       return saveState({...state, players });
     }
