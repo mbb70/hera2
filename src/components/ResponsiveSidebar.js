@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Input, NavbarBrand, Navbar } from 'reactstrap';
 import Sidebar from 'react-sidebar';
 import AppNav from './AppNav';
+import TopNav from './TopNav';
 
 class ResponsiveSidebar extends Component {
   state = {
@@ -12,11 +12,6 @@ class ResponsiveSidebar extends Component {
     this.setState({ open: o });
   }
 
-  navbarStyle = {
-    flexDirection: 'row',
-    alignItems: 'center'
-  }
-
   sidebarStyles = {
     sidebar: { zIndex: 1040 },
     overlay: { zIndex: 1039 }
@@ -25,22 +20,8 @@ class ResponsiveSidebar extends Component {
   render() {
     return (
       <Sidebar
-        sidebar={<AppNav {...this.props} onSetOpen={this.handleOnSetOpen}/>} {...this.state} onSetOpen={this.handleOnSetOpen} styles={this.sidebarStyles}>
-        <Navbar full inverse sticky="top" light style={this.navbarStyle}>
-          <a onClick={() => this.setState({ open: !this.state.open })}>
-            <span className="navbar-toggler-icon"/>
-          </a>
-          <NavbarBrand className="px-2">{this.props.settings.tournamentName}</NavbarBrand>
-          <div className="col-lg-3">
-          <Input
-            size="xl"
-            type="text"
-            value={this.props.searchText}
-            onChange={this.props.onSearchChange}
-            placeholder="Search..."
-          />
-          </div>
-        </Navbar>
+        sidebar={<AppNav {...this.props} onSetOpen={this.handleOnSetOpen}/>} open={this.state.open} onSetOpen={this.handleOnSetOpen} styles={this.sidebarStyles}>
+        <TopNav {...this.props} onToggle={() => this.setState({ open: !this.state.open })} />
         {this.props.children}
       </Sidebar>
     );

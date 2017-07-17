@@ -54,7 +54,7 @@ class MatchDetails extends Component {
     return (
       <div>
         <div>
-          <p>{this.props.op.name} - {outcomeStr} ({recordStr})</p>
+          <p>{outcomeStr} - {this.props.op.name} ({recordStr})</p>
         </div>
         <Container>
           {this.props.match.games.map((outcome, gameId) => {

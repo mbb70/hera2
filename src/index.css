@@ -38,6 +38,25 @@ button.close {
   background-color: #485563;
   border: 0; }
 
+.arrow-icon {
+  margin-top: 4px;
+  margin-left: 10px;
+  float: right;
+  width: 25px;
+  height: 25px; }
+
+.next-arrow-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='grey' viewBox='0 0 8 8'%3E%3Cpath d='M1.5 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E"); }
+
+.prev-arrow-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='grey' viewBox='0 0 8 8'%3E%3Cpath d='M4 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E"); }
+
+.bold-nav-label {
+  color: grey;
+  font-weight: bold;
+  font-size: 1.4rem;
+  margin-bottom: 0; }
+
 .card {
   border-radius: 3px;
   box-shadow: 2px 2px 1px #888;

@@ -39,8 +39,12 @@ class AppNav extends Component {
   render() {
     const hasDroppedPlayers = _.some(this.props.players, (p) => p.dropped);
     return (
-      <div className="p-3" style={{backgroundColor: 'white', height: '100%'}} >
+      <div className="p-3" style={{color: 'black', backgroundColor: 'white', height: '100%'}} >
         <Nav navbar>
+          <div className="hidden-sm-up">
+            <h5>{this.props.settings.tournamentName}</h5>
+            <hr className="my-1" style={{width: '100%'}}/>
+          </div>
           <NavItem>
             <NavLink tag="span">
               <Button color="link" onClick={this.handlePairPlayers}>Pair Players</Button>
