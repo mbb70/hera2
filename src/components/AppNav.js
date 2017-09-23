@@ -1,53 +1,69 @@
-import React, { Component } from 'react';
-import _ from 'lodash';
+import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import SettingsForm from './SettingsForm';
+import PairingForm from '../containers/pairingForm';
+import FaqForm from './FaqForm';
 import { Button, NavLink, NavItem, Nav } from 'reactstrap';
-import shuffle from 'lodash/shuffle';
 
-class AppNav extends Component {
-  handlePairPlayers = () => {
-    const activePlayers = _.pickBy(this.props.players, p => !(p.deleted || p.dropped));
-    this.props.pairPlayers(shuffle(_.keys(activePlayers)));
-    this.props.onSetOpen(false);
+connect();
+
+class AppNavComponent extends PureComponent {
+  closeNav = (switchView) => {
+    this.props.toggleSidebar(false);
+  }
+
+  handlePairPlayers = (pairs) => {
+    this.props.pairPlayers(pairs);
+    this.props.switchView(false);
+    this.closeNav();
+  }
+
+  handleFinishRound = () => {
+    const round = this.props.rounds[this.props.rounds.length - 1];
+    this.props.finishRound(round.id);
+    this.props.switchView(true);
+    this.closeNav();
   }
 
   handleSaveSettings = (settings) => {
     this.props.saveSettings(settings);
-    this.props.onSetOpen(false);
+    this.closeNav();
   }
 
   handleSwitchTournament = () => {
     this.props.switchTournament();
-    this.props.onSetOpen(false);
-  }
-
-  handleNewTournament = () => {
-    this.props.newTournament();
-    this.props.onSetOpen(false);
+    this.closeNav();
   }
 
   handleDeleteTournament = () => {
     this.props.deleteTournament(this.props.currentTournament);
-    this.props.onSetOpen(false);
+    this.closeNav();
   }
 
   handleToggleDroppedFilter = () => {
     this.props.toggleDroppedFilter(!this.props.uiState.hideDropped);
-    this.props.onSetOpen(false);
+    this.closeNav();
   }
 
   render() {
-    const hasDroppedPlayers = _.some(this.props.players, (p) => p.dropped);
+    const hasDroppedPlayers = Object.values(this.props.players).some(p => p.dropped);
+    const unfinishedMatches = Object.values(this.props.matches).some(m => m.winner === undefined);
+    const activeRound = this.props.rounds.some(r => r.active);
     return (
-      <div className="p-3" style={{color: 'black', backgroundColor: 'white', height: '100%'}} >
+      <div className="p-3 app-nav">
         <Nav navbar>
-          <div className="hidden-sm-up">
+          <div className="app-nav-title">
             <h5>{this.props.settings.tournamentName}</h5>
-            <hr className="my-1" style={{width: '100%'}}/>
+            <hr className="my-1"/>
           </div>
           <NavItem>
             <NavLink tag="span">
-              <Button color="link" onClick={this.handlePairPlayers}>Pair Players</Button>
+              {(!unfinishedMatches && activeRound) && (
+                <Button color="link" onClick={this.handleFinishRound}>Finish Round</Button>
+              )}
+              {!activeRound && (
+                <PairingForm pairPlayers={this.handlePairPlayers} settings={this.props.settings} players={this.props.players}/>
+              )}
             </NavLink>
           </NavItem>
           <NavItem>
@@ -81,10 +97,15 @@ class AppNav extends Component {
               </Button>
             </NavLink>
           </NavItem>
+          <NavItem>
+            <NavLink tag="span">
+              <FaqForm onSubmit={this.closeNav}/>
+            </NavLink>
+          </NavItem>
         </Nav>
       </div>
     );
   }
 }
 
-export default AppNav;
+export default AppNavComponent;

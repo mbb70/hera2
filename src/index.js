@@ -7,14 +7,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import reducer from './modules/Tournament';
+import { createStore, combineReducers } from 'redux';
+import tournamentReducer from './modules/Tournament';
+import uiReducer from './modules/uiState';
 import Tournament from './containers/tournament';
 import serviceWorkerRegistration from './registerServiceWorker';
 
-const store = createStore(
-  reducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+const rootReducer = combineReducers({
+  tournamentReducer, uiReducer
+});
+
+const store = process.env.NODE_ENV === 'production' ? (
+  createStore(rootReducer)
+) : (
+  createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 );
 
 serviceWorkerRegistration();

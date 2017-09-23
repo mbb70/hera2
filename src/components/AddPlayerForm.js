@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Label, FormGroup, Input } from 'reactstrap';
 import BasicFormModal from './BasicFormModal';
 import PlayerCard from './PlayerCard';
 
-class AddPlayerForm extends Component {
+class AddPlayerForm extends PureComponent {
   state = {
     names: ['']
   }
@@ -33,7 +33,7 @@ class AddPlayerForm extends Component {
 
   render() {
     const entryPoint = (
-      <PlayerCard className="add-player-card" name={'Add Players'} addPlayerCard/>
+      <PlayerCard className="add-player-card" name="Add Players" addPlayerCard/>
     );
     const header = 'Add Players'
     const submitText='Add All';

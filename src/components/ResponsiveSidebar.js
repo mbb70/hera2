@@ -1,17 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Sidebar from 'react-sidebar';
-import AppNav from './AppNav';
-import TopNav from './TopNav';
+import AppNav from '../containers/appNav';
+import TopNav from '../containers/topNav';
 
-class ResponsiveSidebar extends Component {
-  state = {
-    open: false,
-  }
-
-  handleOnSetOpen = (o) => {
-    this.setState({ open: o });
-  }
-
+class ResponsiveSidebarComponent extends PureComponent {
   sidebarStyles = {
     sidebar: { zIndex: 1040 },
     overlay: { zIndex: 1039 }
@@ -20,12 +12,15 @@ class ResponsiveSidebar extends Component {
   render() {
     return (
       <Sidebar
-        sidebar={<AppNav {...this.props} onSetOpen={this.handleOnSetOpen}/>} open={this.state.open} onSetOpen={this.handleOnSetOpen} styles={this.sidebarStyles}>
-        <TopNav {...this.props} onToggle={() => this.setState({ open: !this.state.open })} />
+        sidebar={<AppNav/>}
+        open={this.props.open}
+        styles={this.sidebarStyles}
+        onSetOpen={this.props.toggleSidebar}>
+        <TopNav/>
         {this.props.children}
       </Sidebar>
     );
   }
 }
 
-export default ResponsiveSidebar;
+export default ResponsiveSidebarComponent;

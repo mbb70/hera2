@@ -1,22 +1,19 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import PlayerCards from './PlayerCards';
+import PlayerCards from '../containers/playerCards';
+import MatchCards from '../containers/matchCards';
 import Welcometron from './Welcometron';
 import ResponsiveSidebar from './ResponsiveSidebar';
 
 connect();
 
-class TournamentComponent extends Component {
-  state = {
-    searchText: '',
-  }
-
-  handleSearchChange = (e) => {
-    this.setState({searchText: e.target.value.trim()})
-  }
-
+class TournamentComponent extends PureComponent {
   handleGetStarted = (tournament) => {
     this.props.createTournament(tournament);
+  }
+
+  toggleSidebar = () => {
+    this.props.toggleSidebar(!this.props.uiState.sidebarOpen);
   }
 
   render() {
@@ -28,8 +25,15 @@ class TournamentComponent extends Component {
           />);
     } else {
       return (
-        <ResponsiveSidebar {...this.props} searchText={this.state.searchText} onSearchChange={this.handleSearchChange}>
-          <PlayerCards {...this.props} searchText={this.state.searchText}/>
+        <ResponsiveSidebar
+          open={this.props.uiState.sidebarOpen}
+          toggleSidebar={this.toggleSidebar}
+        >
+          {this.props.uiState.playerView ? (
+            <PlayerCards/>
+          ) : (
+            <MatchCards/>
+          )}
         </ResponsiveSidebar>
       );
     }

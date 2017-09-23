@@ -9,6 +9,7 @@ However it does have some features that should be noted, which is a great lead-i
 * Generate pairings such that players never play each other twice and that players with the same score (as defined by the weighting above) are most likely to play each other
 * Saves data on device in localStorage
 * Drop players from the tournament with the option to readd them at any time
+* Byes handled automatically as 2-0 win
 * Can be "Added to Home Screen" on mobile to simulate app feel and function
 * Handle multiple tournaments at once
 
@@ -19,9 +20,7 @@ I once read somewhere that if you aren't midly embarrassed to deploy something, 
 * Export Tournament data as Excel sheet
 * Manual Mode (manually edit score, pairings, match outcomes, etc.)
 * Max Difference Pairing mode (pair players to maximize the average difference in scores)
-* Match Level View (as opposed to current Player level view)
 * Fancier filtering and sorting
-* Better handling of Bye matches
 * Better card view when dealing with wildly different sized cards (better styling in general)
 * So much more testing
 
@@ -30,7 +29,6 @@ I once read somewhere that if you aren't midly embarrassed to deploy something, 
 This was my first foray into modern javascript development so it's far from best practices but oh well, add best practices to 'Future Features'
 * [Create React App](https://github.com/facebookincubator/create-react-app) (so React/Webpack/Babel/Jest etc.)
 * [Redux](http://redux.js.org/)
-* [Lodash](https://lodash.com/)
 * [Bootstrap v4](https://v4-alpha.getbootstrap.com/)
 * [Reactstrap](https://github.com/reactstrap/reactstrap) (Bootstrap v4 components)
 * [EdmondsBlossom](https://github.com/mattkrick/EdmondsBlossom) for pairing algorithm

@@ -1,45 +1,54 @@
 import Hutils from '../utils/hutils';
 import DriveUtils from '../utils/driveUtils';
-import _ from 'lodash';
+import { fromJS, Map } from 'immutable';
+import * as e from './events';
 
-const ADD_PLAYERS = 'hera/tournament/ADD_PLAYERS';
-const PAIR_PLAYERS = 'hera/tournament/PAIR_PLAYERS';
-const SAVE_SETTINGS = 'hera/tournament/SAVE_SETTINGS';
-const UPDATE_PLAYER = 'hera/tournament/UPDATE_PLAYER';
-const UPDATE_MATCH = 'hera/tournament/UPDATE_MATCH';
-const CREATE_TOURNAMENT = 'hera/tournament/CREATE_TOURNAMENT';
-const NEW_TOURNAMENT = 'hera/tournament/NEW_TOURNAMENT';
-const SWITCH_TOURNAMENT = 'hera/tournament/SWITCH_TOURNAMENT';
-const DELETE_TOURNAMENT = 'hera/tournament/DELETE_TOURNAMENT';
-const TOGGLE_DROPPED_FILTER = 'hera/tournament/TOGGLE_DROPPED_FILTER';
+const a = e.actions;
 
-export const actions = {
-  ADD_PLAYERS, PAIR_PLAYERS, SAVE_SETTINGS,
-  UPDATE_PLAYER, UPDATE_MATCH, CREATE_TOURNAMENT,
-  DELETE_TOURNAMENT, SWITCH_TOURNAMENT,
-  NEW_TOURNAMENT, TOGGLE_DROPPED_FILTER,
-};
-
-function newInitialState() {
-  return {
+export function newInitialState() {
+  return fromJS({
     players: {},
     tournaments: {},
     settings: {},
     matches: {},
-    uiState: {},
+    rounds: {},
+    uiState: {
+      searchText: '',
+      playerView: true,
+      hideDropped: false,
+    },
     maxPlayerId: 0,
     maxMatchId: 0,
     maxTournamentId: 0,
-  }
+    maxRoundId: 0,
+    version: 1,
+  });
 };
 
+function migrate(state) {
+  if (state === null) {
+  } else if (state.version === 1) {
+  }
+  return state;
+}
+
 function getInitialState() {
-  return JSON.parse(window.localStorage.getItem('state/state')) || newInitialState();
+  if (window.localStorage === undefined) {
+    return newInitialState();
+  } else {
+    if (window.localStorage.getItem('state/state') === null) {
+      return newInitialState();
+    } else {
+      return migrate(fromJS(JSON.parse(window.localStorage.getItem('state/state'))));
+    }
+  }
 }
 
 function saveState(state, firstTime) {
-  window.localStorage.setItem('state/state', JSON.stringify(state));
-  if (state.settings.driveSync) {
+  if (window.localStorage !== undefined) {
+    setTimeout(() => window.localStorage.setItem('state/state', JSON.stringify(state)), 1);
+  }
+  if (state.get(['settings', 'driveSync'])) {
     DriveUtils.saveState(state, firstTime);
   }
   return state;
@@ -49,219 +58,202 @@ const initialState = getInitialState();
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case NEW_TOURNAMENT: {
-      return { ...state, currentTournament: undefined };
+    case a.NEW_TOURNAMENT: {
+      return state.set('currentTournament', undefined);
     }
-    case SWITCH_TOURNAMENT: {
-      return { ...state, currentTournament: action.tournament };
+    case a.SWITCH_TOURNAMENT: {
+      return state.set('currentTournament', action.tournament);
     }
-    case DELETE_TOURNAMENT: {
-      const tournaments = _.pickBy(state.tournaments, (t, id) => {
-        return id !== state.currentTournament;
-      });
-      const settings = _.pickBy(state.settings, (t, id) => {
-        return id !== state.currentTournament;
-      });
-      const players = _.pickBy(state.players, (p, id) => {
-        return p.tournamentId !== state.currentTournament;
-      });
-      const matches = _.pickBy(state.matches, (m, id) => {
-        return m.tournamentId !== state.currentTournament;
-      });
-      return { ...state, settings, tournaments, players, matches, currentTournament: undefined };
+    case a.DELETE_TOURNAMENT: {
+      const currentTournament = state.get('currentTournament');
+      return saveState(state.withMutations((state) => {
+        return state
+          .update('tournaments', t => t.filter((o, id) => {
+            return id !== currentTournament;
+          }))
+          .update('settings', s => s.filter((o, id) => {
+            return id !== currentTournament;
+          }))
+          .update('players', p => p.filter((o, id) => {
+            return id !== currentTournament;
+          }))
+          .update('matches', m => m.filter((s, id) => {
+            return id !== currentTournament;
+          }))
+          .set('currentTournament', undefined);
+      }));
     }
-    case CREATE_TOURNAMENT: {
+    case a.CREATE_TOURNAMENT: {
       const t = action.tournament;
-      const players = { ...state.players };
-      const maxTournamentId = state.maxTournamentId + 1;
-      const maxPlayerId = state.maxPlayerId + 1;
+      const maxTournamentId = state.get('maxTournamentId') + 1;
+      const maxPlayerId = state.get('maxPlayerId') + 1;
       const tournamentId = maxTournamentId.toString();
       const id = maxPlayerId.toString();
-      players[id] = Hutils.generatePlayer({
-        draws: 5000,
-        name: 'Bye',
-        bye: true,
-        tournamentId,
-        id,
-      });
-      const tournaments = {...state.tournaments, [tournamentId]: t.name };
-      const settings = {...state.settings,
-        [tournamentId]: {
+      return saveState(state
+      .setIn(['players', id], Hutils.generatePlayer({
+          draws: 5000,
+          name: 'Bye',
+          bye: true,
+          tournamentId,
+          id,
+      }))
+      .setIn(['tournaments', tournamentId], t.name)
+      .setIn(['settings', tournamentId], fromJS({
           tournamentName: t.name,
-          driveSync: t.driveSync,
+          byePlayerId: id,
           newTournament: false,
-          syncId: t.syncId,
           winPoints: 3,
           drawPoints: 1,
           lossPoints: 0,
-        },
-      };
-      const newState = {...state,
-        players,
-        settings,
-        tournaments,
-        maxTournamentId,
-        maxPlayerId,
-        currentTournament: tournamentId,
-      };
-      return saveState(newState, true);
+      }))
+      .set('currentTournament', tournamentId)
+      .set('maxTournamentId', maxTournamentId)
+      .set('maxPlayerId', maxPlayerId), true)
     }
-    case ADD_PLAYERS: {
-      const players = {...state.players};
-      let maxPlayerId = state.maxPlayerId;
-      _.each(action.names, (name) => {
+    case a.ADD_PLAYERS: {
+      let maxPlayerId = state.get('maxPlayerId');
+      const tournamentId = state.get('currentTournament');
+
+      const newPlayers = Map(action.names.map((name) => {
         maxPlayerId += 1;
         const id = maxPlayerId.toString();
-        const tournamentId = state.currentTournament;
-        players[id] = Hutils.generatePlayer({ name, id, tournamentId });
-      });
-      return saveState({...state, players, maxPlayerId });
-    }
-    case PAIR_PLAYERS: {
-      const pairs = Hutils.pairPlayers(action.players, state.players, state.settings[state.currentTournament], state.currentTournament);
-      const matches = {...state.matches};
-      let maxMatchId = state.maxMatchId;
-      const players = {};
-      _.each(state.players, (p) => {
-        if (p.tournamentId === state.currentTournament && p.playing !== undefined) {
-          const unfinishedMatchId = p.matchIds.pop();
-          delete matches[unfinishedMatchId];
-        }
-      });
-      _.each(pairs, ([p1, p2]) => {
-        if (players[p1] !== undefined || players[p2] !== undefined) {
-          return;
-        }
+        return [
+          id,
+          Hutils.generatePlayer({ name, id, tournamentId })
+        ];
+      }));
 
-        maxMatchId += 1;
-        const matchId = maxMatchId.toString();
-        const p1Copy = { ...state.players[p1] };
-        const p2Copy = { ...state.players[p2] };
-        p1Copy.playing = p2;
-        p2Copy.playing = p1;
-        players[p1] = p1Copy;
-        players[p2] = p2Copy;
-        p1Copy.matchIds.push(matchId);
-        p2Copy.matchIds.push(matchId);
-        matches[matchId] = {
-          tournamentId: state.currentTournament,
-          p1: p1Copy.id,
-          p2: p2Copy.id,
-          round: 0,
-          games: [-1],
-          active: true,
-          current: true,
+      return saveState(state
+        .mergeIn(['players'], newPlayers)
+        .set('maxPlayerId', maxPlayerId)
+      );
+    }
+    case a.PAIR_PLAYERS: {
+      const pairs = fromJS(action.pairs);
+      const opMap = Map(pairs.flatMap(p => [[p.get(0), p.get(1)], [p.get(1), p.get(0)]]));
+      const currentTournament = state.get('currentTournament');
+      const settings = state.getIn(['settings', currentTournament]);
+      const maxMatchId = state.get('maxMatchId');
+      const matches = pairs.map(([p1, p2], table) => {
+        const matchId = (maxMatchId + table + 1).toString();
+        let score = '0 - 0';
+        let active = true;
+        let winner = undefined;
+        const byeId = settings.get('byePlayerId');
+        if (p1 === byeId || p2 === byeId) {
+          active = false;
+          score = '2 - 0';
+          winner = p1 === byeId ? p2 : p1;
+        }
+        return Map({
+          table: (table + 1).toString(),
+          tournamentId: currentTournament,
+          p1: p1,
+          p2: p2,
           id: matchId,
-        };
-      });
-      _.each(state.players, (p) => {
-        if (players[p.id] === undefined) {
-          const pCopy = { ...p };
-          players[pCopy.id] = pCopy;
-        }
-      });
-      return saveState({ ...state, players, matches, maxMatchId });
-    }
-    case SAVE_SETTINGS: {
-      return saveState({ ...state,
-        settings: {...state.settings, [state.currentTournament]: action.settings },
-        tournaments: {...state.tournaments,
-          [state.currentTournament]: action.settings.tournamentName || state.tournaments[state.currentTournament]
-        },
-      });
-    }
-    case UPDATE_PLAYER: {
-      const players = {};
-      _.each(state.players, (p, id) => {
-        if (id === action.player.id) {
-          players[id] = {...p, ...action.player};
-        } else {
-          players[id] = p;
-        }
-      });
-      return saveState({ ...state, players });
-    }
-    case UPDATE_MATCH: {
-      const matches = {};
-      const players = _.cloneDeep(state.players);
-      _.each(state.matches, (match, matchId) => {
-        if (matchId === action.match.id) {
-          if (!action.match.active) {
-            const winner = action.match.winner;
-            const p1 = players[match.p1];
-            const p2 = players[match.p2];
-            if (winner === p1.id) {
-              p1.wins += 1;
-              p2.losses += 1;
-            } else if (winner === p2.id) {
-              p1.losses += 1;
-              p2.wins += 1;
+          drop: [],
+          winner,
+          active,
+          score,
+        });
+      }).toMap().mapKeys((k,v) => v.get('id'));
+      const matchLookup = Map(matches.valueSeq().flatMap((m) => [
+        [m.get('p1'), m.get('id')],
+        [m.get('p2'), m.get('id')],
+      ]));
+      const matchIds = matches.keySeq();
+      const maxRoundId = state.get('maxRoundId') + 1;
+      const roundId = maxRoundId.toString();
+      return saveState(state
+        .set('maxRoundId', maxRoundId)
+        .set('maxMatchId', maxMatchId + matches.size)
+        .setIn(['rounds', roundId], Map({
+          id: roundId,
+          matches: matchIds,
+          active: true,
+          tournamentId: currentTournament,
+        }))
+        .mergeIn(['matches'], matches)
+        .update('players', (players) => {
+          return players.map((p) => {
+            const id = p.get('id');
+            if (opMap.has(id)) {
+              const matchId = matchLookup.get(id);
+              const opId = opMap.get(id);
+              return p
+                .update('matchIds', mIds => mIds.push(matchId))
+                .set('playing', opId);
             } else {
-              p1.draws += 1;
-              p2.draws += 1;
+              return p;
             }
-            p1.playedIds[p2.id] = matchId;
-            p2.playedIds[p1.id] = matchId;
-            p1.playing = undefined;
-            p2.playing = undefined;
-          }
-          matches[matchId] = { ...action.match };
-        } else {
-          matches[matchId] = { ...match };
-        }
-      });
-      return saveState({ ...state, players, matches });
+          });
+        })
+      );
     }
-    case TOGGLE_DROPPED_FILTER: {
-      return saveState({
-        ...state,
-        uiState: {
-          ...state.uiState,
-          hideDropped: action.hideDropped,
-        }
-      });
+    case a.SAVE_SETTINGS: {
+      const currentTournament = state.get('currentTournament');
+      const tName = state.getIn(['tournaments', currentTournament]);
+      return saveState(state
+        .mergeIn(['settings'], fromJS({ [currentTournament]: action.settings }))
+        .mergeIn(['tournaments'], fromJS({ [currentTournament]: action.settings.tournamentName || tName }))
+      );
+    }
+    case a.UPDATE_PLAYER: {
+      return saveState(state.update('players', (players) => players
+        .map((p, pId) => (pId === action.player.id) ? p.merge(fromJS(action.player)) : p)
+      ));
+    }
+    case a.UPDATE_MATCH: {
+      return saveState(state.update('matches', (matches) => matches
+        .map((match, matchId) => (matchId === action.match.id) ? fromJS(action.match) : match)
+      ));
+    }
+    case a.FINISH_ROUND: {
+      return saveState(state.withMutations((state) => {
+        const matches = state
+          .get('rounds')
+          .find(r => r.get('id') === action.roundId)
+          .get('matches')
+          .map(mId => state.getIn(['matches', mId]).set('active', false));
+
+        const players = state.get('players').withMutations((players) => {
+          let plys = players;
+          matches.forEach((match) => {
+            const p1 = match.get('p1');
+            const p2 = match.get('p2');
+            const winner = match.get('winner');
+            const loser = winner === p1 ? p2 : p1;
+            const draw = winner !== p1 && winner !== p2;
+            if (draw) {
+              plys = plys
+                .updateIn([p1, 'draws'], d => d + 1)
+                .updateIn([p2, 'draws'], d => d + 1);
+            } else {
+              plys = plys
+                .updateIn([winner, 'wins'], w => w + 1)
+                .updateIn([loser, 'losses'], l => l + 1);
+            }
+            match.get('drop').forEach(pId => plys = plys.setIn([pId, 'dropped'], true));
+            plys = plys
+              .deleteIn([p1, 'playing'])
+              .deleteIn([p2, 'playing'])
+              .updateIn([p1, 'playedIds'], pIds => pIds.set(p2, true))
+              .updateIn([p2, 'playedIds'], pIds => pIds.set(p1, true));
+          });
+          return plys;
+        });
+        return state
+          .update('rounds', (rounds) => {
+            return rounds.map((round) => {
+              return round.get('id') === action.roundId ? round.set('active', false) : round;
+            });
+          })
+          .update('matches', (ms) => ms.merge(matches.toMap().mapKeys((k,v) => v.get('id'))))
+          .set('players', players);
+      }));
     }
     default:
       return state;
   }
 }
 
-export function addPlayers(names) {
-  return { type: ADD_PLAYERS, names };
-}
-
-export function pairPlayers(players) {
-  return { type: PAIR_PLAYERS, players };
-}
-
-export function saveSettings(settings) {
-  return { type: SAVE_SETTINGS, settings };
-}
-
-export function updatePlayer(player) {
-  return { type: UPDATE_PLAYER, player };
-}
-
-export function updateMatch(match) {
-  return { type: UPDATE_MATCH, match };
-}
-
-export function newTournament() {
-  return { type: NEW_TOURNAMENT };
-}
-
-export function createTournament(tournament) {
-  return { type: CREATE_TOURNAMENT, tournament };
-}
-
-export function switchTournament(tournament) {
-  return { type: SWITCH_TOURNAMENT, tournament };
-}
-
-export function deleteTournament(tournament) {
-  return { type: DELETE_TOURNAMENT, tournament };
-}
-
-export function toggleDroppedFilter(hideDropped) {
-  return { type: TOGGLE_DROPPED_FILTER, hideDropped };
-}

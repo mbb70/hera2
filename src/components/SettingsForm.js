@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Button, Label } from 'reactstrap';
 import BasicFormModal from './BasicFormModal';
 import ValidatedFormGroup from './ValidatedFormGroup';
 import ValidationUtils from '../utils/validationUtils';
 
-class SettingsForm extends Component {
+class SettingsForm extends PureComponent {
   state = this.props;
 
   resetForm = () => {
     this.setState(this.props.settings);
   }
 
-  handleKeyPress = (value, field) => {
+  handleKeyPress = (field, value) => {
     this.setState({ [field]: value });
   }
 

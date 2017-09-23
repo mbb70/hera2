@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 export function googleOauthSignIn(state) {
   const form = document.createElement('form');
   form.setAttribute('method', 'GET');
@@ -11,7 +9,7 @@ export function googleOauthSignIn(state) {
     scope: 'https://www.googleapis.com/auth/drive.appdata',
     state: encodeURIComponent(state.name),
   };
-  _.each(params, (value, key) => {
+  params.forEach((value, key) => {
     const input = document.createElement('input');
     input.setAttribute('type', 'hidden');
     input.setAttribute('name', key);
@@ -29,7 +27,7 @@ function getDriveUri(accessToken, path, args) {
 
 function getQueryString(args) {
   const q = []
-  _.each(args, (value, key) => {
+  args.forEach((value, key) => {
     q.push(key + '=' + encodeURIComponent(value));
   });
   return '?' + q.join('&')
@@ -61,7 +59,11 @@ function validateToken(token) {
 }
 
 function getAccessToken() {
-  return window.localStorage.getItem('auth/google');
+  if (window.localStorage === undefined) {
+    return null;
+  } else {
+    return window.localStorage.getItem('auth/google');
+  }
 }
 
 function setAccessToken(accessToken) {

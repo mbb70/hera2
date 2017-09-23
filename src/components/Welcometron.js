@@ -1,18 +1,17 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Form, FormGroup, Input, Label, Jumbotron, Button, Container, Row, Col } from 'reactstrap';
-import _ from 'lodash';
 import ValidatedFormGroup from './ValidatedFormGroup';
 import ValidationUtils from '../utils/validationUtils';
 import DriveUtils from '../utils/driveUtils';
 
-class Welcometron extends Component {
+class Welcometron extends PureComponent {
   state = {
     name: 'My Tournament',
     driveSync: false,
     signingIn: false,
   }
 
-  handleKeyPress = (value, field) => {
+  handleKeyPress = (field, value) => {
     this.setState({ [field]: value });
   }
 
@@ -63,7 +62,7 @@ class Welcometron extends Component {
   }
 
   render() {
-    const tournaments = _.sortBy(_.toPairs(this.props.tournaments), ([k, v]) => v);
+    const tournaments = Object.entries(this.props.tournaments).sort(([k1, v1], [k2, v2]) => v2 - v1);
     return (
       <Jumbotron>
         <Container>
@@ -79,7 +78,7 @@ class Welcometron extends Component {
               {tournaments.length > 0 && (
                 <div className="pb-3">
                   <Label className="d-block">Open an Existing Tournament</Label>
-                  {_.map(tournaments, ([id, name]) => {
+                  {tournaments.map(([id, name]) => {
                     return (
                       <Button className="mr-1" key={id} onClick={() => this.props.switchTournament(id)}>{name}</Button>
                     );

@@ -1,37 +1,56 @@
-import React, { Component } from 'react';
-import { Label, Input, NavbarBrand, Navbar } from 'reactstrap';
+import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
+import { NavbarBrand, Label, Input, Navbar } from 'reactstrap';
 
-class TopNav extends Component {
+connect();
+
+class TopNavComponent extends PureComponent {
+  handleSearchChange = (e) => {
+    this.props.updateSearch(e.target.value.trim())
+  }
+
+  handleSwitchView = () => {
+    this.props.switchView(!this.props.uiState.playerView);
+  }
+
   navbarStyle = {
     flexDirection: 'row',
-    alignItems: 'center'
+    justifyContent: 'left',
+    flexWrap: 'initial',
+  }
+
+  toggleSidebar = () => {
+    const sidebarOpen = this.props.uiState.sidebarOpen;
+    this.props.toggleSidebar(!sidebarOpen);
   }
 
   render() {
     return (
       <Navbar full inverse sticky="top" light style={this.navbarStyle}>
-        <a onClick={this.props.onToggle}>
+        <a onClick={this.toggleSidebar}>
           <span className="navbar-toggler-icon"/>
         </a>
-        <NavbarBrand className="px-2 hidden-xs-down">{this.props.settings.tournamentName}</NavbarBrand>
-        <div className="col-lg-3">
+        <NavbarBrand className="px-2 d-sm-block d-none">{this.props.settings.tournamentName}</NavbarBrand>
+        <div className='col-lg-3'>
           <Input
             size="xl"
             type="text"
-            value={this.props.searchText}
-            onChange={this.props.onSearchChange}
+            value={this.props.uiState.searchText}
+            onChange={this.handleSearchChange}
             placeholder="Search..."
           />
         </div>
-        {
-          //<a onClick={this.props.onToggle} style={{display: 'flex', marginLeft: 'auto'}}>
-            //<Label className="bold-nav-label hidden-xs-down">Matches</Label>
-            //<span className="arrow-icon next-arrow-icon"/>
-          //</a>
-        }
+        {this.props.rounds.length > 0 && (
+          <a onClick={this.handleSwitchView} className="d-flex ml-auto">
+            <Label className="bold-nav-label d-sm-block d-none">{this.props.uiState.playerView ? 'Matches' : 'Players'}</Label>
+            <Label className="bold-nav-label d-sm-none mr-2 nav-label-xs">{this.props.uiState.playerView ? 'M' : 'P'}</Label>
+            <span className="arrow-icon next-arrow-icon d-sm-block d-none ml-2 my-1"/>
+            <span className="arrow-icon next-arrow-icon d-sm-none"/>
+          </a>
+        )}
       </Navbar>
     );
   }
 }
 
-export default TopNav;
+export default TopNavComponent;

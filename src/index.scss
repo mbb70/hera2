@@ -28,6 +28,18 @@ nav {
   background-color: $dark-blue;
 }
 
+.app-nav {
+  background-color: $off-white;
+  height: 100%;
+  hr {
+    width: 100%;
+  }
+}
+
+.app-nav-title {
+  color: $off-dark-blue
+}
+
 .btn-link {
   color: $orange;
   &:hover {
@@ -57,20 +69,24 @@ button.close {
 $add-player-plus: url("data:image/svg+xml;charset=utf6,<svg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'><path stroke='grey' fill='grey' d='M10 0 h10 v10 h10 v10 h-10 v10 h-10 v-10 h-10 v-10 h10 z'/></svg>");
 
 .arrow-icon {
-  margin-top: 4px;
-  margin-left: 10px;
-  float: right;
   width: 25px;
   height: 25px;
 }
 
+$navbar-toggler-icon: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+.navbar-toggler-icon {
+  background-image: $navbar-toggler-icon !important;
+}
+
 $next-arrow-icon: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='grey' viewBox='0 0 8 8'%3E%3Cpath d='M1.5 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
 .next-arrow-icon {
+  float: right;
   background-image: $next-arrow-icon;
 }
 
 $prev-arrow-icon: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='grey' viewBox='0 0 8 8'%3E%3Cpath d='M4 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
 .prev-arrow-icon {
+  float: left;
   background-image: $prev-arrow-icon;
 }
 
@@ -81,10 +97,27 @@ $prev-arrow-icon: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.
   margin-bottom: 0;
 }
 
+.nav-label-xs {
+  position: relative;
+  top: -0.1rem;
+}
+
+.navbar-brand {
+  margin-right: 0;
+}
+
+.round-row {
+  margin-bottom: 2rem;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
 .card {
   border-radius: 3px;
   box-shadow: 2px 2px 1px #888;
   margin: 5px;
+  width: 280px;
   border: $off-white solid thin;
   background-color: $off-dark-blue;
   color: $orange !important;
@@ -97,16 +130,16 @@ $prev-arrow-icon: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.
     color: $off-white;
   }
 
-  &.add-player-card {
-    background-color: $off-dark-blue;
-    color: $orange;
-    .add-player-icon {
-      margin-right: 10px;
-      float: left;
-      width: 25px;
-      height: 25px;
-      background-image: $add-player-plus;
-    }
+  .card-block {
+    padding: 0.75rem 1.25rem;
+  }
+
+  .add-player-icon {
+    margin-right: 10px;
+    float: left;
+    width: 25px;
+    height: 25px;
+    background-image: $add-player-plus;
   }
 }
 
@@ -124,8 +157,54 @@ $prev-arrow-icon: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.
   }
 }
 
+.button-col {
+  button {
+    width: 100%;
+    border: 0;
+    &.active {
+      box-shadow: inset 0 0 10px #000;
+    }
+  }
+}
+
+.card-footer {
+  padding: 0.5rem 1.25rem;
+  background-color: silver;
+}
+.card-header {
+  padding: 0.5rem 1.25rem;
+  background-color: silver;
+}
+
+@media (max-width: 576px) {
+  .width-initial-xs-down {
+    width: initial;
+  }
+}
+
 @media (max-width: 400px) {
   .hidden-xxs-down {
     display: none !important;
+  }
+}
+
+.slidein {
+  animation-duration: 1s;
+  animation-name: slidein;
+  margin-left: 0;
+  width: 100%;
+  position: absolute;
+}
+
+@keyframes slidein {
+  from {
+    margin-left: 100%;
+    width: 100%;
+    opacity: 0;
+  }
+  to {
+    margin-left: 0;
+    width: 100%;
+    opacity: 100%;
   }
 }

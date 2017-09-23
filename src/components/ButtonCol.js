@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Row, Col } from 'reactstrap';
 
-class ButtonRow extends PureComponent {
+class ButtonCol extends PureComponent {
   isActive = (i) => {
     if (this.props.multi) {
       return this.props.selected.indexOf(i) !== -1;
@@ -12,19 +12,19 @@ class ButtonRow extends PureComponent {
 
   render() {
     return (
-      <Row className="no-gutters button-row">
+      <Col className="my-1 no-gutters button-col">
         {React.Children.map(this.props.children, (c, i) => {
           return (
-            <Col>{React.cloneElement(c, {
+            <Row>{React.cloneElement(c, {
               active: this.isActive(i),
-              onClick: () => this.props.onClick(i)
+              onClick: () => this.props.onClick(i),
             })
-            }</Col>
+            }</Row>
           );
         })}
-      </Row>
+      </Col>
     );
   }
 }
 
-export default ButtonRow;
+export default ButtonCol;

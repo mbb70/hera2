@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import { ModalBody, ModalHeader, ModalFooter, Modal, Form, Button } from 'reactstrap';
 
-class BasicFormModal extends Component {
+class BasicFormModal extends PureComponent {
   state = {
     open: false,
   }
@@ -18,15 +18,22 @@ class BasicFormModal extends Component {
     e.preventDefault();
   }
 
+  handleLoadForm = () => {
+    this.toggleForm();
+    if (this.props.onLoad !== undefined) {
+      this.props.onLoad();
+    }
+  }
+
   render() {
     const entryPoint = React.cloneElement(this.props.entryPoint, {
-      onClick: this.toggleForm,
+      onClick: this.handleLoadForm,
     });
     return (
       <div>
         {entryPoint}
         {this.state.open && (
-          <Modal autoFocus={false} isOpen={this.state.open} toggle={this.toggleForm}>
+          <Modal {...this.props.additionalModalParams} autoFocus={false} isOpen={this.state.open} toggle={this.toggleForm}>
             <ModalHeader toggle={this.toggleForm}>
               {this.props.header}
             </ModalHeader>

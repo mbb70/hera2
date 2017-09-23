@@ -18,6 +18,15 @@ body {
 nav {
   background-color: #2B3E50; }
 
+.app-nav {
+  background-color: #EBEBEB;
+  height: 100%; }
+  .app-nav hr {
+    width: 100%; }
+
+.app-nav-title {
+  color: #4E5D6C; }
+
 .btn-link {
   color: #DF691A; }
   .btn-link:hover {
@@ -39,16 +48,18 @@ button.close {
   border: 0; }
 
 .arrow-icon {
-  margin-top: 4px;
-  margin-left: 10px;
-  float: right;
   width: 25px;
   height: 25px; }
 
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important; }
+
 .next-arrow-icon {
+  float: right;
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='grey' viewBox='0 0 8 8'%3E%3Cpath d='M1.5 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E"); }
 
 .prev-arrow-icon {
+  float: left;
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='grey' viewBox='0 0 8 8'%3E%3Cpath d='M4 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E"); }
 
 .bold-nav-label {
@@ -57,10 +68,23 @@ button.close {
   font-size: 1.4rem;
   margin-bottom: 0; }
 
+.nav-label-xs {
+  position: relative;
+  top: -0.1rem; }
+
+.navbar-brand {
+  margin-right: 0; }
+
+.round-row {
+  margin-bottom: 2rem; }
+  .round-row:last-child {
+    margin-bottom: 0; }
+
 .card {
   border-radius: 3px;
   box-shadow: 2px 2px 1px #888;
   margin: 5px;
+  width: 280px;
   border: #EBEBEB solid thin;
   background-color: #4E5D6C;
   color: #DF691A !important; }
@@ -68,15 +92,14 @@ button.close {
     margin-bottom: 0.2rem; }
   .card .card-playing {
     color: #EBEBEB; }
-  .card.add-player-card {
-    background-color: #4E5D6C;
-    color: #DF691A; }
-    .card.add-player-card .add-player-icon {
-      margin-right: 10px;
-      float: left;
-      width: 25px;
-      height: 25px;
-      background-image: url("data:image/svg+xml;charset=utf6,<svg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'><path stroke='grey' fill='grey' d='M10 0 h10 v10 h10 v10 h-10 v10 h-10 v-10 h-10 v-10 h10 z'/></svg>"); }
+  .card .card-block {
+    padding: 0.75rem 1.25rem; }
+  .card .add-player-icon {
+    margin-right: 10px;
+    float: left;
+    width: 25px;
+    height: 25px;
+    background-image: url("data:image/svg+xml;charset=utf6,<svg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'><path stroke='grey' fill='grey' d='M10 0 h10 v10 h10 v10 h-10 v10 h-10 v-10 h-10 v-10 h10 z'/></svg>"); }
 
 .btn-neutral {
   background-color: silver; }
@@ -87,6 +110,41 @@ button.close {
   .button-row button.active {
     box-shadow: inset 0 0 10px #000; }
 
+.button-col button {
+  width: 100%;
+  border: 0; }
+  .button-col button.active {
+    box-shadow: inset 0 0 10px #000; }
+
+.card-footer {
+  padding: 0.5rem 1.25rem;
+  background-color: silver; }
+
+.card-header {
+  padding: 0.5rem 1.25rem;
+  background-color: silver; }
+
+@media (max-width: 576px) {
+  .width-initial-xs-down {
+    width: initial; } }
+
 @media (max-width: 400px) {
   .hidden-xxs-down {
     display: none !important; } }
+
+.slidein {
+  animation-duration: 1s;
+  animation-name: slidein;
+  margin-left: 0;
+  width: 100%;
+  position: absolute; }
+
+@keyframes slidein {
+  from {
+    margin-left: 100%;
+    width: 100%;
+    opacity: 0; }
+  to {
+    margin-left: 0;
+    width: 100%;
+    opacity: 100%; } }

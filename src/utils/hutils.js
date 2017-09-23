@@ -1,8 +1,21 @@
 import blossom from 'edmonds-blossom';
-import _ from 'lodash';
+import { Map, List } from 'immutable';
 
+export function shuffle(arr) {
+  const sarr = [];
+  for (let i = 0, l = arr.length; i < l; i++) {
+    sarr.push(arr[i]);
+  }
+  for (let i = 0, l = sarr.length; i < l; i++) {
+    const dest = Math.floor(l * Math.random());
+    const tmp = sarr[i];
+    sarr[i] = sarr[dest];
+    sarr[dest] = tmp;
+  }
+  return sarr;
+}
 
-function defaultSettings() {
+export function defaultSettings() {
   return {
     newTournament: true,
     tournamentName: 'My Tournament',
@@ -12,37 +25,36 @@ function defaultSettings() {
   };
 }
 
-function generatePlayer(details) {
-  return {
+export function generatePlayer(details) {
+  return Map({
     losses: 0,
     wins: 0,
     draws: 0,
-    playedIds: {},
-    matchIds: [],
+    playedIds: Map(),
+    matchIds: List(),
     dropped: false,
     ...details,
-  }
+  });
 }
 
-function getScore(p, settings) {
+export function getScore(p, settings) {
   return settings.winPoints  * p.wins   -
          settings.lossPoints * p.losses +
          settings.drawPoints * p.draws;
 }
 
-function calculateWeight(p, op, settings) {
+export function calculateWeight(p, op, settings) {
   const ps = getScore(p, settings);
   const ops = getScore(op, settings);
   return 10000 - (Math.abs(ps - ops));
 }
 
-function generatePlayerGraph(playerIds, players, settings) {
+export function generatePlayerGraph(playerIds, players, settings) {
   const graph = [];
-  const ids = _.keys(players);
-  _.each(playerIds, (id) => {
+  playerIds.forEach((id) => {
     const player = players[id];
-    _.each(ids, (otherId) => {
-      if (id !== otherId && player.playedIds[otherId] === undefined) {
+    playerIds.forEach((otherId) => {
+      if (id !== otherId && !player.playedIds[otherId]) {
         const otherPlayer = players[otherId];
         const weight = calculateWeight(player, otherPlayer, settings);
         graph.push([+id, +otherId, weight]);
@@ -52,17 +64,13 @@ function generatePlayerGraph(playerIds, players, settings) {
   return graph;
 }
 
-function pairPlayers(playerIds, players, settings, currentTournament) {
-  const pairs = new Map();
-  const filterdPlayers = _.pickBy(players, p => (p.tournamentId === currentTournament) && !(p.dropped || p.deleted));
-  const graph = generatePlayerGraph(playerIds, filterdPlayers, settings);
+export function pairPlayers(playerIds, players, settings, currentTournament) {
+  const graph = generatePlayerGraph(playerIds, players, settings);
   const pairing = blossom(graph);
-  _.each(pairing, (gopId, gid) => {
-    if (players[gopId] !== undefined) {
-      pairs.set(gopId.toString(), gid.toString());
-    }
-  });
-  return [...pairs.entries()];
+  return pairing
+    .map((pId, opId) => [pId, opId])
+    .filter(([pId, opId]) => pId > opId)
+    .map(([pId, opId]) => [pId.toString(), opId.toString()])
 }
 
-export default { defaultSettings, generatePlayer, pairPlayers, getScore };
+export default { shuffle, defaultSettings, generatePlayer, pairPlayers, getScore };

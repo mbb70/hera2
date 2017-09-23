@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import TournamentComponent from '../components/Tournament';
 import { toJS } from '../components/toJS';
+import TopNavComponent from '../components/TopNav';
 import * as e from '../modules/events';
 
 const mapStateToProps = (root) => {
@@ -8,21 +8,22 @@ const mapStateToProps = (root) => {
   const uiState = root.uiReducer;
   const currentTournament = state.get('currentTournament');
   return {
-    settings:    state.getIn(['settings', currentTournament]),
-    tournaments: state.get('tournaments'),
+    rounds:   state.get('rounds').filter( r => r.get('tournamentId') === currentTournament)
+                   .valueSeq().sort(r => -r.get('id')),
+    settings: state.getIn(['settings', currentTournament]),
     uiState,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  createTournament: (tournament) => dispatch(e.createTournament(tournament)),
-  switchTournament: (tournamentId) => dispatch(e.switchTournament(tournamentId)),
+  updateSearch: (searchText) => dispatch(e.updateSearch(searchText)),
+  switchView: (playerView) => dispatch(e.switchView(playerView)),
   toggleSidebar: (sidebarOpen) => dispatch(e.toggleSidebar(sidebarOpen)),
 });
 
-const Tournament = connect(
+const TopNav = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(toJS(TournamentComponent));
+)(toJS(TopNavComponent));
 
-export default Tournament;
+export default TopNav;
