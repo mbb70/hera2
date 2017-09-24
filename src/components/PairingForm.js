@@ -86,11 +86,16 @@ class PairingForm extends PureComponent {
       </div>
     );
     const lockedPlayerMap = this.getLockedPlayerMap();
-    const players = Object.values(this.props.players).filter(p => {
+    const byePlayerId = this.props.settings.byePlayerId;
+    const filteredPlayers = Object.values(this.props.players).filter(p => {
       const available = !p.deleted && !p.dropped;
       const notLocked = !lockedPlayerMap[p.id];
       return available && notLocked;
-    }).sort((a, b) => a.name > b.name);
+    });
+    const needsBye = filteredPlayers.length % 2 === 0;
+    const players = filteredPlayers
+      .filter(p => needsBye || p.id !== byePlayerId)
+      .sort((a, b) => a.name > b.name);
 
     const modalParams = {
       additionalModalParams: { size: 'lg' },
