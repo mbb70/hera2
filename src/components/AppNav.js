@@ -21,7 +21,7 @@ class AppNavComponent extends PureComponent {
   handleFinishRound = () => {
     const latestRoundId = this.props.rounds
       .map(r => r.id)
-      .reduce((r, a) => (r > a ? r : a), 0)
+      .reduce((r, a) => (r > a ? r : a), 0);
     this.props.finishRound(latestRoundId);
     this.props.switchView(true);
     this.closeNav();
