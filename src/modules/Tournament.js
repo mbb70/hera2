@@ -12,11 +12,6 @@ export function newInitialState() {
     settings: {},
     matches: {},
     rounds: {},
-    uiState: {
-      searchText: '',
-      playerView: true,
-      hideDropped: false,
-    },
     maxPlayerId: 0,
     maxMatchId: 0,
     maxTournamentId: 0,
@@ -45,6 +40,7 @@ function getInitialState() {
 }
 
 function saveState(state, firstTime) {
+  console.log(state.toJS());
   if (window.localStorage !== undefined) {
     setTimeout(() => window.localStorage.setItem('state/state', JSON.stringify(state)), 1);
   }
@@ -71,14 +67,17 @@ export default function reducer(state = initialState, action) {
           .update('tournaments', t => t.filter((o, id) => {
             return id !== currentTournament;
           }))
-          .update('settings', s => s.filter((o, id) => {
+          .update('settings', settings => settings.filter((o, id) => {
             return id !== currentTournament;
           }))
-          .update('players', p => p.filter((o, id) => {
-            return id !== currentTournament;
+          .update('players', players => players.filter((o, id) => {
+            return o.get('tournamentId') !== currentTournament;
           }))
-          .update('matches', m => m.filter((s, id) => {
-            return id !== currentTournament;
+          .update('matches', matches => matches.filter((o, id) => {
+            return o.get('tournamentId') !== currentTournament;
+          }))
+          .update('rounds', matches => matches.filter((o, id) => {
+            return o.get('tournamentId') !== currentTournament;
           }))
           .set('currentTournament', undefined);
       }));
@@ -209,48 +208,46 @@ export default function reducer(state = initialState, action) {
       ));
     }
     case a.FINISH_ROUND: {
-      return saveState(state.withMutations((state) => {
-        const matches = state
-          .get('rounds')
-          .find(r => r.get('id') === action.roundId)
-          .get('matches')
-          .map(mId => state.getIn(['matches', mId]).set('active', false));
+      const matches = state
+        .get('rounds')
+        .find(r => r.get('id') === action.roundId)
+        .get('matches')
+        .map(mId => state.getIn(['matches', mId]).set('active', false));
 
-        const players = state.get('players').withMutations((players) => {
-          let plys = players;
-          matches.forEach((match) => {
-            const p1 = match.get('p1');
-            const p2 = match.get('p2');
-            const winner = match.get('winner');
-            const loser = winner === p1 ? p2 : p1;
-            const draw = winner !== p1 && winner !== p2;
-            if (draw) {
-              plys = plys
-                .updateIn([p1, 'draws'], d => d + 1)
-                .updateIn([p2, 'draws'], d => d + 1);
-            } else {
-              plys = plys
-                .updateIn([winner, 'wins'], w => w + 1)
-                .updateIn([loser, 'losses'], l => l + 1);
-            }
-            match.get('drop').forEach(pId => plys = plys.setIn([pId, 'dropped'], true));
-            plys = plys
-              .deleteIn([p1, 'playing'])
-              .deleteIn([p2, 'playing'])
-              .updateIn([p1, 'playedIds'], pIds => pIds.set(p2, true))
-              .updateIn([p2, 'playedIds'], pIds => pIds.set(p1, true));
-          });
-          return plys;
+      const players = state.get('players').withMutations((players) => {
+        matches.forEach((match) => {
+          const p1 = match.get('p1');
+          const p2 = match.get('p2');
+          const winner = match.get('winner');
+          const loser = winner === p1 ? p2 : p1;
+          const draw = winner !== p1 && winner !== p2;
+          if (draw) {
+            players
+              .updateIn([p1, 'draws'], d => d + 1)
+              .updateIn([p2, 'draws'], d => d + 1);
+          } else {
+            players
+              .updateIn([winner, 'wins'], w => w + 1)
+              .updateIn([loser, 'losses'], l => l + 1);
+          }
+          match.get('drop').forEach(pId => players.setIn([pId, 'dropped'], true));
+          players
+            .deleteIn([p1, 'playing'])
+            .deleteIn([p2, 'playing'])
+            .updateIn([p1, 'playedIds'], pIds => pIds.set(p2, true))
+            .updateIn([p2, 'playedIds'], pIds => pIds.set(p1, true));
         });
-        return state
-          .update('rounds', (rounds) => {
-            return rounds.map((round) => {
-              return round.get('id') === action.roundId ? round.set('active', false) : round;
-            });
-          })
-          .update('matches', (ms) => ms.merge(matches.toMap().mapKeys((k,v) => v.get('id'))))
-          .set('players', players);
-      }));
+        return players;
+      });
+      return saveState(state
+        .update('rounds', (rounds) => {
+          return rounds.map((round) => {
+            return round.get('id') === action.roundId ? round.set('active', false) : round;
+          });
+        })
+        .update('matches', (ms) => ms.merge(matches.toMap().mapKeys((k,v) => v.get('id'))))
+        .set('players', players)
+      );
     }
     default:
       return state;
