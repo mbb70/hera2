@@ -8,17 +8,18 @@
     "classnames": "^2.2.5",
     "edmonds-blossom": "^1.0.0",
     "immutable": "^3.8.1",
-    "react": "15.6.1",
+    "react": "16.0.0",
     "react-addons-css-transition-group": "^15.5.2",
     "react-addons-transition-group": "^15.5.2",
     "react-dnd": "^2.5.1",
     "react-dnd-html5-backend": "^2.5.1",
-    "react-dom": "15.6.1",
+    "react-dom": "16.0.0",
     "react-redux": "^5.0.5",
     "react-sidebar": "^2.3.2",
     "react-transition-group": "^1.1.3",
     "reactstrap": "^4.8.0",
-    "redux": "^3.6.0"
+    "redux": "^3.6.0",
+    "reselect": "^3.0.1"
   },
   "devDependencies": {
     "gh-pages": "^1.0.0",

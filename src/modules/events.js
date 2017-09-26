@@ -97,8 +97,8 @@ export function toggleSidebar(sidebarOpen) {
   return { type: TOGGLE_SIDEBAR, sidebarOpen };
 }
 
-export function togglePairEditing(editing) {
-  return { type: SWITCH_VIEW, editing };
+export function togglePairEditing() {
+  return { type: TOGGLE_PAIR_EDITING };
 }
 
 export function lockPairs(tableId, locked) {

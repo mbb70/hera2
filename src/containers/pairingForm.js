@@ -1,14 +1,14 @@
 import { connect } from 'react-redux';
 import PairingFormComponent from '../components/PairingForm';
+import { currentPlayers } from '../selectors/tournament'
 import { toJS } from '../components/toJS';
 import * as e from '../modules/events';
 
 const mapStateToProps = (root) => {
   const state = root.tournamentReducer;
   const pairingFormState = root.pairingFormReducer;
-  const currentTournament = state.get('currentTournament');
   return {
-    players:  state.get('players').filter(p => p.get('tournamentId') === currentTournament),
+    players:  currentPlayers(state),
     pairingFormState,
   };
 };

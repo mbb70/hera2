@@ -40,7 +40,6 @@ function getInitialState() {
 }
 
 function saveState(state, firstTime) {
-  console.log(state.toJS());
   if (window.localStorage !== undefined) {
     setTimeout(() => window.localStorage.setItem('state/state', JSON.stringify(state)), 1);
   }

@@ -1,20 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import configureMockStore from 'redux-mock-store'
-import * as r from './modules/Tournament';
+import * as r from './modules/events';
 import reducer from './modules/Tournament';
-import { actions } from './modules/Tournament';
+import uiReducer from './modules/uiState';
+import { newInitialState } from './modules/Tournament';
+import * as tr from './modules/Tournament';
+import * as ur from './modules/uiState';
 import Tournament from './containers/Tournament'
 import Hutils from './utils/hutils'
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
 import { Map, fromJS }  from 'immutable';
 
 let store = createStore(reducer);
 it('renders without crashing', () => {
   const div = document.createElement('div');
+  const fullStore = createStore(
+    combineReducers({
+      tournamentReducer: reducer,
+      uiReducer: uiReducer,
+    })
+  );
   ReactDOM.render(
-    <Provider store={store}>
+    <Provider store={fullStore}>
       <Tournament/>
     </Provider>
   , div);
@@ -23,12 +32,12 @@ it('renders without crashing', () => {
 const mockStore = configureMockStore();
 it('dispatches add players', () => {
   const name = 'new user';
-  let state = r.newInitialState();
+  let state = newInitialState();
   const store = mockStore(state);
   store.dispatch(r.addPlayers(['bob']));
   let action = store.getActions()[0];
   expect(action).toEqual({
-    type: actions.ADD_PLAYERS,
+    type: r.actions.ADD_PLAYERS,
     names: ['bob']
   });
 });
@@ -40,7 +49,7 @@ function createTournament(state, store, name) {
 }
 
 it('creates tournament', () => {
-  let state = r.newInitialState();
+  let state = newInitialState();
   const store = mockStore(state);
   state = createTournament(state, store, 't1');
   expect(state.getIn(['tournaments', '1'])).toEqual('t1');
@@ -53,7 +62,7 @@ function addPlayers(state, store, names) {
 }
 
 it('adds players', () => {
-  let state = r.newInitialState();
+  let state = newInitialState();
   const store = mockStore(state);
   state = createTournament(state, store, 't1');
   state = addPlayers(state, store, ['bob']);
@@ -78,7 +87,7 @@ function pairPlayers(state, store, playerIds) {
 }
 
 it('pairs players', () => {
-  let state = r.newInitialState();
+  let state = newInitialState();
   const store = mockStore(state);
   state = createTournament(state, store, 't1');
   state = addPlayers(state, store, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']);
@@ -96,7 +105,7 @@ it('pairs players', () => {
 });
 
 it('pairs bye', () => {
-  let state = r.newInitialState();
+  let state = newInitialState();
   const store = mockStore(state);
   state = createTournament(state, store, 't1');
   state = addPlayers(state, store, ['a', 'b', 'c', 'd', 'e', 'f', 'g']);
@@ -117,7 +126,7 @@ function saveSettings(state, store, settings) {
 }
 
 it('updates settings', () => {
-  let state = r.newInitialState();
+  let state = newInitialState();
   const store = mockStore(state);
   state = createTournament(state, store, 't1');
   expect(state.getIn(['tournaments', '1'])).toEqual('t1');
