@@ -1,5 +1,5 @@
 import blossom from 'edmonds-blossom';
-import { Map, List } from 'immutable';
+import { Map, List, fromJS } from 'immutable';
 
 export function shuffle(arr) {
   const sarr = [];
@@ -64,13 +64,15 @@ export function generatePlayerGraph(playerIds, players, settings) {
   return graph;
 }
 
-export function pairPlayers(playerIds, players, settings, currentTournament) {
+export function pairPlayers(players, settings, shuffleFn) {
+  const playerIds = shuffleFn(Object.keys(players));
   const graph = generatePlayerGraph(playerIds, players, settings);
   const pairing = blossom(graph);
-  return pairing
+  const pairs = pairing
     .map((pId, opId) => [pId, opId])
     .filter(([pId, opId]) => pId > opId)
-    .map(([pId, opId]) => [pId.toString(), opId.toString()])
+    .map(([pId, opId]) => shuffleFn([pId.toString(), opId.toString()]))
+  return fromJS(shuffleFn(pairs));
 }
 
 export default { shuffle, defaultSettings, generatePlayer, pairPlayers, getScore };

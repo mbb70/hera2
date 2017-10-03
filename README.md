@@ -9,6 +9,7 @@ However it does have some features that should be noted, which is a great lead-i
 * Generate pairings such that players never play each other twice and that players with the same score (as defined by the weighting above) are most likely to play each other
 * Saves data on device in localStorage
 * Drop players from the tournament with the option to readd them at any time
+* Review and edit pairings before each round
 * Byes handled automatically as 2-0 win
 * Can be "Added to Home Screen" on mobile to simulate app feel and function
 * Handle multiple tournaments at once
@@ -22,6 +23,8 @@ I once read somewhere that if you aren't midly embarrassed to deploy something, 
 * Max Difference Pairing mode (pair players to maximize the average difference in scores)
 * Fancier filtering and sorting
 * Better card view when dealing with wildly different sized cards (better styling in general)
+* Edit players record directly
+* On error, present raw data for possible debugging or at least nice error screen
 * So much more testing
 
 

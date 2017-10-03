@@ -1,17 +1,16 @@
 import { connect } from 'react-redux';
 import { toJS } from '../components/toJS';
 import AppNavComponent from '../components/AppNav';
-import { currentPlayers, currentMatches, currentRounds, currentSettings } from '../selectors/tournament'
+import { currentPlayers, currentMatches, currentActiveRound, currentSettings } from '../selectors/tournament'
 import * as e from '../modules/events';
 
 const mapStateToProps = (root) => {
-  const state = root.tournamentReducer;
   const uiState = root.uiReducer;
   return {
-    players: currentPlayers(state),
-    matches: currentMatches(state),
-    rounds:  currentRounds(state),
-    settings: currentSettings(state),
+    players: currentPlayers(root),
+    matches: currentMatches(root),
+    activeRound:  currentActiveRound(root),
+    settings: currentSettings(root),
     uiState,
   };
 };

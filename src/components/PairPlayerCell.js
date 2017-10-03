@@ -9,7 +9,7 @@ class PairPlayerCell extends PureComponent {
         </select>
       );
     } else {
-      return <span>{this.props.name}</span>;
+      return this.props.name;
     }
   }
 }

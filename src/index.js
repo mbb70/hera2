@@ -10,11 +10,12 @@ import { Provider } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
 import tournamentReducer from './modules/Tournament';
 import uiReducer from './modules/uiState';
+import pairingFormReducer from './modules/pairingForm';
 import Tournament from './containers/tournament';
 import serviceWorkerRegistration from './registerServiceWorker';
 
 const rootReducer = combineReducers({
-  tournamentReducer, uiReducer
+  tournamentReducer, uiReducer, pairingFormReducer
 });
 
 const store = process.env.NODE_ENV === 'production' ? (

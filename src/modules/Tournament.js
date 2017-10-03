@@ -1,5 +1,4 @@
 import Hutils from '../utils/hutils';
-import DriveUtils from '../utils/driveUtils';
 import { fromJS, Map } from 'immutable';
 import * as e from './events';
 
@@ -43,9 +42,6 @@ function saveState(state, firstTime) {
   if (window.localStorage !== undefined) {
     setTimeout(() => window.localStorage.setItem('state/state', JSON.stringify(state)), 1);
   }
-  if (state.get(['settings', 'driveSync'])) {
-    DriveUtils.saveState(state, firstTime);
-  }
   return state;
 }
 
@@ -53,9 +49,6 @@ const initialState = getInitialState();
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case a.NEW_TOURNAMENT: {
-      return state.set('currentTournament', undefined);
-    }
     case a.SWITCH_TOURNAMENT: {
       return state.set('currentTournament', action.tournament);
     }
@@ -203,13 +196,16 @@ export default function reducer(state = initialState, action) {
     }
     case a.UPDATE_MATCH: {
       return saveState(state.update('matches', (matches) => matches
-        .map((match, matchId) => (matchId === action.match.id) ? fromJS(action.match) : match)
+        .map((m, matchId) => (matchId === action.match.id) ? m.merge(fromJS(action.match)) : m)
       ));
     }
     case a.FINISH_ROUND: {
+      const currentTournament = state.get('currentTournament');
+      const roundId = state.get('rounds').findKey((r) => (
+        r.get('tournamentId') === currentTournament && r.get('active')
+      ));
       const matches = state
-        .get('rounds')
-        .find(r => r.get('id') === action.roundId)
+        .getIn(['rounds', roundId])
         .get('matches')
         .map(mId => state.getIn(['matches', mId]).set('active', false));
 
@@ -238,13 +234,10 @@ export default function reducer(state = initialState, action) {
         });
         return players;
       });
+      const newMatches = matches.toMap().mapKeys((k,v) => v.get('id'));
       return saveState(state
-        .update('rounds', (rounds) => {
-          return rounds.map((round) => {
-            return round.get('id') === action.roundId ? round.set('active', false) : round;
-          });
-        })
-        .update('matches', (ms) => ms.merge(matches.toMap().mapKeys((k,v) => v.get('id'))))
+        .update('rounds', (rounds) => rounds.setIn([roundId, 'active'], false))
+        .update('matches', (ms) => ms.merge(newMatches))
         .set('players', players)
       );
     }

@@ -5,13 +5,12 @@ import { currentPlayers, currentMatches, currentRounds, currentSettings } from '
 import * as e from '../modules/events';
 
 const mapStateToProps = (root) => {
-  const state = root.tournamentReducer;
   const uiState = root.uiReducer;
   return {
-    players: currentPlayers(state),
-    matches: currentMatches(state),
-    rounds:  currentRounds(state),
-    settings: currentSettings(state),
+    players: currentPlayers(root),
+    matches: currentMatches(root),
+    rounds:  currentRounds(root),
+    settings: currentSettings(root),
     uiState,
   };
 };

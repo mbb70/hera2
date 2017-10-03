@@ -19,10 +19,7 @@ class AppNavComponent extends PureComponent {
   }
 
   handleFinishRound = () => {
-    const latestRoundId = this.props.rounds
-      .map(r => r.id)
-      .reduce((r, a) => (r > a ? r : a), 0);
-    this.props.finishRound(latestRoundId);
+    this.props.finishRound();
     this.props.switchView(true);
     this.closeNav();
   }
@@ -50,7 +47,7 @@ class AppNavComponent extends PureComponent {
   render() {
     const hasDroppedPlayers = Object.values(this.props.players).some(p => p.dropped);
     const unfinishedMatches = Object.values(this.props.matches).some(m => m.winner === undefined);
-    const activeRound = this.props.rounds.some(r => r.active);
+    const activeRound = this.props.activeRound !== undefined;
     return (
       <div className="p-3 app-nav">
         <Nav navbar>

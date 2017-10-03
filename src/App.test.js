@@ -1,3 +1,4 @@
+import './setupTests';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import configureMockStore from 'redux-mock-store'
@@ -11,9 +12,20 @@ import Tournament from './containers/Tournament'
 import Hutils from './utils/hutils'
 import { Provider } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
-import { Map, fromJS }  from 'immutable';
+import { Map, List, fromJS }  from 'immutable';
 
-let store = createStore(reducer);
+const identityFn = (a) => a;
+
+function getLastAction(store) {
+  const actions = store.getActions();
+  return actions[actions.length - 1];
+}
+
+function dispatch(state, store, action) {
+  store.dispatch(action);
+  return reducer(state, getLastAction(store));
+}
+
 it('renders without crashing', () => {
   const div = document.createElement('div');
   const fullStore = createStore(
@@ -80,7 +92,7 @@ it('adds players', () => {
 });
 
 function pairPlayers(state, store, playerIds) {
-  const pairs = Hutils.pairPlayers(playerIds, state.get('players').toJS(), state.getIn(['settings', '1']).toJS());
+  const pairs = Hutils.pairPlayers(state.get('players').toJS(), state.getIn(['settings', '1']).toJS(), identityFn);
   store.dispatch(r.pairPlayers(pairs));
   const action = store.getActions()[store.getActions().length - 1];
   return reducer(state, action);
@@ -132,5 +144,139 @@ it('updates settings', () => {
   expect(state.getIn(['tournaments', '1'])).toEqual('t1');
   state = saveSettings(state, store, { tournamentName: 't2' });
   expect(state.getIn(['tournaments', '1'])).toEqual('t2');
+});
+
+function getTournamentState(nPlayers) {
+  let state = newInitialState();
+  const store = mockStore(state);
+  state = dispatch(state, store, r.createTournament({ name: 't1'}));
+  const names = []
+  for (let n = 0; n < nPlayers; n += 1) {
+    names.push(`p${n+1}`);
+  }
+  state = dispatch(state, store, r.addPlayers(names));
+  return state;
+}
+
+function getPairedTournament(nPlayers) {
+  let state = getTournamentState(nPlayers);
+  const store = mockStore(state);
+  const playerIds = state.get('players').keySeq();
+  const byePlayerId = state.getIn(['settings', '1', 'byePlayerId']);
+  const needsBye = nPlayers % 2 !== 0;
+  const pairs = playerIds
+    .filter(p => needsBye || p !== byePlayerId)
+    .reduce((h, id, i) => {
+    if (i % 2 === 0) {
+      return h.push(List([id]));
+    } else {
+      return h.update(h.count() - 1, l => l.push(id));
+    }
+  }, List([]));
+  state = dispatch(state, store, r.pairPlayers(pairs));
+  return state;
+}
+
+it('updates matches', () => {
+  let state = getPairedTournament(4);
+  const store = mockStore(state);
+  const matchId = '1';
+  const oldMatch = state.getIn(['matches', matchId]);
+  expect(oldMatch.get('winner')).toEqual(undefined);
+  expect(oldMatch.get('score')).toEqual('0 - 0');
+  const update = {
+    id: matchId,
+    winner: '2',
+    score: '2 - 0',
+  };
+  state = dispatch(state, store, r.updateMatch(update));
+  const updatedMatch = state.getIn(['matches', matchId]);
+  expect(updatedMatch.get('winner')).toEqual('2');
+  expect(updatedMatch.get('score')).toEqual('2 - 0');
+});
+
+function getPlayedMatches(nPlayers) {
+  let state = getPairedTournament(nPlayers);
+  const store = mockStore(state);
+  state.get('matches').forEach((m, i) => {
+    const update = {
+      id: i,
+      winner: (i === '1' ? '-1' : m.get('p1')),
+      score: (i === '1' ? '0 - 0' : '2 - 0'),
+    };
+    state = dispatch(state, store, r.updateMatch(update));
+  });
+  return state;
+}
+
+it('finishes round', () => {
+  let state = getPlayedMatches(4);
+  const store = mockStore(state);
+  state = dispatch(state, store, r.finishRound());
+  const matches = state.get('matches');
+  const players = state.get('players');
+  const rounds = state.get('rounds');
+  const allMatchesFinished = matches.every(m => !m.get('active'));
+  expect(allMatchesFinished).toEqual(true);
+
+  const playersUpdated = matches.forEach(m => {
+    const p1 = m.get('p1');
+    const p2 = m.get('p2');
+    const winner = m.get('winner');
+    const loser = winner === p1 ? p2 : p1;
+
+    //There was a winner
+    if (winner === p1 || winner === p2) {
+      const winnerWins = players.getIn([winner, 'wins']);
+      const winnerLosses = players.getIn([winner, 'losses']);
+      expect(winnerWins).toEqual(1);
+      expect(winnerLosses).toEqual(0);
+      const loserLosses = players.getIn([loser, 'losses']);
+      const loserWins = players.getIn([loser, 'wins']);
+      expect(loserLosses).toEqual(1);
+      expect(loserWins).toEqual(0);
+    } else { //There was a draw
+      expect(players.getIn([p1, 'draws'])).toEqual(1);
+      expect(players.getIn([p2, 'draws'])).toEqual(1);
+    }
+
+    const notPlayP1 = !players.getIn([p1, 'playing']);
+    const notPlayP2 = !players.getIn([p2, 'playing']);
+    expect(notPlayP1 && notPlayP2).toEqual(true);
+
+    const didPlayP1 = players.getIn([p1, 'playedIds', p2]);
+    const didPlayP2 = players.getIn([p2, 'playedIds', p1]);
+    expect(didPlayP1 && didPlayP2).toEqual(true);
+  });
+
+  expect(rounds.every(r => !r.get('active'))).toEqual(true);
+});
+
+it('deletes tournaments', () => {
+  let state = getPlayedMatches(5);
+  const store = mockStore(state);
+  state = dispatch(state, store, r.deleteTournament());
+  expect(state.get('tournaments').count()).toEqual(0);
+  expect(state.get('settings').count()).toEqual(0);
+  expect(state.get('players').count()).toEqual(0);
+  expect(state.get('matches').count()).toEqual(0);
+  expect(state.get('rounds').count()).toEqual(0);
+  expect(state.get('currentTournament')).toEqual(undefined);
+});
+
+it('switches tournaments', () => {
+  let state = newInitialState();
+  const store = mockStore(state);
+  state = dispatch(state, store, r.createTournament({ name: 't1'}));
+  state = dispatch(state, store, r.createTournament({ name: 't2'}));
+  state = dispatch(state, store, r.switchTournament('2'));
+  expect(state.get('currentTournament')).toEqual('2');
+});
+
+it('renames players', () => {
+  let state = getPlayedMatches(5);
+  const store = mockStore(state);
+  state = dispatch(state, store, r.updatePlayer({ id: '1', name: 'Matt' }));
+  expect(state.getIn(['players', '1', 'name'])).toEqual('Matt');
 });
 

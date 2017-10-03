@@ -5,11 +5,10 @@ import { currentRounds, currentSettings } from '../selectors/tournament'
 import * as e from '../modules/events';
 
 const mapStateToProps = (root) => {
-  const state = root.tournamentReducer;
   const uiState = root.uiReducer;
   return {
-    rounds: currentRounds(state),
-    settings: currentSettings(state),
+    rounds: currentRounds(root),
+    settings: currentSettings(root),
     uiState,
   };
 };

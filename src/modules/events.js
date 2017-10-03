@@ -5,7 +5,6 @@ const SAVE_SETTINGS = 'hera/tournament/SAVE_SETTINGS';
 const UPDATE_PLAYER = 'hera/tournament/UPDATE_PLAYER';
 const UPDATE_MATCH = 'hera/tournament/UPDATE_MATCH';
 const CREATE_TOURNAMENT = 'hera/tournament/CREATE_TOURNAMENT';
-const NEW_TOURNAMENT = 'hera/tournament/NEW_TOURNAMENT';
 const SWITCH_TOURNAMENT = 'hera/tournament/SWITCH_TOURNAMENT';
 const DELETE_TOURNAMENT = 'hera/tournament/DELETE_TOURNAMENT';
 const FINISH_ROUND = 'hera/tournament/FINISH_ROUND';
@@ -35,7 +34,7 @@ const tournamentActions = {
   ADD_PLAYERS, PAIR_PLAYERS, SAVE_SETTINGS,
   UPDATE_PLAYER, UPDATE_MATCH, CREATE_TOURNAMENT,
   DELETE_TOURNAMENT, SWITCH_TOURNAMENT,
-  NEW_TOURNAMENT, TOGGLE_DROPPED_FILTER,
+  TOGGLE_DROPPED_FILTER,
   FINISH_ROUND, UPDATE_SEARCH, SWITCH_VIEW,
 };
 
@@ -59,10 +58,6 @@ export function updatePlayer(player) {
 
 export function updateMatch(match) {
   return { type: UPDATE_MATCH, match };
-}
-
-export function newTournament() {
-  return { type: NEW_TOURNAMENT };
 }
 
 export function createTournament(tournament) {
@@ -109,8 +104,8 @@ export function resetPairsForm() {
   return { type: RESET_PAIRS_FORM };
 }
 
-export function rePairPlayers() {
-  return { type: REPAIR_PLAYERS };
+export function rePairPlayers(players, settings, shuffleFn) {
+  return { type: REPAIR_PLAYERS, players, settings, shuffleFn};
 }
 
 export function swapPairPlayers(p1, p2) {

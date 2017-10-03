@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 class TimeNow extends PureComponent {
   state = {
     time: new Date(),
@@ -21,9 +21,9 @@ class TimeNow extends PureComponent {
 
   render() {
     if (this.props.yearOnly) {
-      return <span>{this.state.time.getFullYear()}</span>;
+      return this.state.time.getFullYear().toString();
     } else {
-      return <span>{this.state.time.toString()}</span>;
+      return this.state.time.toString();
     }
   }
 }
