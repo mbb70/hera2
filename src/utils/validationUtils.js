@@ -2,8 +2,12 @@ function isNumber(value) {
   return !isNaN(+value);
 }
 
-function notEmpty(value) {
-  return value.trim() !== '';
+function isInteger(value) {
+  return notEmpty(value) && value % 1 === 0;
 }
 
-export default { isNumber, notEmpty };
+function notEmpty(value) {
+  return value.toString().trim() !== '';
+}
+
+export default { isNumber, notEmpty, isInteger };

@@ -8,11 +8,11 @@ class ValidatedFormGroup extends PureComponent {
 
   render() {
     const valid = !this.props.valid || this.props.valid(this.props.value);
-    const name = valid ? '' : 'danger';
+    const className = valid ? '' : 'is-invalid';
     return (
-      <FormGroup color={name}>
+      <FormGroup>
         { this.props.children }
-        <Input className={"form-control form-control-`name`"}
+        <Input className={className}
                type={this.props.type || 'text'}
                value={this.props.value}
                onChange={this.handleKeyPress}

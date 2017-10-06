@@ -10,6 +10,7 @@ However it does have some features that should be noted, which is a great lead-i
 * Saves data on device in localStorage
 * Drop players from the tournament with the option to readd them at any time
 * Review and edit pairings before each round
+* Manually adjust players scores
 * Byes handled automatically as 2-0 win
 * Can be "Added to Home Screen" on mobile to simulate app feel and function
 * Handle multiple tournaments at once
@@ -19,11 +20,9 @@ I once read somewhere that if you aren't midly embarrassed to deploy something, 
 ### Future Features
 * Cloud Sync via Google Drive, Dropbox, and others
 * Export Tournament data as Excel sheet
-* Manual Mode (manually edit score, pairings, match outcomes, etc.)
 * Max Difference Pairing mode (pair players to maximize the average difference in scores)
 * Fancier filtering and sorting
 * Better card view when dealing with wildly different sized cards (better styling in general)
-* Edit players record directly
 * On error, present raw data for possible debugging or at least nice error screen
 * So much more testing
 

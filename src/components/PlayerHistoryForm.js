@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
-import { Button, Label, FormGroup } from 'reactstrap';
+import { Row, Col, Button, Label, FormGroup } from 'reactstrap';
 import BasicFormModal from './BasicFormModal';
+import ValidatedInput from './ValidatedInput';
 import ValidatedFormGroup from './ValidatedFormGroup';
-import ValidationUtils from '../utils/validationUtils';
+import vu from '../utils/validationUtils';
 import PlayerCard from './PlayerCard';
 import MatchDetails from './MatchDetails';
 
@@ -30,7 +31,6 @@ class PlayerHistoryForm extends PureComponent {
     const submitText='Update';
     const resetForm = this.handleResetForm;
     const onFormSubmit = this.handleFormSubmit;
-    const invalid = !ValidationUtils.notEmpty(player.name);
     const dropped = player.dropped;
     const deleted = player.deleted;
     const leftButton = (
@@ -54,8 +54,14 @@ class PlayerHistoryForm extends PureComponent {
       </div>
     );
     const fields = [
-      { field: 'name', label: 'Name'},
+      { field: 'name', label: 'Name', type: 'string', validFn: vu.notEmpty },
     ]
+    const scoreFields = [
+      { field: 'wins', label: 'Wins', type: 'number', validFn: vu.isInteger },
+      { field: 'losses', label: 'Losses', type: 'number', validFn: vu.isInteger },
+      { field: 'draws', label: 'Draws', type: 'number', validFn: vu.isInteger },
+    ]
+    const invalid = fields.concat(scoreFields).map(({ field, validFn }) => validFn(player[field])).some(v => !v);
     const historyRows = this.props.player.matchIds.map((matchId, i) => {
       const match = this.props.matches[matchId];
       const opId = (match.p1 === this.props.player.id) ? match.p2 : match.p1;
@@ -71,19 +77,38 @@ class PlayerHistoryForm extends PureComponent {
     });
     return (
       <BasicFormModal {...{entryPoint, header, invalid, submitText, resetForm, onFormSubmit, leftButton}}>
-        {fields.map(({ field, label }, i) => {
+        {fields.map(({ field, label, type, validFn }, i) => {
           return (
             <ValidatedFormGroup
               key={i}
               field={field}
               value={player[field]}
-              valid={ValidationUtils.notEmpty}
+              valid={validFn}
+              type={type}
               onChange={this.handleFieldUpdate}
             >
               <Label>{label}</Label>
             </ValidatedFormGroup>
           );
         })}
+        <FormGroup>
+          <Row>
+          {scoreFields.map(({ label }, i) => <Col key={i}>{label}</Col>)}
+          </Row>
+          <Row>
+          {scoreFields.map(({ field, label, type, validFn }, i) => (
+            <Col key={i}>
+              <ValidatedInput
+                field={field}
+                validFn={validFn}
+                type={type}
+                value={player[field]}
+                onChange={this.handleFieldUpdate}
+              />
+            </Col>
+          ))}
+          </Row>
+        </FormGroup>
         <FormGroup>
           <Label>Matches</Label>
           {historyRows}
