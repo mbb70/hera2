@@ -1,5 +1,5 @@
 function isNumber(value) {
-  return !isNaN(+value);
+  return notEmpty(value) && !isNaN(+value);
 }
 
 function isInteger(value) {
@@ -7,7 +7,7 @@ function isInteger(value) {
 }
 
 function notEmpty(value) {
-  return value.toString().trim() !== '';
+  return value !== undefined && value.toString().trim() !== '';
 }
 
 export default { isNumber, notEmpty, isInteger };
