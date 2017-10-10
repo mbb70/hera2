@@ -12,20 +12,19 @@ const inputs = {
   '1.5' : { isInteger: false, isNumber: true, notEmpty: true },
 };
 
-it('identifies integers', () => {
-  Object.entries(inputs).forEach(([v, k]) => {
-    expect(vu.isInteger(v)).toEqual(k.isInteger);
+it('works', () => {
+  Object.entries(inputs).forEach(([input, outputs]) => {
+    Object.entries(outputs).forEach(([fnName, correctOutput]) => {
+      expect(vu[fnName](input)).toEqual(correctOutput);
+    });
   });
+
 });
 
-it('identifies numbers', () => {
-  Object.entries(inputs).forEach(([v, k]) => {
-    expect(vu.isNumber(v)).toEqual(k.isNumber);
-  });
-});
-
-it('identifies emptiness', () => {
-  Object.entries(inputs).forEach(([v, k]) => {
-    expect(vu.notEmpty(v)).toEqual(k.notEmpty);
+it('works with undefined and null', () => {
+  [undefined, null].forEach((v) => {
+    expect(vu.isInteger(undefined)).toEqual(false);
+    expect(vu.isNumber(undefined)).toEqual(false);
+    expect(vu.notEmpty(undefined)).toEqual(false);
   });
 });
