@@ -1,5 +1,5 @@
 import blossom from 'edmonds-blossom';
-import { Map, List, fromJS } from 'immutable';
+import { Map, List, Seq, fromJS } from 'immutable';
 
 export function shuffle(arr) {
   const sarr = [];
@@ -50,24 +50,22 @@ export function calculateWeight(p, op, settings) {
 }
 
 export function generatePlayerGraph(playerIds, players, settings) {
-  const graph = [];
-  playerIds.forEach((id) => {
+  return playerIds.flatMap((id) => {
     const player = players[id];
-    playerIds.forEach((otherId) => {
-      if (id !== otherId && !player.playedIds[otherId]) {
+    return playerIds
+      .filter(oId => id !== oId && !player.playedIds[oId])
+      .map((otherId) => {
         const otherPlayer = players[otherId];
         const weight = calculateWeight(player, otherPlayer, settings);
-        graph.push([+id, +otherId, weight]);
-      }
-    });
+        return [+id, +otherId, weight];
+      });
   });
-  return graph;
 }
 
 export function pairPlayers(players, settings, shuffleFn) {
-  const playerIds = shuffleFn(Object.keys(players));
+  const playerIds = Seq(shuffleFn(Object.keys(players)));
   const graph = generatePlayerGraph(playerIds, players, settings);
-  const pairing = blossom(graph);
+  const pairing = blossom(graph.toJS());
   const pairs = pairing
     .map((pId, opId) => [pId, opId])
     .filter(([pId, opId]) => pId > opId)
