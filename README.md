@@ -14,16 +14,14 @@ However it does have some features that should be noted, which is a great lead-i
 * Byes handled automatically as 2-0 win
 * Can be "Added to Home Screen" on mobile to simulate app feel and function
 * Handle multiple tournaments at once
+* Sort players alphabetically or by current score
 
 
 I once read somewhere that if you aren't midly embarrassed to deploy something, you waited too long. With that in mind, another list:
 ### Future Features
-* Cloud Sync via Google Drive, Dropbox, and others
+* Cloud Sync via Google Drive, Dropbox, and/or others
 * Export Tournament data as Excel sheet
 * Max Difference Pairing mode (pair players to maximize the average difference in scores)
-* Fancier filtering and sorting
-* Better card view when dealing with wildly different sized cards (better styling in general)
-* On error, present raw data for possible debugging or at least nice error screen
 * So much more testing
 
 

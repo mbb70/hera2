@@ -25,7 +25,11 @@ class PlayerHistoryForm extends PureComponent {
   }
 
   render() {
-    const entryPoint = <PlayerCard {...this.props.player} players={this.props.players}/>;
+    const entryPoint = <PlayerCard
+      {...this.props.player}
+      settings={this.props.settings}
+      players={this.props.players}
+    />;
     const player = this.state.player;
     const header = player.name;
     const submitText='Update';

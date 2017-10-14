@@ -4,6 +4,7 @@ import PlayerCards from '../containers/playerCards';
 import MatchCards from '../containers/matchCards';
 import Welcometron from './Welcometron';
 import ResponsiveSidebar from './ResponsiveSidebar';
+import ErrorBoundary from './ErrorBoundary';
 
 connect();
 
@@ -29,11 +30,13 @@ class TournamentComponent extends PureComponent {
           open={this.props.uiState.sidebarOpen}
           toggleSidebar={this.toggleSidebar}
         >
-          {this.props.uiState.playerView ? (
-            <PlayerCards/>
-          ) : (
-            <MatchCards/>
-          )}
+          <ErrorBoundary>
+            {this.props.uiState.playerView ? (
+              <PlayerCards/>
+            ) : (
+              <MatchCards/>
+            )}
+          </ErrorBoundary>
         </ResponsiveSidebar>
       );
     }

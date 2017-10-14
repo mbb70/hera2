@@ -1,17 +1,16 @@
 import { connect } from 'react-redux';
 import { toJS } from '../components/toJS';
 import PlayerCardsComponent from '../components/PlayerCards';
-import { currentPlayers, currentMatches, currentRounds, currentSettings } from '../selectors/tournament'
+import { currentPlayers, currentFilteredPlayers, currentMatches, currentRounds, currentSettings } from '../selectors/tournament'
 import * as e from '../modules/events';
 
 const mapStateToProps = (root) => {
-  const uiState = root.uiReducer;
   return {
+    filteredPlayers: currentFilteredPlayers(root),
     players: currentPlayers(root),
     matches: currentMatches(root),
     rounds:  currentRounds(root),
     settings: currentSettings(root),
-    uiState,
   };
 };
 

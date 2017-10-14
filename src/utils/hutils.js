@@ -37,6 +37,12 @@ export function generatePlayer(details) {
   });
 }
 
+export function getScoreImm(p, settings) {
+  return settings.get('winPoints')  * p.get('wins')   -
+         settings.get('lossPoints') * p.get('losses') +
+         settings.get('drawPoints') * p.get('draws');
+}
+
 export function getScore(p, settings) {
   return settings.winPoints  * p.wins   -
          settings.lossPoints * p.losses +
@@ -73,4 +79,4 @@ export function pairPlayers(players, settings, shuffleFn) {
   return fromJS(shuffleFn(pairs));
 }
 
-export default { shuffle, defaultSettings, generatePlayer, pairPlayers, getScore };
+export default { shuffle, defaultSettings, generatePlayer, pairPlayers, getScore, getScoreImm };

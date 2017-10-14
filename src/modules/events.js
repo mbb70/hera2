@@ -11,6 +11,7 @@ const FINISH_ROUND = 'hera/tournament/FINISH_ROUND';
 
 //UI State Actions
 const TOGGLE_DROPPED_FILTER = 'hera/uistate/TOGGLE_DROPPED_FILTER';
+const TOGGLE_SORT_TYPE = 'hera/uistate/TOGGLE_SORT_TYPE';
 const UPDATE_SEARCH = 'hera/uistate/UPDATE_SEARCH';
 const SWITCH_VIEW = 'hera/uistate/SWITCH_VIEW';
 const TOGGLE_SIDEBAR = 'hera/uistate/TOGGLE_SIDEBAR';
@@ -23,11 +24,12 @@ const SWAP_PAIR_PLAYERS = 'hera/pairingform/SWAP_PAIR_PLAYERS'
 
 const pairingFormActions = {
   TOGGLE_PAIR_EDITING, LOCK_PAIRS, REPAIR_PLAYERS, RESET_PAIRS_FORM,
-  SWAP_PAIR_PLAYERS
+  SWAP_PAIR_PLAYERS,
 };
 
 const uiStateActions = {
-  TOGGLE_DROPPED_FILTER, UPDATE_SEARCH, SWITCH_VIEW, TOGGLE_SIDEBAR
+  TOGGLE_DROPPED_FILTER, UPDATE_SEARCH, SWITCH_VIEW, TOGGLE_SIDEBAR,
+  TOGGLE_SORT_TYPE,
 };
 
 const tournamentActions = {
@@ -74,6 +76,10 @@ export function deleteTournament(tournament) {
 
 export function toggleDroppedFilter(hideDropped) {
   return { type: TOGGLE_DROPPED_FILTER, hideDropped };
+}
+
+export function toggleSortType(sortByScore) {
+  return { type: TOGGLE_SORT_TYPE, sortByScore };
 }
 
 export function finishRound(roundId) {

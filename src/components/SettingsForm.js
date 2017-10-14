@@ -31,6 +31,7 @@ class SettingsForm extends PureComponent {
     const submitText='Save';
     const resetForm = this.resetForm;
     const onFormSubmit = this.handleFormSubmit;
+    const onExit = this.props.onExit;
     const invalid = !this.valid();
     const fields = [
       { field: 'tournamentName', label: 'Tournament Title', valid: ValidationUtils.notEmpty},
@@ -39,7 +40,7 @@ class SettingsForm extends PureComponent {
       { field: 'drawPoints', label: 'Draw Points', valid: ValidationUtils.isNumber, type: 'number' },
     ]
     return (
-      <BasicFormModal {...{invalid, entryPoint, header, submitText, resetForm, onFormSubmit}}>
+      <BasicFormModal {...{invalid, entryPoint, header, submitText, resetForm, onFormSubmit, onExit}}>
         {fields.map(({ field, label, valid, type }, i) => {
           return (
             <ValidatedFormGroup

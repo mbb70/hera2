@@ -1,64 +1,19 @@
 import React, { PureComponent } from 'react';
-import { Form, FormGroup, Input, Label, Jumbotron, Button, Container, Row, Col } from 'reactstrap';
+import { Form, Label, Jumbotron, Button, Container, Row, Col } from 'reactstrap';
 import ValidatedFormGroup from './ValidatedFormGroup';
-import ValidationUtils from '../utils/validationUtils';
-import DriveUtils from '../utils/driveUtils';
+import vu from '../utils/validationUtils';
 
 class Welcometron extends PureComponent {
   state = {
     name: 'My Tournament',
-    driveSync: false,
-    signingIn: false,
   }
 
   handleKeyPress = (field, value) => {
     this.setState({ [field]: value });
   }
 
-  handleLoadFromDrive = (e) => {
-  }
-
   handleGetStarted = (e) => {
-    if (this.state.driveSync) {
-      DriveUtils.generateSyncId().then((syncId) => {
-        this.props.getStarted({...this.state, syncId });
-      });
-    } else {
-      this.props.getStarted(this.state);
-    }
-    e.preventDefault();
-  }
-
-  handleGoogleAuth = (e) => {
-    const checked = e.target.checked;
-    this.setState({ driveSync: checked });
-    if (checked && !this.state.signedIn) {
-      this.setState({ signingIn: true });
-      DriveUtils.googleOauthSignIn(this.state);
-    }
-  }
-
-  componentDidMount = () => {
-    const inAuthCallback = window.location.pathname === '/auth/callback';
-    const accessToken = DriveUtils.getAccessToken();
-    this.setState({ signedIn: !!accessToken });
-    if (inAuthCallback) {
-      const response = DriveUtils.parseAuthResponse(window.location.hash);
-      if (response.error) {
-        this.setState({
-          driveSync: false,
-          name: decodeURIComponent(response.state),
-        });
-      } else {
-        DriveUtils.setAccessToken(response.access_token);
-        this.setState({
-          signedIn: true,
-          driveSync: true,
-          name: decodeURIComponent(response.state),
-        });
-      }
-      window.history.replaceState({}, null, window.location.origin);
-    }
+    this.props.getStarted(this.state);
   }
 
   render() {
@@ -90,18 +45,12 @@ class Welcometron extends PureComponent {
                 <ValidatedFormGroup
                   field='name'
                   value={this.state.name}
-                  valid={ValidationUtils.notEmpty}
+                  valid={vu.notEmpty}
                   onChange={this.handleKeyPress}
                 >
                   <Label>Start a New Tournament</Label>
                 </ValidatedFormGroup>
-                {false && <FormGroup check>
-                  <Label check>
-                    <Input type="checkbox" onChange={this.handleGoogleAuth} checked={this.state.driveSync}/>{' '}
-                    Sync with Google Drive
-                  </Label>
-                </FormGroup>}
-                <Button disabled={this.state.signingIn} type="submit">Get Started</Button>
+                <Button disabled={!vu.notEmpty(this.state.name)} type="submit">Get Started</Button>
               </Form>
             </Col>
           </Row>

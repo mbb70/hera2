@@ -155,12 +155,14 @@ export default function reducer(state = initialState, action) {
       const matchIds = matches.keySeq();
       const maxRoundId = state.get('maxRoundId') + 1;
       const roundId = maxRoundId.toString();
+      const nRounds = state.get('rounds').filter(r => r.get('tournamentId') === currentTournament).count();
       return saveState(state
         .set('maxRoundId', maxRoundId)
         .set('maxMatchId', maxMatchId + matches.size)
         .setIn(['rounds', roundId], Map({
           id: roundId,
           matches: matchIds,
+          number: nRounds + 1,
           active: true,
           tournamentId: currentTournament,
         }))

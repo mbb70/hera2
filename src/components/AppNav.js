@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import SettingsForm from './SettingsForm';
 import PairingForm from '../containers/pairingForm';
 import FaqForm from './FaqForm';
-import { Button, NavLink, NavItem, Nav } from 'reactstrap';
+import LinkButton from './LinkButton';
+import { Nav, NavLink, NavItem } from 'reactstrap';
 
 connect();
 
@@ -44,10 +45,59 @@ class AppNavComponent extends PureComponent {
     this.closeNav();
   }
 
+  handleToggleSortType = () => {
+    this.props.toggleSortType(!this.props.uiState.sortByScore);
+    this.closeNav();
+  }
+
   render() {
     const hasDroppedPlayers = Object.values(this.props.players).some(p => p.dropped);
     const unfinishedMatches = Object.values(this.props.matches).some(m => m.winner === undefined);
     const activeRound = this.props.activeRound !== undefined;
+    const rows = [];
+    (!unfinishedMatches && activeRound) && rows.push(
+      <LinkButton onClick={this.handleFinishRound}>Finish Round</LinkButton>
+    );
+
+    (!activeRound) && rows.push(
+      <PairingForm
+        pairPlayers={this.handlePairPlayers}
+        settings={this.props.settings}
+        players={this.props.players}
+        onExit={this.closeNav}
+      />
+    );
+    rows.push(
+      <SettingsForm
+        onExit={this.closeNav}
+        settings={this.props.settings}
+        saveSettings={this.handleSaveSettings}
+      />
+    );
+    rows.push(
+      <LinkButton onClick={this.handleToggleSortType}>
+        {this.props.uiState.sortByScore ? 'Sort Alphabetically' : 'Sort By Score'}
+      </LinkButton>
+    );
+    (hasDroppedPlayers) && rows.push(
+      <LinkButton onClick={this.handleToggleDroppedFilter}>
+      {this.props.uiState.hideDropped ? 'Show Dropped' : 'Hide Dropped'}
+      </LinkButton>
+    );
+    rows.push(
+      <LinkButton onClick={this.handleSwitchTournament}>
+        Switch Tournament
+      </LinkButton>
+    );
+    rows.push(
+      <LinkButton onClick={this.handleDeleteTournament}>
+        Delete Tournament
+      </LinkButton>
+    );
+    rows.push(
+      <FaqForm onExit={this.closeNav}/>
+    );
+
     return (
       <div className="p-3 app-nav">
         <Nav navbar>
@@ -55,52 +105,13 @@ class AppNavComponent extends PureComponent {
             <h5>{this.props.settings.tournamentName}</h5>
             <hr className="my-1"/>
           </div>
-          <NavItem>
-            <NavLink tag="span">
-              {(!unfinishedMatches && activeRound) && (
-                <Button color="link" onClick={this.handleFinishRound}>Finish Round</Button>
-              )}
-              {!activeRound && (
-                <PairingForm pairPlayers={this.handlePairPlayers} settings={this.props.settings} players={this.props.players}/>
-              )}
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink tag="span">
-              <SettingsForm
-                settings={this.props.settings}
-                saveSettings={this.handleSaveSettings}
-              />
-            </NavLink>
-          </NavItem>
-          {hasDroppedPlayers && (
-            <NavItem>
+          {rows.map((navItem,i) => (
+            <NavItem key={i}>
               <NavLink tag="span">
-                <Button onClick={this.handleToggleDroppedFilter} color="link">
-                {this.props.uiState.hideDropped ? 'Show Dropped' : 'Hide Dropped'}
-                </Button>
+                {navItem}
               </NavLink>
             </NavItem>
-          )}
-          <NavItem>
-            <NavLink tag="span">
-              <Button onClick={this.handleSwitchTournament} color="link">
-                Switch Tournament
-              </Button>
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink tag="span">
-              <Button onClick={this.handleDeleteTournament} color="link">
-                Delete Tournament
-              </Button>
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink tag="span">
-              <FaqForm onSubmit={this.closeNav}/>
-            </NavLink>
-          </NavItem>
+          ))}
         </Nav>
       </div>
     );

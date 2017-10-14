@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import Hutils from '../utils/hutils'
 import { CardImg, CardTitle, CardText, CardBlock, Card } from 'reactstrap';
 
 class PlayerCard extends PureComponent {
@@ -6,6 +7,7 @@ class PlayerCard extends PureComponent {
     const cardStyle = {
       opacity: this.props.dropped ? 0.5 : 1,
     }
+    const score = this.props.settings ? Hutils.getScore(this.props, this.props.settings) : undefined;
     return (
       <Card style={cardStyle} tag="a" className="width-initial-xs-down" onClick={this.props.onClick}>
         <CardImg top width="100%" src="player_image.png" alt="card image cap" />
@@ -20,8 +22,8 @@ class PlayerCard extends PureComponent {
             {this.props.playing !== undefined && (
               <span className="card-playing d-block">Playing: {this.props.players[this.props.playing].name}</span>
             )}
-            {this.props.score !== undefined && (
-              <span className="card-playing d-block">Score: {this.props.score}</span>
+            {score !== undefined && (
+              <span className="card-playing d-block">Score: {score}</span>
             )}
           </CardText>
         </CardBlock>

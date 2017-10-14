@@ -23,6 +23,7 @@ const mapDispatchToProps = (dispatch) => ({
   finishRound: (roundId) => dispatch(e.finishRound(roundId)),
 
   toggleDroppedFilter: (hideDropped) => dispatch(e.toggleDroppedFilter(hideDropped)),
+  toggleSortType: (sortByScore) => dispatch(e.toggleSortType(sortByScore)),
   switchView: (playerView) => dispatch(e.switchView(playerView)),
   toggleSidebar: (sidebarOpen) => dispatch(e.toggleSidebar(sidebarOpen)),
 });

@@ -9,6 +9,7 @@ export function newInitialState() {
       playerView: true,
       hideDropped: false,
       sidebarOpen: false,
+      sortByScore: false,
   });
 };
 
@@ -27,6 +28,9 @@ export default function reducer(state = initialState, action) {
     }
     case a.TOGGLE_DROPPED_FILTER: {
       return state.set('hideDropped', action.hideDropped);
+    }
+    case a.TOGGLE_SORT_TYPE: {
+      return state.set('sortByScore', action.sortByScore);
     }
     case a.UPDATE_SEARCH: {
       return state.set('searchText', action.searchText);

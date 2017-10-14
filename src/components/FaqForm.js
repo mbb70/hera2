@@ -21,9 +21,10 @@ class FaqForm extends PureComponent {
     const header = 'Frequently Asked Questions';
     const cancelText='Close';
     const resetForm = () => {};
+    const onExit = this.props.onExit;
     const onFormSubmit = undefined;
     return (
-      <BasicFormModal {...{entryPoint, header, cancelText, resetForm, onFormSubmit}}>
+      <BasicFormModal {...{entryPoint, header, cancelText, resetForm, onFormSubmit, onExit}}>
         <FaqH>What is this?</FaqH>
         <p>
         If you don't know what this is, I honestly have no idea how you ended up here. You can stay though, it's cool. This is a swiss style tourament manager I wrote for my friend Bruce to help him run Magic the Gathering (MtG) tournaments at a local library.

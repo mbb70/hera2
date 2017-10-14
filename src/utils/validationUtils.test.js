@@ -28,3 +28,20 @@ it('works with undefined and null', () => {
     expect(vu.notEmpty(undefined)).toEqual(false);
   });
 });
+
+const caseInputs = [
+  { inp: ['has test', 'test'], out: true },
+  { inp: ['has tEst', 'tesT'], out: true },
+  { inp: ['has tesT', ''], out: true },
+  { inp: ['has tesT', 'has tesT'], out: true },
+  { inp: ['has tesT', 'tEt'], out: false },
+  { inp: [undefined, 'has tesT'], out: false },
+  { inp: ['has testT', undefined], out: false },
+];
+
+it('identifies case insensitive includes', () => {
+  caseInputs.forEach(({ inp, out }) => {
+    expect(vu.caseInsIncludes(inp[0], inp[1])).toEqual(out);
+  });
+});
+
