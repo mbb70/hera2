@@ -74,12 +74,12 @@ class AppNavComponent extends PureComponent {
         saveSettings={this.handleSaveSettings}
       />
     );
-    rows.push(
+    (this.props.uiState.playerView) && rows.push(
       <LinkButton onClick={this.handleToggleSortType}>
         {this.props.uiState.sortByScore ? 'Sort Alphabetically' : 'Sort By Score'}
       </LinkButton>
     );
-    (hasDroppedPlayers) && rows.push(
+    (this.props.uiState.playerView && hasDroppedPlayers) && rows.push(
       <LinkButton onClick={this.handleToggleDroppedFilter}>
       {this.props.uiState.hideDropped ? 'Show Dropped' : 'Hide Dropped'}
       </LinkButton>
