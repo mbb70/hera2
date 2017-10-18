@@ -6,7 +6,8 @@ import TopNav from '../containers/topNav';
 class ResponsiveSidebarComponent extends PureComponent {
   sidebarStyles = {
     sidebar: { zIndex: 1040 },
-    overlay: { zIndex: 1039 }
+    content: { overflowY: 'auto' },
+    overlay: { zIndex: 1039 },
   }
 
   render() {

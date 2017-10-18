@@ -29,6 +29,24 @@ class BasicFormModal extends PureComponent {
     const entryPoint = React.cloneElement(this.props.entryPoint, {
       onClick: this.handleLoadForm,
     });
+    let submitButton = this.props.submitText && (
+      <Button
+        color="primary"
+        type="submit"
+        disabled={this.props.invalid}
+        onClick={this.handleFormSubmit}
+      >
+        {this.props.submitText}
+      </Button>
+    );
+    if (this.props.submitButton) {
+      submitButton = React.cloneElement(this.props.submitButton, {
+        onClick: () => {
+           this.props.submitButton.props.onClick();
+           this.toggleForm();
+        }
+      });
+    }
     return (
       <div>
         {entryPoint}
@@ -47,9 +65,7 @@ class BasicFormModal extends PureComponent {
                   this.props.leftButton
               )}
               <Button className={classNames({'hidden-xxs-down' : this.props.leftButton})} onClick={this.toggleForm}>{this.props.cancelText || 'Cancel'}</Button>
-              {this.props.submitText && (
-                <Button color="primary" type="submit" disabled={this.props.invalid} onClick={this.handleFormSubmit}>{this.props.submitText}</Button>
-              )}
+              {submitButton}
             </ModalFooter>
           </Modal>
         )}

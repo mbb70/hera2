@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import SettingsForm from './SettingsForm';
 import PairingForm from '../containers/pairingForm';
+import ExporterForm from '../containers/exporterForm';
 import FaqForm from './FaqForm';
 import LinkButton from './LinkButton';
 import { Nav, NavLink, NavItem } from 'reactstrap';
@@ -93,6 +94,9 @@ class AppNavComponent extends PureComponent {
       <LinkButton onClick={this.handleDeleteTournament}>
         Delete Tournament
       </LinkButton>
+    );
+    rows.push(
+      <ExporterForm onExit={this.closeNav}/>
     );
     rows.push(
       <FaqForm onExit={this.closeNav}/>

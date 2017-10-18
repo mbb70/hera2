@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
-import { Button } from 'reactstrap';
 import BasicFormModal from './BasicFormModal';
 import TimeNow from './TimeNow';
 import TabA from './TabA';
+import LinkButton from './LinkButton';
 
 const FaqH = (props) => {
   return (
@@ -17,7 +17,7 @@ const FaqH = (props) => {
 
 class FaqForm extends PureComponent {
   render() {
-    const entryPoint = <Button color="link">FAQ</Button>;
+    const entryPoint = <LinkButton>FAQ</LinkButton>;
     const header = 'Frequently Asked Questions';
     const cancelText='Close';
     const resetForm = () => {};
