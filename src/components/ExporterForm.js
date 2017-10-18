@@ -66,7 +66,7 @@ class ExporterForm extends PureComponent {
     const resetForm = () => {};
     const onFormSubmit = () => {};
     const onExit = this.props.onExit;
-    const submitButton = (<a className="btn btn-primary" download={'output.' + this.state.downloadType} href={this.state.uri} onClick={onFormSubmit}>Download</a>);
+    const submitButton = (<a className="btn btn-primary" download={this.props.tournamentState.tournamentName + '.' + this.state.downloadType} href={this.state.uri} onClick={onFormSubmit}>Download</a>);
     return (
       <BasicFormModal {...{entryPoint, header, submitButton, onFormSubmit, resetForm, onExit}}>
         <FormGroup>
