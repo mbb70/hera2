@@ -10,7 +10,7 @@ class ExporterForm extends PureComponent {
   generateCsv = (tstate) => {
     const rows = [];
     const header = ['Round', 'Table', 'Player 1', 'Player 2', 'Winner', 'Score'];
-    rows.push(header.join(','));
+    rows.push('"' + header.join('","') + '"');
     const rounds = tstate.rounds;
     for (let i = rounds.length - 1; i >= 0; i--) {
       const round = rounds[i];
