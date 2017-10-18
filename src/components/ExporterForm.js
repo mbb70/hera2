@@ -21,7 +21,8 @@ class ExporterForm extends PureComponent {
         row.push(match.table);
         row.push(tstate.players[match.p1].name);
         row.push(tstate.players[match.p2].name);
-        row.push(tstate.players[match.winner].name);
+        const winner = tstate.players[match.winner];
+        row.push(winner ? winner.name : '');
         row.push("'" + match.score + '"');
         rows.push(row.join('","'));
       });
