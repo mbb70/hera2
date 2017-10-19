@@ -13,7 +13,11 @@ class PlayerHistoryForm extends PureComponent {
   };
 
   handleFieldUpdate = (field, value) => {
-    this.setState({player: {...this.state.player, [field]: value }});
+    let val = value;
+    if (['wins', 'losses', 'draws'].indexOf(field) > -1) {
+      val = +value;
+    }
+    this.setState({player: {...this.state.player, [field]: val }});
   }
 
   handleFormSubmit = () => {

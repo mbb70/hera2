@@ -7,6 +7,13 @@ import { Label, FormGroup } from 'reactstrap';
 connect();
 
 class ExporterForm extends PureComponent {
+  getInitialState = () => ({
+    downloadDestination: 'local',
+    downloadType: 'csv',
+    uri: ''
+  });
+  state = this.getInitialState();
+
   generateCsv = (tstate) => {
     const rows = [];
     const header = ['Round', 'Table', 'Player 1', 'Player 2', 'Winner', 'Score'];
@@ -21,9 +28,14 @@ class ExporterForm extends PureComponent {
         row.push(match.table);
         row.push(tstate.players[match.p1].name);
         row.push(tstate.players[match.p2].name);
-        const winner = tstate.players[match.winner];
-        row.push(winner ? winner.name : '');
-        row.push("'" + match.score + '"');
+        if (match.winner === undefined) {
+          row.push('Ongoing');
+          row.push('"');
+        } else {
+          const winner = tstate.players[match.winner];
+          row.push(winner ? winner.name : 'Draw');
+          row.push("'" + match.score + '"');
+        }
         rows.push(row.join('","'));
       });
     };
@@ -38,11 +50,11 @@ class ExporterForm extends PureComponent {
     }
   }
 
-  state = {
-    downloadDestination: 'local',
-    downloadType: 'csv',
-    uri: this.getUri('local', 'csv'),
-  };
+  handleFormLoad = () => {
+    this.setState({
+      uri: this.getUri(this.state.downloadDestination, this.state.downloadType)
+    });
+  }
 
   handleDownloadDestination = (e) => {
     const downloadDestination = e.target.value;
@@ -60,15 +72,20 @@ class ExporterForm extends PureComponent {
     });
   }
 
+  handleResetForm = () => {
+    this.setState(this.getInitialState());
+  }
+
   render() {
     const entryPoint = <LinkButton>Export Data</LinkButton>;
     const header = 'Export';
-    const resetForm = () => {};
+    const resetForm = this.handleResetForm;
+    const onLoad = this.handleFormLoad;
     const onFormSubmit = () => {};
     const onExit = this.props.onExit;
     const submitButton = (<a className="btn btn-primary" download={this.props.tournamentState.tournamentName + '.' + this.state.downloadType} href={this.state.uri} onClick={onFormSubmit}>Download</a>);
     return (
-      <BasicFormModal {...{entryPoint, header, submitButton, onFormSubmit, resetForm, onExit}}>
+      <BasicFormModal {...{entryPoint, header, submitButton, onFormSubmit, onLoad, resetForm, onExit}}>
         <FormGroup>
           <Label>Export To</Label>
           <div>
