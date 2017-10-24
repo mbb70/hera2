@@ -41,7 +41,7 @@ const caseInputs = [
 
 it('identifies case insensitive includes', () => {
   caseInputs.forEach(({ inp, out }) => {
-    expect(vu.caseInsIncludes(inp[0], inp[1])).toEqual(out);
+    expect(vu.caseInsIncludes(inp[0], inp[1])).toBe(out);
   });
 });
 

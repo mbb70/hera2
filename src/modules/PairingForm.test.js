@@ -18,18 +18,18 @@ const identityFn = (a) => a;
 it('toggle pair editing', () => {
   let state = newInitialState();
   const store = mockStore(state);
-  expect(state.get('editing')).toEqual(false);
+  expect(state.get('editing')).toBeFalsy();
   state = pdispatch(state, store, r.togglePairEditing());
-  expect(state.get('editing')).toEqual(true);
+  expect(state.get('editing')).toBeTruthy();
   state = pdispatch(state, store, r.togglePairEditing());
-  expect(state.get('editing')).toEqual(false);
+  expect(state.get('editing')).toBeFalsy();
 });
 
 it('locks pairs', () => {
   let state = newInitialState();
   const store = mockStore(state);
   state = pdispatch(state, store, r.lockPairs('1', true));
-  expect(state.getIn(['lockedTables', '1'])).toEqual(true);
+  expect(state.getIn(['lockedTables', '1'])).toBeTruthy();
 });
 
 it('pairs players', () => {
