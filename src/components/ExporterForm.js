@@ -35,7 +35,7 @@ class ExporterForm extends PureComponent {
           const winner = tstate.players[match.winner];
           row.push(winner ? winner.name : 'Draw');
           row.push("'" + match.score);
-          row.push("'" + match.drop.map(p => tstate.players[p].name).join(' and '));
+          row.push(match.drop.map(p => tstate.players[p].name).join(' and '));
         }
         rows.push('"' + row.join('","') + '"');
       });
