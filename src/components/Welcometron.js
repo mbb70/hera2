@@ -6,6 +6,8 @@ import vu from '../utils/validationUtils';
 class Welcometron extends PureComponent {
   state = {
     name: 'My Tournament',
+    errorMsg: '',
+    uploadedState: undefined,
   }
 
   handleKeyPress = (field, value) => {
@@ -13,7 +15,38 @@ class Welcometron extends PureComponent {
   }
 
   handleGetStarted = (e) => {
-    this.props.getStarted(this.state);
+    this.props.createTournament({
+      name: this.state.name
+    });
+  }
+
+  handleUploadedState = () => {
+    this.props.createTournament({
+      state: this.state.uploadedState,
+    });
+  }
+
+  handleJsonUpload = (e) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const uploadedState = JSON.parse(e.target.result);
+        const requiredKeys = ['players', 'matches', 'rounds', 'tournamentName'];
+        const missingKeys = requiredKeys.filter(k => uploadedState[k] === undefined);
+        if (missingKeys.length > 0) {
+          this.setState({
+            uploadMsg: "Your file could not be uploaded! The following required fields are missing: '"+missingKeys.join("', '")+"'.",
+          });
+        } else {
+          this.setState({ uploadMsg: '', uploadedState });
+        }
+      } catch (ex) {
+        this.setState({
+          uploadMsg: 'Your file could not be uploaded! Please check the format.'
+        });
+      }
+    };
+    reader.readAsText(e.target.files[0]);
   }
 
   render() {
@@ -38,6 +71,26 @@ class Welcometron extends PureComponent {
                       <Button className="mr-1" key={id} onClick={() => this.props.switchTournament(id)}>{name}</Button>
                     );
                   })}
+                  <Label className="mt-3 mb-0 d-block">OR</Label>
+                </div>
+              )}
+              {false && (
+                <div className="pb-3">
+                  <Label className="d-block">Import a Tournament</Label>
+                  <input type="file" name="files[]" accept="application/json,.json" onChange={this.handleJsonUpload}/>
+                  {this.state.errorMsg !== '' && (
+                    <Label>
+                    {this.state.errorMsg}
+                    </Label>
+                  )}
+                  {this.state.uploadedState && (
+                    <div>
+                      <Label>Upload Successful!</Label>
+                      <div>
+                        <Button type="button" onClick={this.handleUploadedState}>Get Started</Button>
+                      </div>
+                    </div>
+                  )}
                   <Label className="mt-3 mb-0 d-block">OR</Label>
                 </div>
               )}

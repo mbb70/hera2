@@ -16,7 +16,7 @@ class ExporterForm extends PureComponent {
 
   generateCsv = (tstate) => {
     const rows = [];
-    const header = ['Round', 'Table', 'Player 1', 'Player 2', 'Winner', 'Score'];
+    const header = ['Round', 'Table', 'Player 1', 'Player 2', 'Winner', 'Score', 'Dropped'];
     rows.push('"' + header.join('","') + '"');
     const rounds = tstate.rounds;
     for (let i = rounds.length - 1; i >= 0; i--) {
@@ -24,19 +24,20 @@ class ExporterForm extends PureComponent {
       round.matches.forEach((matchId) => {
         const match = tstate.matches[matchId];
         const row = [];
-        row.push('"' + round.number);
+        row.push(round.number);
         row.push(match.table);
         row.push(tstate.players[match.p1].name);
         row.push(tstate.players[match.p2].name);
         if (match.winner === undefined) {
           row.push('Ongoing');
-          row.push('"');
+          row.push('');
         } else {
           const winner = tstate.players[match.winner];
           row.push(winner ? winner.name : 'Draw');
-          row.push("'" + match.score + '"');
+          row.push("'" + match.score);
+          row.push("'" + match.drop.map(p => tstate.players[p].name).join(' and '));
         }
-        rows.push(row.join('","'));
+        rows.push('"' + row.join('","') + '"');
       });
     };
     return rows.join("\n");

@@ -3,7 +3,7 @@ import Sidebar from 'react-sidebar';
 import AppNav from '../containers/appNav';
 import TopNav from '../containers/topNav';
 
-class ResponsiveSidebarComponent extends PureComponent {
+class ResponsiveSidebar extends PureComponent {
   sidebarStyles = {
     sidebar: { zIndex: 1040 },
     content: { overflowY: 'auto' },
@@ -24,4 +24,4 @@ class ResponsiveSidebarComponent extends PureComponent {
   }
 }
 
-export default ResponsiveSidebarComponent;
+export default ResponsiveSidebar;

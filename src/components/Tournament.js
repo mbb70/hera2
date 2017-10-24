@@ -9,21 +9,19 @@ import ErrorBoundary from './ErrorBoundary';
 connect();
 
 class TournamentComponent extends PureComponent {
-  handleGetStarted = (tournament) => {
-    this.props.createTournament(tournament);
-  }
-
   toggleSidebar = () => {
     this.props.toggleSidebar(!this.props.uiState.sidebarOpen);
   }
 
   render() {
     if (!this.props.settings) {
-      return (<Welcometron
+      return (
+        <Welcometron
           tournaments={this.props.tournaments}
           switchTournament={this.props.switchTournament}
-          getStarted={this.handleGetStarted}
-          />);
+          createTournament={this.props.createTournament}
+        />
+      );
     } else {
       return (
         <ResponsiveSidebar

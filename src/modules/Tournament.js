@@ -20,8 +20,7 @@ export function newInitialState() {
 };
 
 function migrate(state) {
-  if (state === null) {
-  } else if (state.version === 1) {
+  if (state.version === 1) {
   }
   return state;
 }
@@ -38,7 +37,7 @@ function getInitialState() {
   }
 }
 
-function saveState(state, firstTime) {
+function saveState(state) {
   if (window.localStorage !== undefined) {
     setTimeout(() => window.localStorage.setItem('state/state', JSON.stringify(state)), 1);
   }
@@ -78,28 +77,29 @@ export default function reducer(state = initialState, action) {
       const t = action.tournament;
       const maxTournamentId = state.get('maxTournamentId') + 1;
       const maxPlayerId = state.get('maxPlayerId') + 1;
-      const tournamentId = maxTournamentId.toString();
+      const tournamentId= maxTournamentId.toString();
       const id = maxPlayerId.toString();
       return saveState(state
-      .setIn(['players', id], Hutils.generatePlayer({
-          draws: 5000,
-          name: 'Bye',
-          bye: true,
-          tournamentId,
-          id,
-      }))
-      .setIn(['tournaments', tournamentId], t.name)
-      .setIn(['settings', tournamentId], fromJS({
-          tournamentName: t.name,
-          byePlayerId: id,
-          newTournament: false,
-          winPoints: 3,
-          drawPoints: 1,
-          lossPoints: 0,
-      }))
-      .set('currentTournament', tournamentId)
-      .set('maxTournamentId', maxTournamentId)
-      .set('maxPlayerId', maxPlayerId), true)
+        .setIn(['players', id], Hutils.generatePlayer({
+            draws: 5000,
+            name: 'Bye',
+            bye: true,
+            tournamentId,
+            id,
+        }))
+        .setIn(['tournaments', tournamentId], t.name)
+        .setIn(['settings', tournamentId], fromJS({
+            tournamentName: t.name,
+            byePlayerId: id,
+            newTournament: false,
+            winPoints: 3,
+            drawPoints: 1,
+            lossPoints: 0,
+        }))
+        .set('currentTournament', tournamentId)
+        .set('maxTournamentId', maxTournamentId)
+        .set('maxPlayerId', maxPlayerId)
+      );
     }
     case a.ADD_PLAYERS: {
       let maxPlayerId = state.get('maxPlayerId');
