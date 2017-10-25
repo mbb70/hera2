@@ -8,7 +8,6 @@
     "classnames": "^2.2.5",
     "edmonds-blossom": "^1.0.0",
     "immutable": "^3.8.1",
-    "localforage": "^1.5.2",
     "react": "16.0.0",
     "react-addons-css-transition-group": "^15.5.2",
     "react-addons-transition-group": "^15.5.2",
