@@ -50,25 +50,23 @@ class BasicFormModal extends PureComponent {
     return (
       <div>
         {entryPoint}
-        {this.state.open && (
-          <Modal {...this.props.additionalModalParams} autoFocus={false} isOpen={this.state.open} toggle={this.toggleForm} onExit={this.props.onExit}>
-            <ModalHeader toggle={this.toggleForm}>
-              {this.props.header}
-            </ModalHeader>
-            <ModalBody>
-              <Form onSubmit={this.handleFormSubmit}>
-                {this.props.children}
-              </Form>
-            </ModalBody>
-            <ModalFooter>
-              {this.props.leftButton && (
-                  this.props.leftButton
-              )}
-              <Button className={classNames({'hidden-xxs-down' : this.props.leftButton})} onClick={this.toggleForm}>{this.props.cancelText || 'Cancel'}</Button>
-              {submitButton}
-            </ModalFooter>
-          </Modal>
-        )}
+        <Modal {...this.props.additionalModalParams} autoFocus={false} isOpen={this.state.open} toggle={this.toggleForm} onExit={this.props.onExit}>
+          <ModalHeader toggle={this.toggleForm}>
+            {this.props.header}
+          </ModalHeader>
+          <ModalBody>
+            <Form onSubmit={this.handleFormSubmit}>
+              {this.props.children}
+            </Form>
+          </ModalBody>
+          <ModalFooter>
+            {this.props.leftButton && (
+                this.props.leftButton
+            )}
+            <Button className={classNames({'hidden-xxs-down' : this.props.leftButton})} onClick={this.toggleForm}>{this.props.cancelText || 'Cancel'}</Button>
+            {submitButton}
+          </ModalFooter>
+        </Modal>
       </div>
     );
   }
