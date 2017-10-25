@@ -113,8 +113,26 @@ $prev-arrow-icon: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.
   }
 }
 
+.card-group .card:only-child {
+  border-radius: 0;
+  margin-bottom: 5px;
+}
+
+.card-group .card:only-child .card-img-top {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.card-footer:last-child {
+  border-radius: 0;
+}
+
+.card-header:first-child {
+  border-radius: 0;
+}
+
 .card {
-  border-radius: 3px;
+  border-radius: 0;
   box-shadow: 2px 2px 1px #888;
   margin: 5px;
   width: 280px;

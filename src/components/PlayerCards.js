@@ -12,7 +12,7 @@ class PlayerCardsComponent extends PureComponent {
       <Container fluid id="player-cards" className={this.props.className}>
         <Row>
           <Col>
-            <CardGroup className="align-content-start flex-wrap" style={{justifyContent: 'center'}}>
+            <CardGroup style={{justifyContent: 'center'}}>
               {this.props.filteredPlayers.map((p) =>
                   <PlayerHistoryForm
                     key={p.id}
