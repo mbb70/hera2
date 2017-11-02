@@ -10,7 +10,7 @@ export function newInitialState() {
     pairs: [],
     lockedTables: {},
   });
-};
+}
 
 const initialState = newInitialState();
 
@@ -23,9 +23,15 @@ export default function reducer(state = initialState, action) {
       return state.setIn(['lockedTables', action.tableId], action.locked);
     }
     case a.REPAIR_PLAYERS: {
-      const lockedPairs = state.get('lockedTables').filter(v => v)
+      const lockedPairs = state
+        .get('lockedTables')
+        .filter(v => v)
         .map((v, tableId) => state.getIn(['pairs', tableId.toString()]));
-      let pairs = Hutils.pairPlayers(action.players, action.settings, action.shuffleFn);
+      let pairs = Hutils.pairPlayers(
+        action.players,
+        action.settings,
+        action.shuffleFn
+      );
       lockedPairs.forEach((lockedPair, tableId) => {
         pairs = pairs.insert(+tableId, lockedPair);
       });
@@ -35,8 +41,8 @@ export default function reducer(state = initialState, action) {
       return newInitialState();
     }
     case a.SWAP_PAIR_PLAYERS: {
-      return state.update('pairs', (pairs) => {
-        return pairs.map((pair) => {
+      return state.update('pairs', pairs => {
+        return pairs.map(pair => {
           return pair.map(p => {
             if (p === action.p1) return action.p2;
             if (p === action.p2) return action.p1;
@@ -49,4 +55,3 @@ export default function reducer(state = initialState, action) {
       return state;
   }
 }
-

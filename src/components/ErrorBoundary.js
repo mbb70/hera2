@@ -5,7 +5,7 @@ import TabA from './TabA';
 class ErrorBoundary extends Component {
   state = {
     error: false,
-    info: false
+    info: false,
   };
 
   componentDidCatch(error, info) {
@@ -15,7 +15,7 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.error) {
       const trace = this.state.info.componentStack
-        .split("\n")
+        .split('\n')
         .map(l => l.trim())
         .filter(l => l.match(/\.js/))
         .slice(0, 10);
@@ -28,7 +28,9 @@ class ErrorBoundary extends Component {
             </Row>
             <Row>
               Please consider filing an issue
-                <TabA href="https://github.com/mbb70/hera2/issues">&nbsp;here&nbsp;</TabA>
+              <TabA href="https://github.com/mbb70/hera2/issues">
+                &nbsp;here&nbsp;
+              </TabA>
               with the following information:
             </Row>
             <Row>{this.state.error.toString()}</Row>

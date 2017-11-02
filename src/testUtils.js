@@ -1,5 +1,5 @@
-import configureMockStore from 'redux-mock-store'
-import { Map, List, fromJS }  from 'immutable';
+import configureMockStore from 'redux-mock-store';
+import { Map, List, fromJS } from 'immutable';
 import tReducer, { newInitialState } from './modules/Tournament';
 import uReducer from './modules/uiState';
 import pReducer from './modules/pairingForm';
@@ -29,10 +29,10 @@ const mockStore = configureMockStore();
 export function getTournamentState(nPlayers) {
   let state = newInitialState();
   const store = mockStore(state);
-  state = tdispatch(state, store, r.createTournament({ name: 't1'}));
-  const names = []
+  state = tdispatch(state, store, r.createTournament({ name: 't1' }));
+  const names = [];
   for (let n = 0; n < nPlayers; n += 1) {
-    names.push(`p${n+1}`);
+    names.push(`p${n + 1}`);
   }
   state = tdispatch(state, store, r.addPlayers(names));
   return state;
@@ -47,12 +47,12 @@ export function getPairedTournament(nPlayers) {
   const pairs = playerIds
     .filter(p => needsBye || p !== byePlayerId)
     .reduce((h, id, i) => {
-    if (i % 2 === 0) {
-      return h.push(List([id]));
-    } else {
-      return h.update(h.count() - 1, l => l.push(id));
-    }
-  }, List([]));
+      if (i % 2 === 0) {
+        return h.push(List([id]));
+      } else {
+        return h.update(h.count() - 1, l => l.push(id));
+      }
+    }, List([]));
   state = tdispatch(state, store, r.pairPlayers(pairs));
   return state;
 }
@@ -63,11 +63,10 @@ export function getPlayedMatches(nPlayers) {
   state.get('matches').forEach((m, i) => {
     const update = {
       id: i,
-      winner: (i === '1' ? '-1' : m.get('p1')),
-      score: (i === '1' ? '0 - 0' : '2 - 0'),
+      winner: i === '1' ? '-1' : m.get('p1'),
+      score: i === '1' ? '0 - 0' : '2 - 0',
     };
     state = tdispatch(state, store, r.updateMatch(update));
   });
   return state;
 }
-

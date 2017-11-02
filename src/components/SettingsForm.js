@@ -9,38 +9,69 @@ class SettingsForm extends PureComponent {
 
   resetForm = () => {
     this.setState(this.props.settings);
-  }
+  };
 
   handleKeyPress = (field, value) => {
     this.setState({ [field]: value });
-  }
+  };
 
   handleFormSubmit = () => {
     this.props.saveSettings(this.state);
-  }
+  };
 
   valid = () => {
-    return ValidationUtils.isNumber(this.state.winPoints)  &
-           ValidationUtils.isNumber(this.state.lossPoints) &
-           ValidationUtils.isNumber(this.state.drawPoints);
-  }
+    return (
+      ValidationUtils.isNumber(this.state.winPoints) &
+      ValidationUtils.isNumber(this.state.lossPoints) &
+      ValidationUtils.isNumber(this.state.drawPoints)
+    );
+  };
 
   render() {
     const entryPoint = <Button color="link">Settings</Button>;
     const header = 'Edit Settings';
-    const submitText='Save';
+    const submitText = 'Save';
     const resetForm = this.resetForm;
     const onFormSubmit = this.handleFormSubmit;
     const onExit = this.props.onExit;
     const invalid = !this.valid();
     const fields = [
-      { field: 'tournamentName', label: 'Tournament Title', valid: ValidationUtils.notEmpty},
-      { field: 'winPoints',  label: 'Win Points',  valid: ValidationUtils.isNumber, type: 'number' },
-      { field: 'lossPoints', label: 'Loss Points', valid: ValidationUtils.isNumber, type: 'number' },
-      { field: 'drawPoints', label: 'Draw Points', valid: ValidationUtils.isNumber, type: 'number' },
-    ]
+      {
+        field: 'tournamentName',
+        label: 'Tournament Title',
+        valid: ValidationUtils.notEmpty,
+      },
+      {
+        field: 'winPoints',
+        label: 'Win Points',
+        valid: ValidationUtils.isNumber,
+        type: 'number',
+      },
+      {
+        field: 'lossPoints',
+        label: 'Loss Points',
+        valid: ValidationUtils.isNumber,
+        type: 'number',
+      },
+      {
+        field: 'drawPoints',
+        label: 'Draw Points',
+        valid: ValidationUtils.isNumber,
+        type: 'number',
+      },
+    ];
     return (
-      <BasicFormModal {...{invalid, entryPoint, header, submitText, resetForm, onFormSubmit, onExit}}>
+      <BasicFormModal
+        {...{
+          invalid,
+          entryPoint,
+          header,
+          submitText,
+          resetForm,
+          onFormSubmit,
+          onExit,
+        }}
+      >
         {fields.map(({ field, label, valid, type }, i) => {
           return (
             <ValidatedFormGroup

@@ -12,21 +12,24 @@ class PlayerCardsComponent extends PureComponent {
       <Container fluid id="player-cards" className={this.props.className}>
         <Row>
           <Col>
-            <CardGroup style={{justifyContent: 'center'}}>
-              {this.props.filteredPlayers.map((p) =>
-                  <PlayerHistoryForm
-                    key={p.id}
-                    player={p}
-                    settings={this.props.settings}
-                    players={this.props.players}
-                    matches={this.props.matches}
-                    updatePlayer={this.props.updatePlayer}
-                    updateMatch={this.props.updateMatch}
-                  />
-              )}
+            <CardGroup style={{ justifyContent: 'center' }}>
+              {this.props.filteredPlayers.map(p => (
+                <PlayerHistoryForm
+                  key={p.id}
+                  player={p}
+                  settings={this.props.settings}
+                  players={this.props.players}
+                  matches={this.props.matches}
+                  updatePlayer={this.props.updatePlayer}
+                  updateMatch={this.props.updateMatch}
+                />
+              ))}
             </CardGroup>
-            <CardGroup className="align-content-start flex-wrap" style={{justifyContent: 'center'}}>
-              <AddPlayerForm onAddPlayers={this.props.onAddPlayers}/>
+            <CardGroup
+              className="align-content-start flex-wrap"
+              style={{ justifyContent: 'center' }}
+            >
+              <AddPlayerForm onAddPlayers={this.props.onAddPlayers} />
             </CardGroup>
           </Col>
         </Row>

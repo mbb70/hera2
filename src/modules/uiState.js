@@ -5,13 +5,13 @@ const a = e.actions;
 
 export function newInitialState() {
   return fromJS({
-      searchText: '',
-      playerView: true,
-      hideDropped: false,
-      sidebarOpen: false,
-      sortByScore: false,
+    searchText: '',
+    playerView: true,
+    hideDropped: false,
+    sidebarOpen: false,
+    sortByScore: false,
   });
-};
+}
 
 const initialState = newInitialState();
 
@@ -45,4 +45,3 @@ export default function reducer(state = initialState, action) {
       return state;
   }
 }
-

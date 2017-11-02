@@ -38,29 +38,33 @@ export function generatePlayer(details) {
 }
 
 export function getScoreImm(p, settings) {
-  return settings.get('winPoints')  * p.get('wins')   -
-         settings.get('lossPoints') * p.get('losses') +
-         settings.get('drawPoints') * p.get('draws');
+  return (
+    settings.get('winPoints') * p.get('wins') -
+    settings.get('lossPoints') * p.get('losses') +
+    settings.get('drawPoints') * p.get('draws')
+  );
 }
 
 export function getScore(p, settings) {
-  return settings.winPoints  * p.wins   -
-         settings.lossPoints * p.losses +
-         settings.drawPoints * p.draws;
+  return (
+    settings.winPoints * p.wins -
+    settings.lossPoints * p.losses +
+    settings.drawPoints * p.draws
+  );
 }
 
 export function calculateWeight(p, op, settings) {
   const ps = getScore(p, settings);
   const ops = getScore(op, settings);
-  return 10000 - (Math.abs(ps - ops));
+  return 10000 - Math.abs(ps - ops);
 }
 
 export function generatePlayerGraph(playerIds, players, settings) {
-  return playerIds.flatMap((id) => {
+  return playerIds.flatMap(id => {
     const player = players[id];
     return playerIds
       .filter(oId => id !== oId && !player.playedIds[oId])
-      .map((otherId) => {
+      .map(otherId => {
         const otherPlayer = players[otherId];
         const weight = calculateWeight(player, otherPlayer, settings);
         return [+id, +otherId, weight];
@@ -75,8 +79,15 @@ export function pairPlayers(players, settings, shuffleFn) {
   const pairs = pairing
     .map((pId, opId) => [pId, opId])
     .filter(([pId, opId]) => pId > opId)
-    .map(([pId, opId]) => shuffleFn([pId.toString(), opId.toString()]))
+    .map(([pId, opId]) => shuffleFn([pId.toString(), opId.toString()]));
   return fromJS(shuffleFn(pairs));
 }
 
-export default { shuffle, defaultSettings, generatePlayer, pairPlayers, getScore, getScoreImm };
+export default {
+  shuffle,
+  defaultSettings,
+  generatePlayer,
+  pairPlayers,
+  getScore,
+  getScoreImm,
+};

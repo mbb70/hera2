@@ -1,9 +1,12 @@
 function caseInsIncludes(t1, t2) {
-  return t1 !== undefined &&
-         t2 !== undefined &&
-         t1.toString().toUpperCase().includes(
-           t2.toString().toUpperCase()
-         );
+  return (
+    t1 !== undefined &&
+    t2 !== undefined &&
+    t1
+      .toString()
+      .toUpperCase()
+      .includes(t2.toString().toUpperCase())
+  );
 }
 
 function isNumber(value) {
@@ -19,4 +22,3 @@ function notEmpty(value) {
 }
 
 export default { caseInsIncludes, isNumber, notEmpty, isInteger };
-

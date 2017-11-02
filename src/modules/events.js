@@ -16,31 +16,48 @@ const UPDATE_SEARCH = 'hera/uistate/UPDATE_SEARCH';
 const SWITCH_VIEW = 'hera/uistate/SWITCH_VIEW';
 const TOGGLE_SIDEBAR = 'hera/uistate/TOGGLE_SIDEBAR';
 
-const TOGGLE_PAIR_EDITING = 'hera/pairingform/TOGGLE_PAIR_EDITING'
-const LOCK_PAIRS = 'hera/pairingform/LOCK_PAIRS'
-const REPAIR_PLAYERS = 'hera/pairingform/REPAIR_PLAYERS'
-const RESET_PAIRS_FORM = 'hera/pairingform/RESET_PAIRS_FORM'
-const SWAP_PAIR_PLAYERS = 'hera/pairingform/SWAP_PAIR_PLAYERS'
+const TOGGLE_PAIR_EDITING = 'hera/pairingform/TOGGLE_PAIR_EDITING';
+const LOCK_PAIRS = 'hera/pairingform/LOCK_PAIRS';
+const REPAIR_PLAYERS = 'hera/pairingform/REPAIR_PLAYERS';
+const RESET_PAIRS_FORM = 'hera/pairingform/RESET_PAIRS_FORM';
+const SWAP_PAIR_PLAYERS = 'hera/pairingform/SWAP_PAIR_PLAYERS';
 
 const pairingFormActions = {
-  TOGGLE_PAIR_EDITING, LOCK_PAIRS, REPAIR_PLAYERS, RESET_PAIRS_FORM,
+  TOGGLE_PAIR_EDITING,
+  LOCK_PAIRS,
+  REPAIR_PLAYERS,
+  RESET_PAIRS_FORM,
   SWAP_PAIR_PLAYERS,
 };
 
 const uiStateActions = {
-  TOGGLE_DROPPED_FILTER, UPDATE_SEARCH, SWITCH_VIEW, TOGGLE_SIDEBAR,
+  TOGGLE_DROPPED_FILTER,
+  UPDATE_SEARCH,
+  SWITCH_VIEW,
+  TOGGLE_SIDEBAR,
   TOGGLE_SORT_TYPE,
 };
 
 const tournamentActions = {
-  ADD_PLAYERS, PAIR_PLAYERS, SAVE_SETTINGS,
-  UPDATE_PLAYER, UPDATE_MATCH, CREATE_TOURNAMENT,
-  DELETE_TOURNAMENT, SWITCH_TOURNAMENT,
+  ADD_PLAYERS,
+  PAIR_PLAYERS,
+  SAVE_SETTINGS,
+  UPDATE_PLAYER,
+  UPDATE_MATCH,
+  CREATE_TOURNAMENT,
+  DELETE_TOURNAMENT,
+  SWITCH_TOURNAMENT,
   TOGGLE_DROPPED_FILTER,
-  FINISH_ROUND, UPDATE_SEARCH, SWITCH_VIEW,
+  FINISH_ROUND,
+  UPDATE_SEARCH,
+  SWITCH_VIEW,
 };
 
-export const actions = { ...pairingFormActions, ...uiStateActions, ...tournamentActions };
+export const actions = {
+  ...pairingFormActions,
+  ...uiStateActions,
+  ...tournamentActions,
+};
 
 export function addPlayers(names) {
   return { type: ADD_PLAYERS, names };
@@ -111,7 +128,7 @@ export function resetPairsForm() {
 }
 
 export function rePairPlayers(players, settings, shuffleFn) {
-  return { type: REPAIR_PLAYERS, players, settings, shuffleFn};
+  return { type: REPAIR_PLAYERS, players, settings, shuffleFn };
 }
 
 export function swapPairPlayers(p1, p2) {

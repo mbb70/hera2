@@ -8,16 +8,17 @@ class ResponsiveSidebar extends PureComponent {
     sidebar: { zIndex: 1040 },
     content: { overflowY: 'auto' },
     overlay: { zIndex: 1039 },
-  }
+  };
 
   render() {
     return (
       <Sidebar
-        sidebar={<AppNav/>}
+        sidebar={<AppNav />}
         open={this.props.open}
         styles={this.sidebarStyles}
-        onSetOpen={this.props.toggleSidebar}>
-        <TopNav/>
+        onSetOpen={this.props.toggleSidebar}
+      >
+        <TopNav />
         {this.props.children}
       </Sidebar>
     );

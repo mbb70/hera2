@@ -1,21 +1,26 @@
 import './setupTests';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import configureMockStore from 'redux-mock-store'
+import configureMockStore from 'redux-mock-store';
 import * as r from './modules/events';
 import reducer from './modules/Tournament';
 import uiReducer from './modules/uiState';
 import { newInitialState } from './modules/Tournament';
 import * as tr from './modules/Tournament';
 import * as ur from './modules/uiState';
-import Tournament from './containers/Tournament'
-import Hutils from './utils/hutils'
+import Tournament from './containers/Tournament';
+import Hutils from './utils/hutils';
 import { Provider } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
-import { Map, List, fromJS }  from 'immutable';
-import { tdispatch, getTournamentState, getPairedTournament, getPlayedMatches }  from './testUtils';
+import { Map, List, fromJS } from 'immutable';
+import {
+  tdispatch,
+  getTournamentState,
+  getPairedTournament,
+  getPlayedMatches,
+} from './testUtils';
 
-const identityFn = (a) => a;
+const identityFn = a => a;
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
@@ -27,9 +32,10 @@ it('renders without crashing', () => {
   );
   ReactDOM.render(
     <Provider store={fullStore}>
-      <Tournament/>
-    </Provider>
-  , div);
+      <Tournament />
+    </Provider>,
+    div
+  );
 });
 
 const mockStore = configureMockStore();
@@ -41,7 +47,7 @@ it('dispatches add players', () => {
   let action = store.getActions()[0];
   expect(action).toEqual({
     type: r.actions.ADD_PLAYERS,
-    names: ['bob']
+    names: ['bob'],
   });
 });
 
@@ -69,21 +75,27 @@ it('adds players', () => {
   const store = mockStore(state);
   state = createTournament(state, store, 't1');
   state = addPlayers(state, store, ['bob']);
-  expect(state.getIn(['players', '2'])).toEqual(fromJS({
-    name: 'bob',
-    draws: 0,
-    wins: 0,
-    losses: 0,
-    id: '2',
-    dropped: false,
-    playedIds: {},
-    matchIds: [],
-    tournamentId: '1',
-  }));
+  expect(state.getIn(['players', '2'])).toEqual(
+    fromJS({
+      name: 'bob',
+      draws: 0,
+      wins: 0,
+      losses: 0,
+      id: '2',
+      dropped: false,
+      playedIds: {},
+      matchIds: [],
+      tournamentId: '1',
+    })
+  );
 });
 
 function pairPlayers(state, store, playerIds) {
-  const pairs = Hutils.pairPlayers(state.get('players').toJS(), state.getIn(['settings', '1']).toJS(), identityFn);
+  const pairs = Hutils.pairPlayers(
+    state.get('players').toJS(),
+    state.getIn(['settings', '1']).toJS(),
+    identityFn
+  );
   store.dispatch(r.pairPlayers(pairs));
   const action = store.getActions()[store.getActions().length - 1];
   return reducer(state, action);
@@ -97,14 +109,20 @@ it('pairs players', () => {
   state = pairPlayers(state, store, state.get('players').keySeq());
   expect(state.getIn(['rounds', '1']).toJS()).toEqual({
     id: '1',
-    matches: ['1','2','3','4'],
+    matches: ['1', '2', '3', '4'],
     number: 1,
     active: true,
     tournamentId: '1',
   });
-  const matchPairs = state.get('matches').valueSeq().map(m => [m.get('p1'), m.get('p2')])
+  const matchPairs = state
+    .get('matches')
+    .valueSeq()
+    .map(m => [m.get('p1'), m.get('p2')]);
   expect(matchPairs.toJS()).toEqual([
-    ['9', '2'], ['8', '3'], ['7', '4'], ['6', '5'],
+    ['9', '2'],
+    ['8', '3'],
+    ['7', '4'],
+    ['6', '5'],
   ]);
 });
 
@@ -115,8 +133,14 @@ it('pairs bye', () => {
   state = addPlayers(state, store, ['a', 'b', 'c', 'd', 'e', 'f', 'g']);
   state = pairPlayers(state, store, state.get('players').keySeq());
   const byeId = state.getIn(['settings', '1', 'byePlayerId']);
-  const byeMatch = state.get('matches').valueSeq().find(m => m.get('p2') === byeId);
-  const otherMatch = state.get('matches').valueSeq().find(m => m.get('p2') !== byeId);
+  const byeMatch = state
+    .get('matches')
+    .valueSeq()
+    .find(m => m.get('p2') === byeId);
+  const otherMatch = state
+    .get('matches')
+    .valueSeq()
+    .find(m => m.get('p2') !== byeId);
   expect(byeMatch.get('score')).toBe('2 - 0');
   expect(byeMatch.get('active')).toBeFalsy();
   expect(otherMatch.get('score')).toBe('0 - 0');
@@ -182,7 +206,8 @@ it('finishes round', () => {
       const loserWins = players.getIn([loser, 'wins']);
       expect(loserLosses).toBe(1);
       expect(loserWins).toBe(0);
-    } else { //There was a draw
+    } else {
+      //There was a draw
       expect(players.getIn([p1, 'draws'])).toBe(1);
       expect(players.getIn([p2, 'draws'])).toBe(1);
     }
@@ -214,8 +239,8 @@ it('deletes tournaments', () => {
 it('switches tournaments', () => {
   let state = newInitialState();
   const store = mockStore(state);
-  state = tdispatch(state, store, r.createTournament({ name: 't1'}));
-  state = tdispatch(state, store, r.createTournament({ name: 't2'}));
+  state = tdispatch(state, store, r.createTournament({ name: 't1' }));
+  state = tdispatch(state, store, r.createTournament({ name: 't2' }));
   state = tdispatch(state, store, r.switchTournament('2'));
   expect(state.get('currentTournament')).toBe('2');
 });
@@ -226,4 +251,3 @@ it('renames players', () => {
   state = tdispatch(state, store, r.updatePlayer({ id: '1', name: 'Matt' }));
   expect(state.getIn(['players', '1', 'name'])).toBe('Matt');
 });
-

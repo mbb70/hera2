@@ -15,20 +15,25 @@ import Tournament from './containers/tournament';
 import serviceWorkerRegistration from './registerServiceWorker';
 
 const rootReducer = combineReducers({
-  tournamentReducer, uiReducer, pairingFormReducer
+  tournamentReducer,
+  uiReducer,
+  pairingFormReducer,
 });
 
-const store = process.env.NODE_ENV === 'production' ? (
-  createStore(rootReducer)
-) : (
-  createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
-);
+const store =
+  process.env.NODE_ENV === 'production'
+    ? createStore(rootReducer)
+    : createStore(
+        rootReducer,
+        window.__REDUX_DEVTOOLS_EXTENSION__ &&
+          window.__REDUX_DEVTOOLS_EXTENSION__()
+      );
 
 serviceWorkerRegistration();
 
 ReactDOM.render(
   <Provider store={store}>
-    <Tournament/>
+    <Tournament />
   </Provider>,
-  document.getElementById('root'),
+  document.getElementById('root')
 );
