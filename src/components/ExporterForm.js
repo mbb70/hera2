@@ -1,18 +1,33 @@
+import { connect } from 'react-redux';
+import { Label, FormGroup } from 'reactstrap';
 import React, { PureComponent } from 'react';
 import BasicFormModal from './BasicFormModal';
 import LinkButton from './LinkButton';
-import { connect } from 'react-redux';
-import { Label, FormGroup } from 'reactstrap';
 
 connect();
 
 class ExporterForm extends PureComponent {
-  getInitialState = () => ({
+  initialState = {
     downloadDestination: 'local',
     downloadType: 'csv',
     uri: '',
-  });
-  state = this.getInitialState();
+  };
+  state = { ...this.initialState };
+
+  getUri = (destination, type) => {
+    if (destination === 'local' && type === 'json') {
+      const uri = encodeURIComponent(
+        JSON.stringify(this.props.tournamentState, null, 2)
+      );
+      return `data:application/json;charset=utf-8,${uri}`;
+    } else if (destination === 'local' && type === 'csv') {
+      const uri = encodeURIComponent(
+        this.generateCsv(this.props.tournamentState)
+      );
+      return `data:text/csv;charset=utf-8,${uri}`;
+    }
+    return '';
+  };
 
   generateCsv = tstate => {
     const rows = [];
@@ -25,9 +40,9 @@ class ExporterForm extends PureComponent {
       'Score',
       'Dropped',
     ];
-    rows.push('"' + header.join('","') + '"');
+    rows.push(`"${header.join('","')}"`);
     const rounds = tstate.rounds;
-    for (let i = rounds.length - 1; i >= 0; i--) {
+    for (let i = rounds.length - 1; i >= 0; i -= 1) {
       const round = rounds[i];
       round.matches.forEach(matchId => {
         const match = tstate.matches[matchId];
@@ -42,27 +57,13 @@ class ExporterForm extends PureComponent {
         } else {
           const winner = tstate.players[match.winner];
           row.push(winner ? winner.name : 'Draw');
-          row.push("'" + match.score);
+          row.push(`'${match.score}`);
           row.push(match.drop.map(p => tstate.players[p].name).join(' and '));
         }
-        rows.push('"' + row.join('","') + '"');
+        rows.push(`"${row.join('","')}"`);
       });
     }
     return rows.join('\n');
-  };
-
-  getUri = (destination, type) => {
-    if (destination === 'local' && type === 'json') {
-      return (
-        'data:application/json;charset=utf-8,' +
-        encodeURIComponent(JSON.stringify(this.props.tournamentState, null, 2))
-      );
-    } else if (destination === 'local' && type === 'csv') {
-      return (
-        'data:text/csv;charset=utf-8,' +
-        encodeURIComponent(this.generateCsv(this.props.tournamentState))
-      );
-    }
   };
 
   handleFormLoad = () => {
@@ -88,7 +89,7 @@ class ExporterForm extends PureComponent {
   };
 
   handleResetForm = () => {
-    this.setState(this.getInitialState());
+    this.setState(...this.initialState);
   };
 
   render() {
@@ -98,14 +99,12 @@ class ExporterForm extends PureComponent {
     const onLoad = this.handleFormLoad;
     const onFormSubmit = () => {};
     const onExit = this.props.onExit;
+    const downloadName = `${this.props.tournamentState.tournamentName}.${this
+      .state.downloadType}`;
     const submitButton = (
       <a
         className="btn btn-primary"
-        download={
-          this.props.tournamentState.tournamentName +
-          '.' +
-          this.state.downloadType
-        }
+        download={downloadName}
         href={this.state.uri}
         onClick={onFormSubmit}
       >

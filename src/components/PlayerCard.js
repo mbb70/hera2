@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
-import Hutils from '../utils/hutils';
 import { CardImg, CardTitle, CardText, CardBlock, Card } from 'reactstrap';
+import Hutils from '../utils/hutils';
 
 class PlayerCard extends PureComponent {
   render() {

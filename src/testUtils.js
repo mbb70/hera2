@@ -1,5 +1,6 @@
+/* eslint-disable */
 import configureMockStore from 'redux-mock-store';
-import { Map, List, fromJS } from 'immutable';
+import { List } from 'immutable';
 import tReducer, { newInitialState } from './modules/Tournament';
 import uReducer from './modules/uiState';
 import pReducer from './modules/pairingForm';
@@ -47,11 +48,8 @@ export function getPairedTournament(nPlayers) {
   const pairs = playerIds
     .filter(p => needsBye || p !== byePlayerId)
     .reduce((h, id, i) => {
-      if (i % 2 === 0) {
-        return h.push(List([id]));
-      } else {
-        return h.update(h.count() - 1, l => l.push(id));
-      }
+      if (i % 2 === 0) return h.push(List([id]));
+      return h.update(h.count() - 1, l => l.push(id));
     }, List([]));
   state = tdispatch(state, store, r.pairPlayers(pairs));
   return state;

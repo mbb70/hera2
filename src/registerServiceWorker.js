@@ -34,6 +34,7 @@ export default function register() {
           };
         })
         .catch(error => {
+          /* eslint-disable */
           console.error('Error during service worker registration:', error);
         });
     });
@@ -42,8 +43,8 @@ export default function register() {
 
 export function unregister() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready.then(registration => {
-      registration.unregister();
-    });
+    navigator.serviceWorker.ready.then(registration =>
+      registration.unregister()
+    );
   }
 }

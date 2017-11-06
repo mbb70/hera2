@@ -1,24 +1,17 @@
-import './setupTests';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import configureMockStore from 'redux-mock-store';
-import * as r from './modules/events';
-import reducer from './modules/Tournament';
-import uiReducer from './modules/uiState';
-import { newInitialState } from './modules/Tournament';
-import * as tr from './modules/Tournament';
-import * as ur from './modules/uiState';
-import Tournament from './containers/Tournament';
-import Hutils from './utils/hutils';
 import { Provider } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
-import { Map, List, fromJS } from 'immutable';
-import {
-  tdispatch,
-  getTournamentState,
-  getPairedTournament,
-  getPlayedMatches,
-} from './testUtils';
+import { fromJS } from 'immutable';
+
+import './setupTests';
+import * as r from './modules/events';
+import uiReducer from './modules/uiState';
+import reducer, { newInitialState } from './modules/Tournament';
+import Tournament from './containers/tournament';
+import Hutils from './utils/hutils';
+import { tdispatch, getPairedTournament, getPlayedMatches } from './testUtils';
 
 const identityFn = a => a;
 
@@ -27,7 +20,7 @@ it('renders without crashing', () => {
   const fullStore = createStore(
     combineReducers({
       tournamentReducer: reducer,
-      uiReducer: uiReducer,
+      uiReducer,
     })
   );
   ReactDOM.render(
@@ -40,11 +33,10 @@ it('renders without crashing', () => {
 
 const mockStore = configureMockStore();
 it('dispatches add players', () => {
-  const name = 'new user';
-  let state = newInitialState();
+  const state = newInitialState();
   const store = mockStore(state);
   store.dispatch(r.addPlayers(['bob']));
-  let action = store.getActions()[0];
+  const action = store.getActions()[0];
   expect(action).toEqual({
     type: r.actions.ADD_PLAYERS,
     names: ['bob'],
@@ -90,7 +82,7 @@ it('adds players', () => {
   );
 });
 
-function pairPlayers(state, store, playerIds) {
+function pairPlayers(state, store) {
   const pairs = Hutils.pairPlayers(
     state.get('players').toJS(),
     state.getIn(['settings', '1']).toJS(),
@@ -190,7 +182,7 @@ it('finishes round', () => {
   const allMatchesFinished = matches.every(m => !m.get('active'));
   expect(allMatchesFinished).toBeTruthy();
 
-  const playersUpdated = matches.forEach(m => {
+  matches.forEach(m => {
     const p1 = m.get('p1');
     const p2 = m.get('p2');
     const winner = m.get('winner');
@@ -221,7 +213,7 @@ it('finishes round', () => {
     expect(didPlayP1 && didPlayP2).toBeTruthy();
   });
 
-  expect(rounds.every(r => !r.get('active'))).toBeTruthy();
+  expect(rounds.every(rd => !rd.get('active'))).toBeTruthy();
 });
 
 it('deletes tournaments', () => {

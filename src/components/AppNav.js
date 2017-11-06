@@ -1,16 +1,16 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { Nav, NavLink, NavItem } from 'reactstrap';
 import SettingsForm from './SettingsForm';
 import PairingForm from '../containers/pairingForm';
 import ExporterForm from '../containers/exporterForm';
 import FaqForm from './FaqForm';
 import LinkButton from './LinkButton';
-import { Nav, NavLink, NavItem } from 'reactstrap';
 
 connect();
 
 class AppNavComponent extends PureComponent {
-  closeNav = switchView => {
+  closeNav = () => {
     this.props.toggleSidebar(false);
   };
 
@@ -60,13 +60,13 @@ class AppNavComponent extends PureComponent {
     );
     const activeRound = this.props.activeRound !== undefined;
     const rows = [];
-    !unfinishedMatches &&
-      activeRound &&
+    if (!unfinishedMatches && activeRound) {
       rows.push(
         <LinkButton onClick={this.handleFinishRound}>Finish Round</LinkButton>
       );
+    }
 
-    !activeRound &&
+    if (!activeRound) {
       rows.push(
         <PairingForm
           pairPlayers={this.handlePairPlayers}
@@ -75,6 +75,8 @@ class AppNavComponent extends PureComponent {
           onExit={this.closeNav}
         />
       );
+    }
+
     rows.push(
       <SettingsForm
         onExit={this.closeNav}
@@ -82,7 +84,8 @@ class AppNavComponent extends PureComponent {
         saveSettings={this.handleSaveSettings}
       />
     );
-    this.props.uiState.playerView &&
+
+    if (this.props.uiState.playerView) {
       rows.push(
         <LinkButton onClick={this.handleToggleSortType}>
           {this.props.uiState.sortByScore
@@ -90,13 +93,16 @@ class AppNavComponent extends PureComponent {
             : 'Sort By Score'}
         </LinkButton>
       );
-    this.props.uiState.playerView &&
-      hasDroppedPlayers &&
+    }
+
+    if (this.props.uiState.playerView && hasDroppedPlayers) {
       rows.push(
         <LinkButton onClick={this.handleToggleDroppedFilter}>
           {this.props.uiState.hideDropped ? 'Show Dropped' : 'Hide Dropped'}
         </LinkButton>
       );
+    }
+
     rows.push(
       <LinkButton onClick={this.handleSwitchTournament}>
         Switch Tournament

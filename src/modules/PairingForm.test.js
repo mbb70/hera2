@@ -1,16 +1,8 @@
-import '../setupTests';
-import React from 'react';
-import ReactDOM from 'react-dom';
 import configureMockStore from 'redux-mock-store';
+import '../setupTests';
 import * as r from './events';
-import reducer from './pairingForm';
-import tReducer from './Tournament';
-import * as tr from './Tournament';
 import { newInitialState } from './pairingForm';
-import Hutils from '../utils/hutils';
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { Map, fromJS } from 'immutable';
-import { pdispatch, tdispatch, getTournamentState } from '../testUtils';
+import { pdispatch, getTournamentState } from '../testUtils';
 
 const mockStore = configureMockStore();
 const identityFn = a => a;
@@ -36,8 +28,7 @@ it('pairs players', () => {
   let state = newInitialState();
   const tstate = getTournamentState(4).toJS();
   const settings = tstate.settings['1'];
-  const players = tstate.players;
-  const playerIds = Object.keys(players).sort((a, b) => +a - +b);
+  const { players } = tstate;
   const store = mockStore(state);
   state = pdispatch(
     state,
@@ -46,12 +37,6 @@ it('pairs players', () => {
   );
   expect(state.get('pairs').toJS()).toEqual([['5', '2'], ['4', '3']]);
 });
-
-function arraySwap(arr, idx1, idx2) {
-  const tmp = arr[idx1];
-  arr[idx1] = arr[idx2];
-  arr[idx2] = tmp;
-}
 
 it('locked pairs stick players', () => {
   let state = newInitialState();
@@ -93,7 +78,7 @@ it('swaps paired players', () => {
 
   const tstate = getTournamentState(6).toJS();
   const settings = tstate.settings['1'];
-  const players = tstate.players;
+  const { players } = tstate;
 
   state = pdispatch(
     state,
@@ -125,7 +110,7 @@ it('resets', () => {
   const store = mockStore(state);
   const tstate = getTournamentState(6).toJS();
   const settings = tstate.settings['1'];
-  const players = tstate.players;
+  const { players } = tstate;
   state = pdispatch(
     state,
     store,

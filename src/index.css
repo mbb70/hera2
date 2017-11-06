@@ -31,7 +31,8 @@ nav {
   color: #DF691A; }
   .btn-link:hover {
     color: #DF691A;
-    cursor: pointer; }
+    cursor: pointer;
+    text-decoration: none; }
 
 button.close {
   color: #EBEBEB; }

@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { NavbarBrand, Label, Input, Navbar } from 'reactstrap';
+import LinkButton from './LinkButton';
 
 connect();
 
@@ -20,16 +21,16 @@ class TopNavComponent extends PureComponent {
   };
 
   toggleSidebar = () => {
-    const sidebarOpen = this.props.uiState.sidebarOpen;
+    const { sidebarOpen } = this.props.uiState;
     this.props.toggleSidebar(!sidebarOpen);
   };
 
   render() {
     return (
       <Navbar full inverse sticky="top" light style={this.navbarStyle}>
-        <a onClick={this.toggleSidebar}>
+        <LinkButton onClick={this.toggleSidebar}>
           <span className="navbar-toggler-icon" />
-        </a>
+        </LinkButton>
         <NavbarBrand className="px-2 d-sm-block d-none">
           {this.props.settings.tournamentName}
         </NavbarBrand>
@@ -43,7 +44,10 @@ class TopNavComponent extends PureComponent {
           />
         </div>
         {this.props.rounds.length > 0 && (
-          <a onClick={this.handleSwitchView} className="d-flex ml-auto">
+          <LinkButton
+            onClick={this.handleSwitchView}
+            className="d-flex ml-auto"
+          >
             <Label className="bold-nav-label d-sm-block d-none">
               {this.props.uiState.playerView ? 'Matches' : 'Players'}
             </Label>
@@ -52,7 +56,7 @@ class TopNavComponent extends PureComponent {
             </Label>
             <span className="arrow-icon next-arrow-icon d-sm-block d-none ml-2 my-1" />
             <span className="arrow-icon next-arrow-icon d-sm-none" />
-          </a>
+          </LinkButton>
         )}
       </Navbar>
     );

@@ -10,15 +10,13 @@ import {
 } from '../selectors/tournament';
 import * as e from '../modules/events';
 
-const mapStateToProps = root => {
-  return {
-    filteredPlayers: currentFilteredPlayers(root),
-    players: currentPlayers(root),
-    matches: currentMatches(root),
-    rounds: currentRounds(root),
-    settings: currentSettings(root),
-  };
-};
+const mapStateToProps = root => ({
+  filteredPlayers: currentFilteredPlayers(root),
+  players: currentPlayers(root),
+  matches: currentMatches(root),
+  rounds: currentRounds(root),
+  settings: currentSettings(root),
+});
 
 const mapDispatchToProps = dispatch => ({
   onAddPlayers: names => dispatch(e.addPlayers(names)),

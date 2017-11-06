@@ -41,15 +41,15 @@ export default function reducer(state = initialState, action) {
       return newInitialState();
     }
     case a.SWAP_PAIR_PLAYERS: {
-      return state.update('pairs', pairs => {
-        return pairs.map(pair => {
-          return pair.map(p => {
+      return state.update('pairs', pairs =>
+        pairs.map(pair =>
+          pair.map(p => {
             if (p === action.p1) return action.p2;
             if (p === action.p2) return action.p1;
             return p;
-          });
-        });
-      });
+          })
+        )
+      );
     }
     default:
       return state;

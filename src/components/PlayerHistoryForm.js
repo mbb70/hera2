@@ -80,7 +80,7 @@ class PlayerHistoryForm extends PureComponent {
       .concat(scoreFields)
       .map(({ field, validFn }) => validFn(player[field]))
       .some(v => !v);
-    const historyRows = this.props.player.matchIds.map((matchId, i) => {
+    const historyRows = this.props.player.matchIds.map(matchId => {
       const match = this.props.matches[matchId];
       const opId = match.p1 === this.props.player.id ? match.p2 : match.p1;
       const op = this.props.players[opId];
@@ -105,27 +105,25 @@ class PlayerHistoryForm extends PureComponent {
           leftButton,
         }}
       >
-        {fields.map(({ field, label, type, validFn }, i) => {
-          return (
-            <ValidatedFormGroup
-              key={i}
-              field={field}
-              value={player[field]}
-              valid={validFn}
-              type={type}
-              onChange={this.handleFieldUpdate}
-            >
-              <Label>{label}</Label>
-            </ValidatedFormGroup>
-          );
-        })}
+        {fields.map(({ field, label, type, validFn }) => (
+          <ValidatedFormGroup
+            key={field}
+            field={field}
+            value={player[field]}
+            valid={validFn}
+            type={type}
+            onChange={this.handleFieldUpdate}
+          >
+            <Label>{label}</Label>
+          </ValidatedFormGroup>
+        ))}
         <FormGroup>
           <Row>
-            {scoreFields.map(({ label }, i) => <Col key={i}>{label}</Col>)}
+            {scoreFields.map(({ label }) => <Col key={label}>{label}</Col>)}
           </Row>
           <Row>
-            {scoreFields.map(({ field, label, type, validFn }, i) => (
-              <Col key={i}>
+            {scoreFields.map(({ field, type, validFn }) => (
+              <Col key={field}>
                 <ValidatedInput
                   field={field}
                   validFn={validFn}

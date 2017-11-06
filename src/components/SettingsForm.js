@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
-import { Button, Label } from 'reactstrap';
+import { Label } from 'reactstrap';
 import BasicFormModal from './BasicFormModal';
 import ValidatedFormGroup from './ValidatedFormGroup';
+import LinkButton from './LinkButton';
 import ValidationUtils from '../utils/validationUtils';
 
 class SettingsForm extends PureComponent {
@@ -19,16 +20,13 @@ class SettingsForm extends PureComponent {
     this.props.saveSettings(this.state);
   };
 
-  valid = () => {
-    return (
-      ValidationUtils.isNumber(this.state.winPoints) &
-      ValidationUtils.isNumber(this.state.lossPoints) &
-      ValidationUtils.isNumber(this.state.drawPoints)
-    );
-  };
+  valid = () =>
+    ValidationUtils.isNumber(this.state.winPoints) &
+    ValidationUtils.isNumber(this.state.lossPoints) &
+    ValidationUtils.isNumber(this.state.drawPoints);
 
   render() {
-    const entryPoint = <Button color="link">Settings</Button>;
+    const entryPoint = <LinkButton>Settings</LinkButton>;
     const header = 'Edit Settings';
     const submitText = 'Save';
     const resetForm = this.resetForm;
@@ -72,20 +70,18 @@ class SettingsForm extends PureComponent {
           onExit,
         }}
       >
-        {fields.map(({ field, label, valid, type }, i) => {
-          return (
-            <ValidatedFormGroup
-              key={i}
-              field={field}
-              value={this.state[field]}
-              valid={valid}
-              type={type}
-              onChange={this.handleKeyPress}
-            >
-              <Label>{label}</Label>
-            </ValidatedFormGroup>
-          );
-        })}
+        {fields.map(({ field, label, valid, type }) => (
+          <ValidatedFormGroup
+            key={field}
+            field={field}
+            value={this.state[field]}
+            valid={valid}
+            type={type}
+            onChange={this.handleKeyPress}
+          >
+            <Label>{label}</Label>
+          </ValidatedFormGroup>
+        ))}
       </BasicFormModal>
     );
   }

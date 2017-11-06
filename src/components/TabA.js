@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+
 class TabA extends PureComponent {
   render() {
     return (

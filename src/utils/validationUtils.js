@@ -9,16 +9,21 @@ function caseInsIncludes(t1, t2) {
   );
 }
 
+function notEmpty(value) {
+  return value !== undefined && value.toString().trim() !== '';
+}
+
 function isNumber(value) {
-  return notEmpty(value) && !isNaN(+value);
+  return notEmpty(value) && !Number.isNaN(+value);
 }
 
 function isInteger(value) {
   return notEmpty(value) && value % 1 === 0;
 }
 
-function notEmpty(value) {
-  return value !== undefined && value.toString().trim() !== '';
-}
-
-export default { caseInsIncludes, isNumber, notEmpty, isInteger };
+export default {
+  caseInsIncludes,
+  isNumber,
+  notEmpty,
+  isInteger,
+};

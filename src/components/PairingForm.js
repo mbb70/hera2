@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
 import BasicFormModal from './BasicFormModal';
 import PairPlayerCell from './PairPlayerCell';
+import LinkButton from './LinkButton';
 import Hutils from '../utils/hutils';
 
 connect();
@@ -22,9 +23,7 @@ class PairingFormComponent extends PureComponent {
 
   render() {
     const entryPoint = (
-      <Button color="link" onClick={this.handlePairPlayers}>
-        Start New Round
-      </Button>
+      <LinkButton onClick={this.handlePairPlayers}>Start New Round</LinkButton>
     );
     const header = 'Select Pairings';
     const submitText = 'Start Match';

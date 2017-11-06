@@ -1,5 +1,6 @@
-const localStorage = (global.localStorage = {
-  getItem: key => null,
-  setItem: (key, value) => null,
-});
+global.localStorage = {
+  getItem: () => null,
+  setItem: () => null,
+};
+const localStorage = global.localStorage;
 export default localStorage;

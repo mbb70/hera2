@@ -10,6 +10,22 @@ import {
 
 class MatchCard extends PureComponent {
   render() {
+    let matchStatus = <div>Ongoing</div>;
+    if (this.props.match.winner !== undefined) {
+      if (this.props.match.winner === -1) {
+        matchStatus = <div>Draw</div>;
+      } else {
+        matchStatus = (
+          <div>
+            {this.props.players[this.props.match.winner].name}{' '}
+            <span style={{ whiteSpace: 'nowrap' }}>
+              ({this.props.match.score})
+            </span>
+          </div>
+        );
+      }
+    }
+
     const cardStyle = {
       opacity: this.props.match.winner !== undefined ? 0.7 : 1,
     };
@@ -34,22 +50,7 @@ class MatchCard extends PureComponent {
             </span>
           </CardText>
         </CardBlock>
-        <CardFooter>
-          {this.props.match.winner !== undefined ? (
-            this.props.match.winner === -1 ? (
-              <div>Draw</div>
-            ) : (
-              <div>
-                {this.props.players[this.props.match.winner].name}{' '}
-                <span style={{ whiteSpace: 'nowrap' }}>
-                  ({this.props.match.score})
-                </span>
-              </div>
-            )
-          ) : (
-            <div>Ongoing</div>
-          )}
-        </CardFooter>
+        <CardFooter>{matchStatus}</CardFooter>
       </Card>
     );
   }

@@ -10,6 +10,34 @@ class MatchForm extends PureComponent {
     match: { ...this.props.match },
   };
 
+  getScoreFromIndex = i => {
+    if (i === 0) return '2 - 0';
+    if (i === 1) return '2 - 1';
+    if (i === 2) return '1 - 0';
+    return '0 - 0';
+  };
+
+  getIndexFromScore = score => {
+    if (score === '2 - 0') return 0;
+    if (score === '2 - 1') return 1;
+    if (score === '1 - 0') return 2;
+    if (score === '0 - 0') return -1;
+    return 3;
+  };
+
+  getWinnerId = i => {
+    if (i === 0) return this.state.match.p1;
+    if (i === 2) return this.state.match.p2;
+    return -1;
+  };
+
+  getWinnerIndex = id => {
+    if (id === -1) return 1;
+    if (id === this.state.match.p1) return 0;
+    if (id === this.state.match.p2) return 2;
+    return -1;
+  };
+
   handleDropSelection = i => {
     const drop = [...(this.state.match.drop || [])];
     const pId = i === 0 ? this.state.match.p1 : this.state.match.p2;
@@ -27,6 +55,7 @@ class MatchForm extends PureComponent {
       match: { ...this.state.match, score: this.getScoreFromIndex(i) },
     });
   };
+
   handleWinnerSelection = i => {
     const winnerId = this.getWinnerId(i);
     const newState = { ...this.state.match };
@@ -35,33 +64,6 @@ class MatchForm extends PureComponent {
       newState.score = '0 - 0';
     }
     this.setState({ match: newState });
-  };
-
-  getScoreFromIndex = i => {
-    if (i === 0) return '2 - 0';
-    if (i === 1) return '2 - 1';
-    if (i === 2) return '1 - 0';
-    return '0 - 0';
-  };
-
-  getIndexFromScore = score => {
-    if (score === '2 - 0') return 0;
-    if (score === '2 - 1') return 1;
-    if (score === '1 - 0') return 2;
-    if (score === '0 - 0') return -1;
-  };
-
-  getWinnerId = i => {
-    if (i === 0) return this.state.match.p1;
-    if (i === 2) return this.state.match.p2;
-    return -1;
-  };
-
-  getWinnerIndex = id => {
-    if (id === -1) return 1;
-    if (id === this.state.match.p1) return 0;
-    if (id === this.state.match.p2) return 2;
-    return -1;
   };
 
   handleFormSubmit = () => {
@@ -77,7 +79,7 @@ class MatchForm extends PureComponent {
     const entryPoint = (
       <MatchCard match={this.props.match} players={this.props.players} />
     );
-    const header = 'Table ' + this.props.match.table;
+    const header = `Table ${this.props.match.table}`;
     const submitText = 'Submit';
     const resetForm = this.handleResetForm;
     const onFormSubmit = this.handleFormSubmit;

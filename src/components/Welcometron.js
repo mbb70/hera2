@@ -15,6 +15,7 @@ class Welcometron extends PureComponent {
   state = {
     name: 'My Tournament',
     errorMsg: '',
+    uploadMsg: '',
     uploadedState: undefined,
   };
 
@@ -22,7 +23,7 @@ class Welcometron extends PureComponent {
     this.setState({ [field]: value });
   };
 
-  handleGetStarted = e => {
+  handleGetStarted = () => {
     this.props.createTournament({
       name: this.state.name,
     });
@@ -36,19 +37,18 @@ class Welcometron extends PureComponent {
 
   handleJsonUpload = e => {
     const reader = new FileReader();
-    reader.onload = e => {
+    reader.onload = re => {
       try {
-        const uploadedState = JSON.parse(e.target.result);
+        const uploadedState = JSON.parse(re.target.result);
         const requiredKeys = ['players', 'matches', 'rounds', 'tournamentName'];
         const missingKeys = requiredKeys.filter(
           k => uploadedState[k] === undefined
         );
         if (missingKeys.length > 0) {
           this.setState({
-            uploadMsg:
-              "Your file could not be uploaded! The following required fields are missing: '" +
-              missingKeys.join("', '") +
-              "'.",
+            uploadMsg: `Your file could not be uploaded! The following required fields are missing: ${missingKeys.join(
+              "', '"
+            )}'.`,
           });
         } else {
           this.setState({ uploadMsg: '', uploadedState });
@@ -65,7 +65,7 @@ class Welcometron extends PureComponent {
 
   render() {
     const tournaments = Object.entries(this.props.tournaments).sort(
-      ([k1, v1], [k2, v2]) => v2 - v1
+      ([, v1], [, v2]) => v2 - v1
     );
     return (
       <Jumbotron>
@@ -82,17 +82,15 @@ class Welcometron extends PureComponent {
               {tournaments.length > 0 && (
                 <div className="pb-3">
                   <Label className="d-block">Open an Existing Tournament</Label>
-                  {tournaments.map(([id, name]) => {
-                    return (
-                      <Button
-                        className="mr-1"
-                        key={id}
-                        onClick={() => this.props.switchTournament(id)}
-                      >
-                        {name}
-                      </Button>
-                    );
-                  })}
+                  {tournaments.map(([id, name]) => (
+                    <Button
+                      className="mr-1"
+                      key={id}
+                      onClick={() => this.props.switchTournament(id)}
+                    >
+                      {name}
+                    </Button>
+                  ))}
                   <Label className="mt-3 mb-0 d-block">OR</Label>
                 </div>
               )}
@@ -107,6 +105,9 @@ class Welcometron extends PureComponent {
                   />
                   {this.state.errorMsg !== '' && (
                     <Label>{this.state.errorMsg}</Label>
+                  )}
+                  {this.state.uploadMsg !== '' && (
+                    <Label>{this.state.uploadMsg}</Label>
                   )}
                   {this.state.uploadedState && (
                     <div>

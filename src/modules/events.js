@@ -128,7 +128,12 @@ export function resetPairsForm() {
 }
 
 export function rePairPlayers(players, settings, shuffleFn) {
-  return { type: REPAIR_PLAYERS, players, settings, shuffleFn };
+  return {
+    type: REPAIR_PLAYERS,
+    players,
+    settings,
+    shuffleFn,
+  };
 }
 
 export function swapPairPlayers(p1, p2) {

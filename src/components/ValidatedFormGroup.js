@@ -2,9 +2,7 @@ import React, { PureComponent } from 'react';
 import { FormGroup, Input } from 'reactstrap';
 
 class ValidatedFormGroup extends PureComponent {
-  handleKeyPress = e => {
-    this.props.onChange(this.props.field, e.target.value);
-  };
+  handleKeyPress = e => this.props.onChange(this.props.field, e.target.value);
 
   render() {
     const valid = !this.props.valid || this.props.valid(this.props.value);

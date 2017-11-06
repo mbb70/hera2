@@ -34,7 +34,7 @@ class ErrorBoundary extends Component {
               with the following information:
             </Row>
             <Row>{this.state.error.toString()}</Row>
-            {trace.map((line, i) => <Row key={i}>{line}</Row>)}
+            {trace.map(line => <Row key={line}>{line}</Row>)}
           </Col>
         </Container>
       );

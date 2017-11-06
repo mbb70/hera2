@@ -22,18 +22,17 @@ class TournamentComponent extends PureComponent {
           createTournament={this.props.createTournament}
         />
       );
-    } else {
-      return (
-        <ResponsiveSidebar
-          open={this.props.uiState.sidebarOpen}
-          toggleSidebar={this.toggleSidebar}
-        >
-          <ErrorBoundary>
-            {this.props.uiState.playerView ? <PlayerCards /> : <MatchCards />}
-          </ErrorBoundary>
-        </ResponsiveSidebar>
-      );
     }
+    return (
+      <ResponsiveSidebar
+        open={this.props.uiState.sidebarOpen}
+        toggleSidebar={this.toggleSidebar}
+      >
+        <ErrorBoundary>
+          {this.props.uiState.playerView ? <PlayerCards /> : <MatchCards />}
+        </ErrorBoundary>
+      </ResponsiveSidebar>
+    );
   }
 }
 

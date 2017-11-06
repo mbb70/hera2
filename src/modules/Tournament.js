@@ -1,5 +1,5 @@
-import Hutils from '../utils/hutils';
 import { fromJS, Map } from 'immutable';
+import Hutils from '../utils/hutils';
 import * as e from './events';
 
 const a = e.actions;
@@ -21,22 +21,21 @@ export function newInitialState() {
 
 function migrate(state) {
   if (state.version === 1) {
+    return state;
   }
   return state;
 }
 
 function getInitialState() {
-  if (window.localStorage === undefined) {
+  if (
+    window.localStorage === undefined ||
+    window.localStorage.getItem('state/state') === null
+  ) {
     return newInitialState();
-  } else {
-    if (window.localStorage.getItem('state/state') === null) {
-      return newInitialState();
-    } else {
-      return migrate(
-        fromJS(JSON.parse(window.localStorage.getItem('state/state')))
-      );
-    }
   }
+  return migrate(
+    fromJS(JSON.parse(window.localStorage.getItem('state/state')))
+  );
 }
 
 function saveState(state) {
@@ -59,35 +58,25 @@ export default function reducer(state = initialState, action) {
     case a.DELETE_TOURNAMENT: {
       const currentTournament = state.get('currentTournament');
       return saveState(
-        state.withMutations(state => {
-          return state
+        state.withMutations(newState =>
+          newState
             .update('tournaments', t =>
-              t.filter((o, id) => {
-                return id !== currentTournament;
-              })
+              t.filter((_, id) => id !== currentTournament)
             )
             .update('settings', settings =>
-              settings.filter((o, id) => {
-                return id !== currentTournament;
-              })
+              settings.filter((_, id) => id !== currentTournament)
             )
             .update('players', players =>
-              players.filter((o, id) => {
-                return o.get('tournamentId') !== currentTournament;
-              })
+              players.filter(o => o.get('tournamentId') !== currentTournament)
             )
             .update('matches', matches =>
-              matches.filter((o, id) => {
-                return o.get('tournamentId') !== currentTournament;
-              })
+              matches.filter(o => o.get('tournamentId') !== currentTournament)
             )
             .update('rounds', matches =>
-              matches.filter((o, id) => {
-                return o.get('tournamentId') !== currentTournament;
-              })
+              matches.filter(o => o.get('tournamentId') !== currentTournament)
             )
-            .set('currentTournament', undefined);
-        })
+            .set('currentTournament', undefined)
+        )
       );
     }
     case a.CREATE_TOURNAMENT: {
@@ -154,7 +143,7 @@ export default function reducer(state = initialState, action) {
           const matchId = (maxMatchId + table + 1).toString();
           let score = '0 - 0';
           let active = true;
-          let winner = undefined;
+          let winner;
           const byeId = settings.get('byePlayerId');
           if (p1 === byeId || p2 === byeId) {
             active = false;
@@ -164,13 +153,13 @@ export default function reducer(state = initialState, action) {
           return Map({
             table: (table + 1).toString(),
             tournamentId: currentTournament,
-            p1: p1,
-            p2: p2,
             id: matchId,
             drop: [],
             winner,
             active,
             score,
+            p1,
+            p2,
           });
         })
         .toMap()
@@ -205,8 +194,8 @@ export default function reducer(state = initialState, action) {
             })
           )
           .mergeIn(['matches'], matches)
-          .update('players', players => {
-            return players.map(p => {
+          .update('players', players =>
+            players.map(p => {
               const id = p.get('id');
               if (opMap.has(id)) {
                 const matchId = matchLookup.get(id);
@@ -214,11 +203,10 @@ export default function reducer(state = initialState, action) {
                 return p
                   .update('matchIds', mIds => mIds.push(matchId))
                   .set('playing', opId);
-              } else {
-                return p;
               }
-            });
-          })
+              return p;
+            })
+          )
       );
     }
     case a.SAVE_SETTINGS: {
@@ -240,22 +228,12 @@ export default function reducer(state = initialState, action) {
     }
     case a.UPDATE_PLAYER: {
       return saveState(
-        state.update('players', players =>
-          players.map(
-            (p, pId) =>
-              pId === action.player.id ? p.merge(fromJS(action.player)) : p
-          )
-        )
+        state.mergeIn(['players', action.player.id], fromJS(action.player))
       );
     }
     case a.UPDATE_MATCH: {
       return saveState(
-        state.update('matches', matches =>
-          matches.map(
-            (m, matchId) =>
-              matchId === action.match.id ? m.merge(fromJS(action.match)) : m
-          )
-        )
+        state.mergeIn(['matches', action.match.id], fromJS(action.match))
       );
     }
     case a.FINISH_ROUND: {
@@ -270,7 +248,7 @@ export default function reducer(state = initialState, action) {
         .get('matches')
         .map(mId => state.getIn(['matches', mId]).set('active', false));
 
-      const players = state.get('players').withMutations(players => {
+      const newPlayers = state.get('players').withMutations(players => {
         matches.forEach(match => {
           const p1 = match.get('p1');
           const p2 = match.get('p2');
@@ -302,7 +280,7 @@ export default function reducer(state = initialState, action) {
         state
           .update('rounds', rounds => rounds.setIn([roundId, 'active'], false))
           .update('matches', ms => ms.merge(newMatches))
-          .set('players', players)
+          .set('players', newPlayers)
       );
     }
     default:

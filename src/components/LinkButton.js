@@ -4,7 +4,7 @@ import { Button } from 'reactstrap';
 class LinkButton extends PureComponent {
   render() {
     return (
-      <Button {...this.props} color="link">
+      <Button {...this.props} style={{ padding: 0 }} color="link">
         {this.props.children}
       </Button>
     );

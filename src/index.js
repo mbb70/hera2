@@ -1,7 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-reboot.css';
 import 'bootstrap/dist/css/bootstrap-grid.css';
-import './index.css';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -13,6 +12,8 @@ import uiReducer from './modules/uiState';
 import pairingFormReducer from './modules/pairingForm';
 import Tournament from './containers/tournament';
 import serviceWorkerRegistration from './registerServiceWorker';
+
+import './index.css';
 
 const rootReducer = combineReducers({
   tournamentReducer,

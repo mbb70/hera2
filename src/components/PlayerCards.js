@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { CardGroup, Container, Row, Col } from 'reactstrap';
 import PlayerHistoryForm from './PlayerHistoryForm';
 import AddPlayerForm from './AddPlayerForm';
-import { CardGroup, Container, Row, Col } from 'reactstrap';
 
 connect();
 

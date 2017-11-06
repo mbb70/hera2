@@ -1,7 +1,7 @@
-import vu from '../utils/validationUtils';
-import Hutils from '../utils/hutils';
 import { createSelector } from 'reselect';
 import { Map } from 'immutable';
+import vu from '../utils/validationUtils';
+import Hutils from '../utils/hutils';
 
 const getCurrentTournament = state =>
   state.tournamentReducer.get('currentTournament');
@@ -31,23 +31,17 @@ export const currentLockedPlayerMap = createSelector(
 
 export const currentPlayers = createSelector(
   [getCurrentTournament, getPlayers],
-  (currentTournament, players) => {
-    return players.filter(p => p.get('tournamentId') === currentTournament);
-  }
+  (tournamentId, players) =>
+    players.filter(p => p.get('tournamentId') === tournamentId)
 );
 
-export const currentActivePlayers = createSelector(
-  [currentPlayers],
-  currentPlayers => {
-    return currentPlayers.filter(p => !p.get('deleted') && !p.get('dropped'));
-  }
+export const currentActivePlayers = createSelector([currentPlayers], players =>
+  players.filter(p => !p.get('deleted') && !p.get('dropped'))
 );
 
 export const currentMatches = createSelector(
   [getCurrentTournament, getMatches],
-  (currentTournament, matches) => {
-    return matches.filter(m => m.get('tournamentId') === currentTournament);
-  }
+  (tId, matches) => matches.filter(m => m.get('tournamentId') === tId)
 );
 
 export const currentFilteredMatches = createSelector(
@@ -70,48 +64,43 @@ export const currentFilteredMatches = createSelector(
 
 export const currentRounds = createSelector(
   [getCurrentTournament, getRounds],
-  (currentTournament, rounds) => {
-    return rounds
+  (currentTournament, rounds) =>
+    rounds
       .filter(r => r.get('tournamentId') === currentTournament)
       .valueSeq()
-      .sortBy(r => -r.get('id'));
-  }
+      .sortBy(r => -r.get('id'))
 );
 
 export const currentFilteredRounds = createSelector(
   [currentRounds, currentFilteredMatches],
-  (rounds, matches) => {
-    return rounds
-      .map(r => {
-        return r.update('matches', rMatches => {
-          return rMatches.filter(m => matches.has(m)).sortBy(v => +v);
-        });
-      })
-      .filter(r => r.get('matches').count() > 0);
-  }
+  (rounds, matches) =>
+    rounds
+      .map(r =>
+        r.update('matches', rMatches =>
+          rMatches.filter(m => matches.has(m)).sortBy(v => +v)
+        )
+      )
+      .filter(r => r.get('matches').count() > 0)
 );
 
-export const currentActiveRound = createSelector(
-  [currentRounds],
-  currentRounds => currentRounds.find(r => r.get('active'))
+export const currentActiveRound = createSelector([currentRounds], rounds =>
+  rounds.find(r => r.get('active'))
 );
 
 export const currentSettings = createSelector(
   [getCurrentTournament, getSettings],
-  (currentTournament, settings) => {
-    return settings.get(currentTournament);
-  }
+  (currentTournament, settings) => settings.get(currentTournament)
 );
 
 export const currentActiveUnlockedPlayers = createSelector(
   [currentActivePlayers, currentLockedPlayerMap, currentSettings],
-  (currentPlayers, lockedPlayerMap, settings) => {
+  (players, lockedPlayerMap, settings) => {
     const byePlayerId = settings.get('byePlayerId');
-    const needsBye = currentPlayers.count() % 2 === 0;
-    return currentPlayers
-      .filter((p, id) => {
-        return (needsBye || id !== byePlayerId) && !lockedPlayerMap.get(id);
-      })
+    const needsBye = players.count() % 2 === 0;
+    return players
+      .filter(
+        (p, id) => (needsBye || id !== byePlayerId) && !lockedPlayerMap.get(id)
+      )
       .sort((a, b) => a.get('name') > b.get('name'));
   }
 );
@@ -124,8 +113,8 @@ export const currentFilteredPlayers = createSelector(
     currentSettings,
     getHideDropped,
   ],
-  (players, searchText, sortByScore, settings, hideDropped) => {
-    return players
+  (players, searchText, sortByScore, settings, hideDropped) =>
+    players
       .filter(p => {
         const searchEmpty = !vu.notEmpty(searchText);
         const searchMatches = vu.caseInsIncludes(p.get('name'), searchText);
@@ -143,9 +132,7 @@ export const currentFilteredPlayers = createSelector(
       .sortBy(p => {
         if (sortByScore) {
           return -Hutils.getScoreImm(p, settings);
-        } else {
-          return p.get('name').toUpperCase();
         }
-      });
-  }
+        return p.get('name').toUpperCase();
+      })
 );
