@@ -1,18 +1,14 @@
 import React, { PureComponent } from 'react';
-import { CardImg, CardTitle, CardText, CardBlock, Card } from 'reactstrap';
+import { CardImg, CardTitle, CardText, CardBlock } from 'reactstrap';
+import GreyCard from './GreyCard';
 import Hutils from '../utils/hutils';
 
 class PlayerCard extends PureComponent {
   render() {
-    const cardStyle = {
-      opacity: this.props.dropped ? 0.5 : 1,
-    };
-    const score = this.props.settings
-      ? Hutils.getScore(this.props, this.props.settings)
-      : undefined;
+    const score = Hutils.getScore(this.props, this.props.settings);
     return (
-      <Card
-        style={cardStyle}
+      <GreyCard
+        grey={this.props.dropped}
         tag="a"
         className="width-initial-xs-down"
         onClick={this.props.onClick}
@@ -36,7 +32,7 @@ class PlayerCard extends PureComponent {
             )}
           </CardText>
         </CardBlock>
-      </Card>
+      </GreyCard>
     );
   }
 }

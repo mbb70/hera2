@@ -38,6 +38,7 @@ function generatePlayer(details) {
 }
 
 function getScoreImm(p, settings) {
+  if (settings === undefined) return undefined;
   const wins = settings.get('winPoints') * p.get('wins');
   const losses = settings.get('lossPoints') * p.get('losses');
   const draws = settings.get('drawPoints') * p.get('draws');
@@ -45,6 +46,7 @@ function getScoreImm(p, settings) {
 }
 
 function getScore(p, settings) {
+  if (settings === undefined) return undefined;
   const wins = settings.winPoints * p.wins;
   const losses = settings.lossPoints * p.losses;
   const draws = settings.drawPoints * p.draws;

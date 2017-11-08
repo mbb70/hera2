@@ -108,12 +108,15 @@ class AppNavComponent extends PureComponent {
         Switch Tournament
       </LinkButton>
     );
+
     rows.push(
       <LinkButton onClick={this.handleDeleteTournament}>
         Delete Tournament
       </LinkButton>
     );
+
     rows.push(<ExporterForm onExit={this.closeNav} />);
+
     rows.push(<FaqForm onExit={this.closeNav} />);
 
     return (

@@ -5,8 +5,8 @@ import {
   CardText,
   CardBlock,
   CardFooter,
-  Card,
 } from 'reactstrap';
+import GreyCard from './GreyCard';
 
 class MatchCard extends PureComponent {
   render() {
@@ -26,13 +26,11 @@ class MatchCard extends PureComponent {
       }
     }
 
-    const cardStyle = {
-      opacity: this.props.match.winner !== undefined ? 0.7 : 1,
-    };
+    const hasWinner = this.props.match.winner !== undefined;
     return (
-      <Card
+      <GreyCard
+        grey={hasWinner}
         className="width-initial-xs-down"
-        style={cardStyle}
         tag="a"
         onClick={this.props.onClick}
       >
@@ -51,7 +49,7 @@ class MatchCard extends PureComponent {
           </CardText>
         </CardBlock>
         <CardFooter>{matchStatus}</CardFooter>
-      </Card>
+      </GreyCard>
     );
   }
 }
