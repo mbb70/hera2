@@ -4,18 +4,19 @@ import vu from '../utils/validationUtils';
 import Hutils from '../utils/hutils';
 
 const getCurrentTournament = state =>
-  state.tournamentReducer.get('currentTournament');
-const getPlayers = state => state.tournamentReducer.get('players');
-const getRounds = state => state.tournamentReducer.get('rounds');
-const getMatches = state => state.tournamentReducer.get('matches');
-const getSettings = state => state.tournamentReducer.get('settings');
+  state.getIn(['tournament', 'currentTournament']);
 
-const getLockedTables = state => state.pairingFormReducer.get('lockedTables');
-const getPairs = state => state.pairingFormReducer.get('pairs');
+const getPlayers = state => state.getIn(['tournament', 'players']);
+const getRounds = state => state.getIn(['tournament', 'rounds']);
+const getMatches = state => state.getIn(['tournament', 'matches']);
+const getSettings = state => state.getIn(['tournament', 'settings']);
 
-const getSearchText = state => state.uiReducer.get('searchText');
-const getHideDropped = state => state.uiReducer.get('hideDropped');
-const getSortByScore = state => state.uiReducer.get('sortByScore');
+const getLockedTables = state => state.getIn(['pairingForm', 'lockedTables']);
+const getPairs = state => state.getIn(['pairingForm', 'pairs']);
+
+const getSearchText = state => state.getIn(['ui', 'searchText']);
+const getHideDropped = state => state.getIn(['ui', 'hideDropped']);
+const getSortByScore = state => state.getIn(['ui', 'sortByScore']);
 
 export const currentLockedPlayerMap = createSelector(
   [getLockedTables, getPairs],
@@ -131,7 +132,7 @@ export const currentFilteredPlayers = createSelector(
       .valueSeq()
       .sortBy(p => {
         if (sortByScore) {
-          return -Hutils.getScoreImm(p, settings);
+          return -Hutils.getScore(p, settings);
         }
         return p.get('name').toUpperCase();
       })

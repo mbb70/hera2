@@ -19,9 +19,6 @@ const mapStateToProps = root => ({
 });
 
 const mapDispatchToProps = () => ({});
-
-const ExporterForm = connect(mapStateToProps, mapDispatchToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
   toJS(ExporterFormComponent)
 );
-
-export default ExporterForm;

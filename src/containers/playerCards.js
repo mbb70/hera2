@@ -18,13 +18,7 @@ const mapStateToProps = root => ({
   settings: currentSettings(root),
 });
 
-const mapDispatchToProps = dispatch => ({
-  onAddPlayers: names => dispatch(e.addPlayers(names)),
-  updatePlayer: player => dispatch(e.updatePlayer(player)),
-});
-
-const PlayerCards = connect(mapStateToProps, mapDispatchToProps)(
+const mapDispatchToProps = e.dumbDispatch(e, ['addPlayers', 'updatePlayer']);
+export default connect(mapStateToProps, mapDispatchToProps)(
   toJS(PlayerCardsComponent)
 );
-
-export default PlayerCards;

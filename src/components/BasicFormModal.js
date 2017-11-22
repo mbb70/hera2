@@ -27,9 +27,7 @@ class BasicFormModal extends PureComponent {
 
   handleLoadForm = () => {
     this.toggleForm();
-    if (this.props.onLoad !== undefined) {
-      this.props.onLoad();
-    }
+    this.props.onLoad && this.props.onLoad();
   };
 
   render() {

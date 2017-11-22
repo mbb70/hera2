@@ -2,27 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import configureMockStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
-import { createStore, combineReducers } from 'redux';
+import { createStore } from 'redux';
 import { fromJS } from 'immutable';
 
 import './setupTests';
 import * as r from './modules/events';
-import uiReducer from './modules/uiState';
-import reducer, { newInitialState } from './modules/Tournament';
+import rootReducer, { newInitialState } from './modules/rootReducer';
 import Tournament from './containers/tournament';
 import Hutils from './utils/hutils';
-import { tdispatch, getPairedTournament, getPlayedMatches } from './testUtils';
+import { dispatch, getPairedTournament, getPlayedMatches } from './testUtils';
 
 const identityFn = a => a;
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  const fullStore = createStore(
-    combineReducers({
-      tournamentReducer: reducer,
-      uiReducer,
-    })
-  );
+  const fullStore = createStore(rootReducer);
   ReactDOM.render(
     <Provider store={fullStore}>
       <Tournament />
@@ -46,20 +40,20 @@ it('dispatches add players', () => {
 function createTournament(state, store, name) {
   store.dispatch(r.createTournament({ name }));
   const action = store.getActions()[store.getActions().length - 1];
-  return reducer(state, action);
+  return rootReducer(state, action);
 }
 
 it('creates tournament', () => {
   let state = newInitialState();
   const store = mockStore(state);
   state = createTournament(state, store, 't1');
-  expect(state.getIn(['tournaments', '1'])).toBe('t1');
+  expect(state.getIn(['tournament', 'tournaments', '1'])).toBe('t1');
 });
 
 function addPlayers(state, store, names) {
   store.dispatch(r.addPlayers(names));
   const action = store.getActions()[store.getActions().length - 1];
-  return reducer(state, action);
+  return rootReducer(state, action);
 }
 
 it('adds players', () => {
@@ -67,7 +61,7 @@ it('adds players', () => {
   const store = mockStore(state);
   state = createTournament(state, store, 't1');
   state = addPlayers(state, store, ['bob']);
-  expect(state.getIn(['players', '2'])).toEqual(
+  expect(state.getIn(['tournament', 'players', '2'])).toEqual(
     fromJS({
       name: 'bob',
       draws: 0,
@@ -84,13 +78,13 @@ it('adds players', () => {
 
 function pairPlayers(state, store) {
   const pairs = Hutils.pairPlayers(
-    state.get('players').toJS(),
-    state.getIn(['settings', '1']).toJS(),
+    state.getIn(['tournament', 'players']),
+    state.getIn(['tournament', 'settings', '1']),
     identityFn
   );
   store.dispatch(r.pairPlayers(pairs));
   const action = store.getActions()[store.getActions().length - 1];
-  return reducer(state, action);
+  return rootReducer(state, action);
 }
 
 it('pairs players', () => {
@@ -98,8 +92,12 @@ it('pairs players', () => {
   const store = mockStore(state);
   state = createTournament(state, store, 't1');
   state = addPlayers(state, store, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']);
-  state = pairPlayers(state, store, state.get('players').keySeq());
-  expect(state.getIn(['rounds', '1']).toJS()).toEqual({
+  state = pairPlayers(
+    state,
+    store,
+    state.getIn(['tournament', 'players']).keySeq()
+  );
+  expect(state.getIn(['tournament', 'rounds', '1']).toJS()).toEqual({
     id: '1',
     matches: ['1', '2', '3', '4'],
     number: 1,
@@ -107,7 +105,7 @@ it('pairs players', () => {
     tournamentId: '1',
   });
   const matchPairs = state
-    .get('matches')
+    .getIn(['tournament', 'matches'])
     .valueSeq()
     .map(m => [m.get('p1'), m.get('p2')]);
   expect(matchPairs.toJS()).toEqual([
@@ -123,14 +121,18 @@ it('pairs bye', () => {
   const store = mockStore(state);
   state = createTournament(state, store, 't1');
   state = addPlayers(state, store, ['a', 'b', 'c', 'd', 'e', 'f', 'g']);
-  state = pairPlayers(state, store, state.get('players').keySeq());
-  const byeId = state.getIn(['settings', '1', 'byePlayerId']);
+  state = pairPlayers(
+    state,
+    store,
+    state.getIn(['tournament', 'players']).keySeq()
+  );
+  const byeId = state.getIn(['tournament', 'settings', '1', 'byePlayerId']);
   const byeMatch = state
-    .get('matches')
+    .getIn(['tournament', 'matches'])
     .valueSeq()
     .find(m => m.get('p2') === byeId);
   const otherMatch = state
-    .get('matches')
+    .getIn(['tournament', 'matches'])
     .valueSeq()
     .find(m => m.get('p2') !== byeId);
   expect(byeMatch.get('score')).toBe('2 - 0');
@@ -142,32 +144,33 @@ it('pairs bye', () => {
 function saveSettings(state, store, settings) {
   store.dispatch(r.saveSettings(settings));
   const action = store.getActions()[store.getActions().length - 1];
-  return reducer(state, action);
+  return rootReducer(state, action);
 }
 
 it('updates settings', () => {
   let state = newInitialState();
   const store = mockStore(state);
   state = createTournament(state, store, 't1');
-  expect(state.getIn(['tournaments', '1'])).toBe('t1');
+  expect(state.getIn(['tournament', 'tournaments', '1'])).toBe('t1');
   state = saveSettings(state, store, { tournamentName: 't2' });
-  expect(state.getIn(['tournaments', '1'])).toBe('t2');
+  expect(state.getIn(['tournament', 'tournaments', '1'])).toBe('t2');
 });
 
 it('updates matches', () => {
   let state = getPairedTournament(4);
   const store = mockStore(state);
   const matchId = '1';
-  const oldMatch = state.getIn(['matches', matchId]);
+  const oldMatch = state.getIn(['tournament', 'matches', matchId]);
   expect(oldMatch.get('winner')).toBeFalsy();
   expect(oldMatch.get('score')).toBe('0 - 0');
   const update = {
     id: matchId,
     winner: '2',
     score: '2 - 0',
+    drop: ['2'],
   };
-  state = tdispatch(state, store, r.updateMatch(update));
-  const updatedMatch = state.getIn(['matches', matchId]);
+  state = dispatch(state, store, r.updateMatch(update));
+  const updatedMatch = state.getIn(['tournament', 'matches', matchId]);
   expect(updatedMatch.get('winner')).toBe('2');
   expect(updatedMatch.get('score')).toBe('2 - 0');
 });
@@ -175,10 +178,10 @@ it('updates matches', () => {
 it('finishes round', () => {
   let state = getPlayedMatches(4);
   const store = mockStore(state);
-  state = tdispatch(state, store, r.finishRound());
-  const matches = state.get('matches');
-  const players = state.get('players');
-  const rounds = state.get('rounds');
+  state = dispatch(state, store, r.finishRound());
+  const matches = state.getIn(['tournament', 'matches']);
+  const players = state.getIn(['tournament', 'players']);
+  const rounds = state.getIn(['tournament', 'rounds']);
   const allMatchesFinished = matches.every(m => !m.get('active'));
   expect(allMatchesFinished).toBeTruthy();
 
@@ -219,27 +222,55 @@ it('finishes round', () => {
 it('deletes tournaments', () => {
   let state = getPlayedMatches(5);
   const store = mockStore(state);
-  state = tdispatch(state, store, r.deleteTournament());
-  expect(state.get('tournaments').count()).toBe(0);
-  expect(state.get('settings').count()).toBe(0);
-  expect(state.get('players').count()).toBe(0);
-  expect(state.get('matches').count()).toBe(0);
-  expect(state.get('rounds').count()).toBe(0);
-  expect(state.get('currentTournament')).toBeFalsy();
+  state = dispatch(state, store, r.deleteTournament());
+  expect(state.getIn(['tournament', 'tournaments']).count()).toBe(0);
+  expect(state.getIn(['tournament', 'settings']).count()).toBe(0);
+  expect(state.getIn(['tournament', 'players']).count()).toBe(0);
+  expect(state.getIn(['tournament', 'matches']).count()).toBe(0);
+  expect(state.getIn(['tournament', 'rounds']).count()).toBe(0);
+  expect(state.getIn(['tournament', 'currentTournament'])).toBeFalsy();
 });
 
 it('switches tournaments', () => {
   let state = newInitialState();
   const store = mockStore(state);
-  state = tdispatch(state, store, r.createTournament({ name: 't1' }));
-  state = tdispatch(state, store, r.createTournament({ name: 't2' }));
-  state = tdispatch(state, store, r.switchTournament('2'));
-  expect(state.get('currentTournament')).toBe('2');
+  state = dispatch(state, store, r.createTournament({ name: 't1' }));
+  state = dispatch(state, store, r.createTournament({ name: 't2' }));
+  state = dispatch(state, store, r.switchTournament('2'));
+  expect(state.getIn(['tournament', 'currentTournament'])).toBe('2');
 });
 
 it('renames players', () => {
   let state = getPlayedMatches(5);
   const store = mockStore(state);
-  state = tdispatch(state, store, r.updatePlayer({ id: '1', name: 'Matt' }));
-  expect(state.getIn(['players', '1', 'name'])).toBe('Matt');
+  state = dispatch(state, store, r.updatePlayer({ id: '1', name: 'Matt' }));
+  expect(state.getIn(['tournament', 'players', '1', 'name'])).toBe('Matt');
+});
+
+it('drops players from matches', () => {
+  let state = getPlayedMatches(5);
+  const store = mockStore(state);
+
+  const matchId = '1';
+
+  const update = {
+    id: matchId,
+    winner: '2',
+    score: '2 - 0',
+    drop: ['2'],
+  };
+  state = dispatch(state, store, r.updateMatch(update));
+  state = dispatch(state, store, r.finishRound('1'));
+  const dropped = state.getIn(['tournament', 'players', '2', 'dropped']);
+  expect(dropped).toBeTruthy();
+});
+
+it('increments round numbers', () => {
+  let state = getPlayedMatches(5);
+  const store = mockStore(state);
+  state = dispatch(state, store, r.finishRound('1'));
+  state = dispatch(state, store, r.rePairPlayers(identityFn));
+  const pairs = state.getIn(['pairingForm', 'pairs']).toJS();
+  state = dispatch(state, store, r.pairPlayers(pairs));
+  expect(state.getIn(['tournament', 'rounds', '2', 'number'])).toBe(2);
 });

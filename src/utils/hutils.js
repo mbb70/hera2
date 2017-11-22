@@ -15,16 +15,6 @@ function shuffle(arr) {
   return sarr;
 }
 
-function defaultSettings() {
-  return {
-    newTournament: true,
-    tournamentName: 'My Tournament',
-    winPoints: 3,
-    lossPoints: 0,
-    drawPoints: 1,
-  };
-}
-
 function generatePlayer(details) {
   return Map({
     losses: 0,
@@ -37,19 +27,19 @@ function generatePlayer(details) {
   });
 }
 
-function getScoreImm(p, settings) {
+function getScorePojo(p, settings) {
   if (settings === undefined) return undefined;
-  const wins = settings.get('winPoints') * p.get('wins');
-  const losses = settings.get('lossPoints') * p.get('losses');
-  const draws = settings.get('drawPoints') * p.get('draws');
+  const wins = settings.winPoints * p.wins;
+  const losses = settings.lossPoints * p.losses;
+  const draws = settings.drawPoints * p.draws;
   return wins - losses + draws;
 }
 
 function getScore(p, settings) {
   if (settings === undefined) return undefined;
-  const wins = settings.winPoints * p.wins;
-  const losses = settings.lossPoints * p.losses;
-  const draws = settings.drawPoints * p.draws;
+  const wins = settings.get('winPoints') * p.get('wins');
+  const losses = settings.get('lossPoints') * p.get('losses');
+  const draws = settings.get('drawPoints') * p.get('draws');
   return wins - losses + draws;
 }
 
@@ -61,11 +51,11 @@ function calculateWeight(p, op, settings) {
 
 function generatePlayerGraph(playerIds, players, settings) {
   return playerIds.flatMap(id => {
-    const player = players[id];
+    const player = players.get(id);
     return playerIds
-      .filter(oId => id !== oId && !player.playedIds[oId])
+      .filter(oId => id !== oId && !player.getIn(['playedIds', oId]))
       .map(otherId => {
-        const otherPlayer = players[otherId];
+        const otherPlayer = players.get(otherId);
         const weight = calculateWeight(player, otherPlayer, settings);
         return [+id, +otherId, weight];
       });
@@ -73,7 +63,7 @@ function generatePlayerGraph(playerIds, players, settings) {
 }
 
 function pairPlayers(players, settings, shuffleFn) {
-  const playerIds = Seq(shuffleFn(Object.keys(players)));
+  const playerIds = Seq(shuffleFn(players.keySeq().toJS()));
   const graph = generatePlayerGraph(playerIds, players, settings);
   const pairing = blossom(graph.toJS());
   const pairs = pairing
@@ -85,9 +75,8 @@ function pairPlayers(players, settings, shuffleFn) {
 
 export default {
   shuffle,
-  defaultSettings,
   generatePlayer,
   pairPlayers,
+  getScorePojo,
   getScore,
-  getScoreImm,
 };

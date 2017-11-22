@@ -9,33 +9,26 @@ import {
 } from '../selectors/tournament';
 import * as e from '../modules/events';
 
-const mapStateToProps = root => {
-  const uiState = root.uiReducer;
-  return {
-    players: currentPlayers(root),
-    matches: currentMatches(root),
-    activeRound: currentActiveRound(root),
-    settings: currentSettings(root),
-    uiState,
-  };
-};
-
-const mapDispatchToProps = dispatch => ({
-  pairPlayers: pairs => dispatch(e.pairPlayers(pairs)),
-  saveSettings: settings => dispatch(e.saveSettings(settings)),
-  switchTournament: tournamentId => dispatch(e.switchTournament(tournamentId)),
-  deleteTournament: tournamentId => dispatch(e.deleteTournament(tournamentId)),
-  finishRound: roundId => dispatch(e.finishRound(roundId)),
-
-  toggleDroppedFilter: hideDropped =>
-    dispatch(e.toggleDroppedFilter(hideDropped)),
-  toggleSortType: sortByScore => dispatch(e.toggleSortType(sortByScore)),
-  switchView: playerView => dispatch(e.switchView(playerView)),
-  toggleSidebar: sidebarOpen => dispatch(e.toggleSidebar(sidebarOpen)),
+const mapStateToProps = root => ({
+  players: currentPlayers(root),
+  matches: currentMatches(root),
+  activeRound: currentActiveRound(root),
+  settings: currentSettings(root),
+  uiState: root.get('ui'),
 });
 
-const AppNav = connect(mapStateToProps, mapDispatchToProps)(
+const mapDispatchToProps = e.dumbDispatch(e, [
+  'pairPlayers',
+  'saveSettings',
+  'switchTournament',
+  'deleteTournament',
+  'finishRound',
+  'toggleDroppedFilter',
+  'toggleSortType',
+  'switchView',
+  'toggleSidebar',
+]);
+
+export default connect(mapStateToProps, mapDispatchToProps)(
   toJS(AppNavComponent)
 );
-
-export default AppNav;

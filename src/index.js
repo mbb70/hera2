@@ -6,20 +6,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { Provider } from 'react-redux';
-import { createStore, combineReducers } from 'redux';
-import tournamentReducer from './modules/Tournament';
-import uiReducer from './modules/uiState';
-import pairingFormReducer from './modules/pairingForm';
+import { createStore } from 'redux';
+import rootReducer from './modules/rootReducer';
 import Tournament from './containers/tournament';
 import serviceWorkerRegistration from './registerServiceWorker';
 
 import './index.css';
-
-const rootReducer = combineReducers({
-  tournamentReducer,
-  uiReducer,
-  pairingFormReducer,
-});
 
 const store =
   process.env.NODE_ENV === 'production'
@@ -36,5 +28,5 @@ ReactDOM.render(
   <Provider store={store}>
     <Tournament />
   </Provider>,
-  document.getElementById('root')
+  document.getElementById('root') || document.createElement('div')
 );

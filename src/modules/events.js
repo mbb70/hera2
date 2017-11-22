@@ -59,6 +59,8 @@ export const actions = {
   ...tournamentActions,
 };
 
+export default actions;
+
 export function addPlayers(names) {
   return { type: ADD_PLAYERS, names };
 }
@@ -127,15 +129,21 @@ export function resetPairsForm() {
   return { type: RESET_PAIRS_FORM };
 }
 
-export function rePairPlayers(players, settings, shuffleFn) {
+export function rePairPlayers(shuffleFn) {
   return {
     type: REPAIR_PLAYERS,
-    players,
-    settings,
     shuffleFn,
   };
 }
 
 export function swapPairPlayers(p1, p2) {
   return { type: SWAP_PAIR_PLAYERS, p1, p2 };
+}
+
+export function dumbDispatch(e, events) {
+  return dispatch =>
+    events.reduce((disp, ev) => {
+      disp[ev] = (...args) => dispatch(e[ev](...args));
+      return disp;
+    }, {});
 }

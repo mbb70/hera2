@@ -13,15 +13,14 @@ export function newInitialState() {
   });
 }
 
-const initialState = newInitialState();
-
-export default function reducer(state = initialState, action) {
+export default function reducer(globalState, action) {
+  const state = globalState.get('ui');
   switch (action.type) {
     case a.CREATE_TOURNAMENT: {
       return state.set('playerView', true);
     }
     case a.PAIR_PLAYERS: {
-      return state.set('playerView', true);
+      return state.set('playerView', false).set('sidebarOpen', false);
     }
     case a.FINISH_ROUND: {
       return state.set('playerView', true);

@@ -4,23 +4,17 @@ import TopNavComponent from '../components/TopNav';
 import { currentRounds, currentSettings } from '../selectors/tournament';
 import * as e from '../modules/events';
 
-const mapStateToProps = root => {
-  const uiState = root.uiReducer;
-  return {
-    rounds: currentRounds(root),
-    settings: currentSettings(root),
-    uiState,
-  };
-};
-
-const mapDispatchToProps = dispatch => ({
-  updateSearch: searchText => dispatch(e.updateSearch(searchText)),
-  switchView: playerView => dispatch(e.switchView(playerView)),
-  toggleSidebar: sidebarOpen => dispatch(e.toggleSidebar(sidebarOpen)),
+const mapStateToProps = root => ({
+  rounds: currentRounds(root),
+  settings: currentSettings(root),
+  uiState: root.get('ui'),
 });
 
-const TopNav = connect(mapStateToProps, mapDispatchToProps)(
+const mapDispatchToProps = e.dumbDispatch(e, [
+  'updateSearch',
+  'switchView',
+  'toggleSidebar',
+]);
+export default connect(mapStateToProps, mapDispatchToProps)(
   toJS(TopNavComponent)
 );
-
-export default TopNav;
