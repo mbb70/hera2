@@ -1,6 +1,5 @@
 import { saveState, getInitialState, newInitialState } from './rootReducer';
 
-
 it('gets data from local storage', () => {
   const state = newInitialState();
   window.localStorage.setItem('state/state', JSON.stringify(state));

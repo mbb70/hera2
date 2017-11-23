@@ -1,9 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import ReactTestUtils from 'react-dom/test-utils';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-
 import '../../setupTests';
 import AddPlayerForm from '../AddPlayerForm';
 import { renderIntoDiv, changeEvent } from './ComponentTestUtils';

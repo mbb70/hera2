@@ -10,7 +10,7 @@ class AddPlayerForm extends PureComponent {
 
   resetForm = () => {
     this.setState({ names: [''] });
-  }
+  };
 
   handleKeyPress = e => {
     const newnames = [...this.state.names];

@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 
@@ -14,3 +13,6 @@ export function changeEvent(component, target) {
   ReactTestUtils.Simulate.change(component, { target });
 }
 
+export function clickEvent(component) {
+  ReactTestUtils.Simulate.click(component);
+}

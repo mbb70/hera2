@@ -14,15 +14,14 @@ class MatchForm extends PureComponent {
     if (i === 0) return '2 - 0';
     if (i === 1) return '2 - 1';
     if (i === 2) return '1 - 0';
-    return '0 - 0';
+    return undefined;
   };
 
   getIndexFromScore = score => {
     if (score === '2 - 0') return 0;
     if (score === '2 - 1') return 1;
     if (score === '1 - 0') return 2;
-    if (score === '0 - 0') return -1;
-    return 3;
+    return undefined;
   };
 
   getWinnerId = i => {

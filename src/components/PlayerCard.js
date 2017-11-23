@@ -10,7 +10,7 @@ class PlayerCard extends PureComponent {
       <GreyCard
         grey={this.props.dropped}
         tag="a"
-        className={"width-initial-xs-down " + (this.props.className || '')}
+        className={`width-initial-xs-down ${this.props.className || ''}`}
         onClick={this.props.onClick}
       >
         <CardImg top width="100%" src="player_image.png" alt="card image cap" />
