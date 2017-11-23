@@ -15,14 +15,16 @@ However it does have some features that should be noted, which is a great lead-i
 * Can be "Added to Home Screen" on mobile to simulate app feel and function
 * Handle multiple tournaments at once
 * Sort players alphabetically or by current score
+* Export tournament as CSV file or raw json
+* Decent test code coverage
 
 
 I once read somewhere that if you aren't midly embarrassed to deploy something, you waited too long. With that in mind, another list:
 ### Future Features
 * Cloud Sync via Google Drive, Dropbox, and/or others
 * Export Tournament data as Excel sheet
+* Import Tournament data from json / CSV
 * Max Difference Pairing mode (pair players to maximize the average difference in scores)
-* So much more testing
 
 
 ### Tech Stack
