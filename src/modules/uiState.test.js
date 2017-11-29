@@ -10,9 +10,9 @@ it('toggles side bar', () => {
   let state = newInitialState();
   const store = mockStore(state);
   expect(state.getIn(['ui', 'sidebarOpen'])).toBeFalsy();
-  state = dispatch(state, store, r.toggleSidebar(true));
+  state = dispatch(state, store, r.toggleSidebar());
   expect(state.getIn(['ui', 'sidebarOpen'])).toBeTruthy();
-  state = dispatch(state, store, r.toggleSidebar(false));
+  state = dispatch(state, store, r.toggleSidebar());
   expect(state.getIn(['ui', 'sidebarOpen'])).toBeFalsy();
 });
 

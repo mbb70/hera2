@@ -5,6 +5,7 @@ const SAVE_SETTINGS = 'hera/tournament/SAVE_SETTINGS';
 const UPDATE_PLAYER = 'hera/tournament/UPDATE_PLAYER';
 const UPDATE_MATCH = 'hera/tournament/UPDATE_MATCH';
 const CREATE_TOURNAMENT = 'hera/tournament/CREATE_TOURNAMENT';
+const CLEAR_TOURNAMENT = 'hera/tournament/CLEAR_TOURNAMENT';
 const SWITCH_TOURNAMENT = 'hera/tournament/SWITCH_TOURNAMENT';
 const DELETE_TOURNAMENT = 'hera/tournament/DELETE_TOURNAMENT';
 const FINISH_ROUND = 'hera/tournament/FINISH_ROUND';
@@ -47,6 +48,7 @@ const tournamentActions = {
   CREATE_TOURNAMENT,
   DELETE_TOURNAMENT,
   SWITCH_TOURNAMENT,
+  CLEAR_TOURNAMENT,
   TOGGLE_DROPPED_FILTER,
   FINISH_ROUND,
   UPDATE_SEARCH,
@@ -89,20 +91,24 @@ export function switchTournament(tournament) {
   return { type: SWITCH_TOURNAMENT, tournament };
 }
 
-export function deleteTournament(tournament) {
-  return { type: DELETE_TOURNAMENT, tournament };
+export function clearTournament() {
+  return { type: CLEAR_TOURNAMENT };
 }
 
-export function toggleDroppedFilter(hideDropped) {
-  return { type: TOGGLE_DROPPED_FILTER, hideDropped };
+export function deleteTournament() {
+  return { type: DELETE_TOURNAMENT };
 }
 
-export function toggleSortType(sortByScore) {
-  return { type: TOGGLE_SORT_TYPE, sortByScore };
+export function toggleDroppedFilter() {
+  return { type: TOGGLE_DROPPED_FILTER };
 }
 
-export function finishRound(roundId) {
-  return { type: FINISH_ROUND, roundId };
+export function toggleSortType() {
+  return { type: TOGGLE_SORT_TYPE };
+}
+
+export function finishRound() {
+  return { type: FINISH_ROUND };
 }
 
 export function switchView(playerView) {
@@ -113,8 +119,8 @@ export function updateSearch(searchText) {
   return { type: UPDATE_SEARCH, searchText };
 }
 
-export function toggleSidebar(sidebarOpen) {
-  return { type: TOGGLE_SIDEBAR, sidebarOpen };
+export function toggleSidebar() {
+  return { type: TOGGLE_SIDEBAR };
 }
 
 export function togglePairEditing() {

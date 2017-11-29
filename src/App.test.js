@@ -219,6 +219,13 @@ it('finishes round', () => {
   expect(rounds.every(rd => !rd.get('active'))).toBeTruthy();
 });
 
+it('clears tournaments', () => {
+  let state = getPlayedMatches(5);
+  const store = mockStore(state);
+  state = dispatch(state, store, r.clearTournament());
+  expect(state.getIn(['tournament', 'currentTournament'])).toBe(undefined);
+});
+
 it('deletes tournaments', () => {
   let state = getPlayedMatches(5);
   const store = mockStore(state);

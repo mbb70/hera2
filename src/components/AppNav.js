@@ -10,41 +10,6 @@ import LinkButton from './LinkButton';
 connect();
 
 class AppNavComponent extends PureComponent {
-  closeNav = () => {
-    this.props.toggleSidebar(false);
-  };
-
-  handleFinishRound = () => {
-    this.props.finishRound();
-    this.props.switchView(true);
-    this.closeNav();
-  };
-
-  handleSaveSettings = settings => {
-    this.props.saveSettings(settings);
-    this.closeNav();
-  };
-
-  handleSwitchTournament = () => {
-    this.props.switchTournament();
-    this.closeNav();
-  };
-
-  handleDeleteTournament = () => {
-    this.props.deleteTournament(this.props.currentTournament);
-    this.closeNav();
-  };
-
-  handleToggleDroppedFilter = () => {
-    this.props.toggleDroppedFilter(!this.props.uiState.hideDropped);
-    this.closeNav();
-  };
-
-  handleToggleSortType = () => {
-    this.props.toggleSortType(!this.props.uiState.sortByScore);
-    this.closeNav();
-  };
-
   render() {
     const hasDroppedPlayers = Object.values(this.props.players).some(
       p => p.dropped
@@ -56,7 +21,7 @@ class AppNavComponent extends PureComponent {
     const rows = [];
     if (!unfinishedMatches && activeRound) {
       rows.push(
-        <LinkButton onClick={this.handleFinishRound}>Finish Round</LinkButton>
+        <LinkButton onClick={this.props.finishRound}>Finish Round</LinkButton>
       );
     }
 
@@ -68,13 +33,13 @@ class AppNavComponent extends PureComponent {
       <SettingsForm
         onExit={this.closeNav}
         settings={this.props.settings}
-        saveSettings={this.handleSaveSettings}
+        saveSettings={this.props.saveSettings}
       />
     );
 
     if (this.props.uiState.playerView) {
       rows.push(
-        <LinkButton onClick={this.handleToggleSortType}>
+        <LinkButton onClick={this.props.toggleSortType}>
           {this.props.uiState.sortByScore
             ? 'Sort Alphabetically'
             : 'Sort By Score'}
@@ -84,20 +49,20 @@ class AppNavComponent extends PureComponent {
 
     if (this.props.uiState.playerView && hasDroppedPlayers) {
       rows.push(
-        <LinkButton onClick={this.handleToggleDroppedFilter}>
+        <LinkButton onClick={this.props.toggleDroppedFilter}>
           {this.props.uiState.hideDropped ? 'Show Dropped' : 'Hide Dropped'}
         </LinkButton>
       );
     }
 
     rows.push(
-      <LinkButton onClick={this.handleSwitchTournament}>
+      <LinkButton onClick={this.props.clearTournament}>
         Switch Tournament
       </LinkButton>
     );
 
     rows.push(
-      <LinkButton onClick={this.handleDeleteTournament}>
+      <LinkButton onClick={this.props.deleteTournament}>
         Delete Tournament
       </LinkButton>
     );

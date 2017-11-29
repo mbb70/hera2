@@ -20,7 +20,7 @@ const mapStateToProps = root => ({
 const mapDispatchToProps = e.dumbDispatch(e, [
   'pairPlayers',
   'saveSettings',
-  'switchTournament',
+  'clearTournament',
   'deleteTournament',
   'finishRound',
   'toggleDroppedFilter',

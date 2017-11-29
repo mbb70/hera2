@@ -12,7 +12,3 @@ export function renderIntoDiv(component) {
 export function changeEvent(component, target) {
   ReactTestUtils.Simulate.change(component, { target });
 }
-
-export function clickEvent(component) {
-  ReactTestUtils.Simulate.click(component);
-}

@@ -20,15 +20,10 @@ class TopNavComponent extends PureComponent {
     flexWrap: 'initial',
   };
 
-  toggleSidebar = () => {
-    const { sidebarOpen } = this.props.uiState;
-    this.props.toggleSidebar(!sidebarOpen);
-  };
-
   render() {
     return (
       <Navbar full inverse sticky="top" light style={this.navbarStyle}>
-        <LinkButton onClick={this.toggleSidebar}>
+        <LinkButton onClick={this.props.toggleSidebar}>
           <span className="navbar-toggler-icon" />
         </LinkButton>
         <NavbarBrand className="px-2 d-sm-block d-none">
