@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Card } from 'reactstrap';
+import Card from 'reactstrap/lib/Card';
 
 class GreyCard extends PureComponent {
   render() {

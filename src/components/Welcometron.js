@@ -1,13 +1,11 @@
 import React, { PureComponent } from 'react';
-import {
-  Form,
-  Label,
-  Jumbotron,
-  Button,
-  Container,
-  Row,
-  Col,
-} from 'reactstrap';
+import Form from 'reactstrap/lib/Form';
+import Label from 'reactstrap/lib/Label';
+import Jumbotron from 'reactstrap/lib/Jumbotron';
+import Button from 'reactstrap/lib/Button';
+import Container from 'reactstrap/lib/Container';
+import Row from 'reactstrap/lib/Row';
+import Col from 'reactstrap/lib/Col';
 import ValidatedFormGroup from './ValidatedFormGroup';
 import vu from '../utils/validationUtils';
 

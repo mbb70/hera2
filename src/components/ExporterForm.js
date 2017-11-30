@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { Label, FormGroup } from 'reactstrap';
+import Label from 'reactstrap/lib/Label';
+import FormGroup from 'reactstrap/lib/FormGroup';
 import React, { PureComponent } from 'react';
 import BasicFormModal from './BasicFormModal';
 import LinkButton from './LinkButton';

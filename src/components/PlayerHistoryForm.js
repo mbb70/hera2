@@ -1,5 +1,9 @@
 import React, { PureComponent } from 'react';
-import { Row, Col, Button, Label, FormGroup } from 'reactstrap';
+import Row from 'reactstrap/lib/Row';
+import Col from 'reactstrap/lib/Col';
+import Button from 'reactstrap/lib/Button';
+import Label from 'reactstrap/lib/Label';
+import FormGroup from 'reactstrap/lib/FormGroup';
 import BasicFormModal from './BasicFormModal';
 import ValidatedInput from './ValidatedInput';
 import ValidatedFormGroup from './ValidatedFormGroup';

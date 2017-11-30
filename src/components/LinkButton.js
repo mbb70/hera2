@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Button } from 'reactstrap';
+import Button from 'reactstrap/lib/Button';
 
 class LinkButton extends PureComponent {
   render() {

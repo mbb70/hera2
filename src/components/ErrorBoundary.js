@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Container, Row, Col } from 'reactstrap';
+import Container from 'reactstrap/lib/Container';
+import Row from 'reactstrap/lib/Row';
+import Col from 'reactstrap/lib/Col';
 import TabA from './TabA';
 
 class ErrorBoundary extends Component {

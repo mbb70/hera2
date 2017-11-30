@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { Nav, NavLink, NavItem } from 'reactstrap';
+import Nav from 'reactstrap/lib/Nav';
+import NavLink from 'reactstrap/lib/NavLink';
+import NavItem from 'reactstrap/lib/NavItem';
 import SettingsForm from './SettingsForm';
 import PairingForm from '../containers/pairingForm';
 import ExporterForm from '../containers/exporterForm';

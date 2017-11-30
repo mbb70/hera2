@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
-import { Button, Label, FormGroup } from 'reactstrap';
+import Button from 'reactstrap/lib/Button';
+import Label from 'reactstrap/lib/Label';
+import FormGroup from 'reactstrap/lib/FormGroup';
 import BasicFormModal from './BasicFormModal';
 import MatchCard from './MatchCard';
 import ButtonRow from './ButtonRow';

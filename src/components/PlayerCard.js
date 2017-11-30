@@ -1,5 +1,8 @@
 import React, { PureComponent } from 'react';
-import { CardImg, CardTitle, CardText, CardBlock } from 'reactstrap';
+import CardImg from 'reactstrap/lib/CardImg';
+import CardTitle from 'reactstrap/lib/CardTitle';
+import CardText from 'reactstrap/lib/CardText';
+import CardBlock from 'reactstrap/lib/CardBlock';
 import GreyCard from './GreyCard';
 import Hutils from '../utils/hutils';
 

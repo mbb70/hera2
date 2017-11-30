@@ -1,11 +1,9 @@
 import React, { PureComponent } from 'react';
-import {
-  CardHeader,
-  CardTitle,
-  CardText,
-  CardBlock,
-  CardFooter,
-} from 'reactstrap';
+import CardHeader from 'reactstrap/lib/CardHeader';
+import CardTitle from 'reactstrap/lib/CardTitle';
+import CardText from 'reactstrap/lib/CardText';
+import CardBlock from 'reactstrap/lib/CardBlock';
+import CardFooter from 'reactstrap/lib/CardFooter';
 import GreyCard from './GreyCard';
 
 class MatchCard extends PureComponent {

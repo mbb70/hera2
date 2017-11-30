@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Label } from 'reactstrap';
+import Label from 'reactstrap/lib/Label';
 import BasicFormModal from './BasicFormModal';
 import ValidatedFormGroup from './ValidatedFormGroup';
 import LinkButton from './LinkButton';

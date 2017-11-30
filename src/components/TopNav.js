@@ -1,6 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { NavbarBrand, Label, Input, Navbar } from 'reactstrap';
+import NavbarBrand from 'reactstrap/lib/NavbarBrand';
+import Label from 'reactstrap/lib/Label';
+import Input from 'reactstrap/lib/Input';
+import Navbar from 'reactstrap/lib/Navbar';
 import LinkButton from './LinkButton';
 
 connect();

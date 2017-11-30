@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { FormGroup } from 'reactstrap';
+import FormGroup from 'reactstrap/lib/FormGroup';
 import ValidatedInput from './ValidatedInput';
 
 class ValidatedFormGroup extends PureComponent {

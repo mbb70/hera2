@@ -1,6 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { CardGroup, Container, Row, Col } from 'reactstrap';
+import CardGroup from 'reactstrap/lib/CardGroup';
+import Container from 'reactstrap/lib/Container';
+import Row from 'reactstrap/lib/Row';
+import Col from 'reactstrap/lib/Col';
 import MatchForm from './MatchForm';
 
 connect();

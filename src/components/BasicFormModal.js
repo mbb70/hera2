@@ -1,13 +1,11 @@
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
-import {
-  ModalBody,
-  ModalHeader,
-  ModalFooter,
-  Modal,
-  Form,
-  Button,
-} from 'reactstrap';
+import ModalBody from 'reactstrap/lib/ModalBody';
+import ModalHeader from 'reactstrap/lib/ModalHeader';
+import ModalFooter from 'reactstrap/lib/ModalFooter';
+import Modal from 'reactstrap/lib/Modal';
+import Form from 'reactstrap/lib/Form';
+import Button from 'reactstrap/lib/Button';
 
 class BasicFormModal extends PureComponent {
   state = {

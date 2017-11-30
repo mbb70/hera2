@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Input } from 'reactstrap';
+import Input from 'reactstrap/lib/Input';
 
 class ValidatedInput extends PureComponent {
   handleKeyPress = e => this.props.onChange(this.props.field, e.target.value);
