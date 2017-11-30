@@ -50,7 +50,7 @@ export default function reducer(globalState, action) {
     case a.DELETE_TOURNAMENT: {
       return state.set('sidebarOpen', false);
     }
-    case a.SWITCH_TOURNAMENT: {
+    case a.CLEAR_TOURNAMENT: {
       return state.set('sidebarOpen', false);
     }
     default:

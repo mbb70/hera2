@@ -9,10 +9,6 @@ import ErrorBoundary from './ErrorBoundary';
 connect();
 
 class TournamentComponent extends PureComponent {
-  toggleSidebar = () => {
-    this.props.toggleSidebar(!this.props.uiState.sidebarOpen);
-  };
-
   render() {
     if (!this.props.settings) {
       return (
@@ -26,7 +22,7 @@ class TournamentComponent extends PureComponent {
     return (
       <ResponsiveSidebar
         open={this.props.uiState.sidebarOpen}
-        toggleSidebar={this.toggleSidebar}
+        toggleSidebar={this.props.toggleSidebar}
       >
         <ErrorBoundary>
           {this.props.uiState.playerView ? <PlayerCards /> : <MatchCards />}
