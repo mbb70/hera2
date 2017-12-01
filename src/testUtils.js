@@ -57,7 +57,7 @@ export function getPlayedMatches(nPlayers) {
   state.getIn(['tournament', 'matches']).forEach((m, i) => {
     const update = {
       id: i,
-      winner: i === '1' ? -1 : m.get('p1'),
+      winner: i === '1' ? '0' : m.get('p1'),
       score: i === '1' ? '0 - 0' : '2 - 0',
     };
     state = dispatch(state, store, r.updateMatch(update));

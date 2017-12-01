@@ -10,7 +10,7 @@ class MatchCard extends PureComponent {
   render() {
     let matchStatus = <div>Ongoing</div>;
     if (this.props.match.winner !== undefined) {
-      if (this.props.match.winner === -1) {
+      if (this.props.match.winner === '0') {
         matchStatus = <div>Draw</div>;
       } else {
         matchStatus = (

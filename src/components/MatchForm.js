@@ -28,15 +28,16 @@ class MatchForm extends PureComponent {
 
   getWinnerId = i => {
     if (i === 0) return this.state.match.p1;
+    if (i === 1) return '0';
     if (i === 2) return this.state.match.p2;
-    return -1;
+    return undefined;
   };
 
   getWinnerIndex = id => {
-    if (id === -1) return 1;
     if (id === this.state.match.p1) return 0;
+    if (id === '0') return 1;
     if (id === this.state.match.p2) return 2;
-    return -1;
+    return undefined;
   };
 
   handleDropSelection = i => {
@@ -61,7 +62,7 @@ class MatchForm extends PureComponent {
     const winnerId = this.getWinnerId(i);
     const newState = { ...this.state.match };
     newState.winner = winnerId;
-    if (winnerId === -1) {
+    if (winnerId === '0') {
       newState.score = '0 - 0';
     }
     this.setState({ match: newState });
@@ -89,7 +90,7 @@ class MatchForm extends PureComponent {
     const winnerSelected = this.getWinnerIndex(match.winner);
     const scoreSelected = this.getIndexFromScore(match.score);
     const invalid =
-      winnerSelected === -1 || (winnerSelected !== 1 && scoreSelected === -1);
+      winnerSelected === undefined || (winnerSelected !== 1 && scoreSelected === undefined);
     const drop = (match.drop || []).map(pId => (pId === p1.id ? 0 : 1));
     return (
       <BasicFormModal
@@ -119,7 +120,7 @@ class MatchForm extends PureComponent {
             </Button>
           </ButtonCol>
         </FormGroup>
-        {match.winner !== -1 && (
+        {match.winner !== '0' && (
           <FormGroup>
             <Label>Score</Label>
             <ButtonRow

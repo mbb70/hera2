@@ -88,6 +88,6 @@ it('renders accepts all inputs', () => {
   selectDrop('p1');
   submitForm();
   const newMatch = submitFn.mock.calls[0][0];
-  expect(newMatch.winner).toBe(-1);
+  expect(newMatch.winner).toBe('0');
   expect(newMatch.score).toBe('0 - 0');
 });

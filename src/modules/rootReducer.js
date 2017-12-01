@@ -8,13 +8,25 @@ export function newInitialState() {
     tournament: newTState(),
     ui: newUiState(),
     pairingForm: newPFormState(),
-    version: 2,
+    version: 3,
   });
 }
 
 function migrate(state) {
   if (state.get('version') === 1) {
-    return newInitialState().set('tournament', state);
+    state = newInitialState()
+      .set('tournament', state)
+      .set('version', 2);
+  }
+  if (state.get('version') === 2) {
+    state = state
+      .updateIn(['tournament', 'matches'], (matches) => (
+        matches.map((m) => (
+            m.set('winner', m.get('winner') === -1 ? '0' : m.get('winner'))
+          )
+        )
+      )
+    ).set('version', 3);
   }
   return state;
 }
