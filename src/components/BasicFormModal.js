@@ -21,6 +21,7 @@ class BasicFormModal extends PureComponent {
 
   handleFormSubmit = e => {
     this.closeForm();
+    this.props.resetForm();
     this.props.onFormSubmit();
     e.preventDefault();
   };
