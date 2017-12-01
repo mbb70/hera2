@@ -28,12 +28,12 @@ class AppNavComponent extends PureComponent {
     }
 
     if (!activeRound) {
-      rows.push(<PairingForm onExit={this.closeNav} />);
+      rows.push(<PairingForm onExit={this.props.toggleSidebar} />);
     }
 
     rows.push(
       <SettingsForm
-        onExit={this.closeNav}
+        onExit={this.props.toggleSidebar}
         settings={this.props.settings}
         saveSettings={this.props.saveSettings}
       />
@@ -69,9 +69,9 @@ class AppNavComponent extends PureComponent {
       </LinkButton>
     );
 
-    rows.push(<ExporterForm onExit={this.closeNav} />);
+    rows.push(<ExporterForm onExit={this.props.toggleSidebar} />);
 
-    rows.push(<FaqForm onExit={this.closeNav} />);
+    rows.push(<FaqForm onExit={this.props.toggleSidebar} />);
 
     return (
       <div className="p-3 app-nav">
