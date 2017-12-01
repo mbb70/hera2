@@ -20,7 +20,7 @@ export default function reducer(globalState, action) {
       return state.set('playerView', true);
     }
     case a.PAIR_PLAYERS: {
-      return state.set('playerView', false).set('sidebarOpen', false);
+      return state.set('playerView', false)
     }
     case a.FINISH_ROUND: {
       return state.set('playerView', true).set('sidebarOpen', false);
@@ -41,10 +41,10 @@ export default function reducer(globalState, action) {
     case a.SWITCH_VIEW: {
       return state.set('playerView', action.playerView);
     }
-    case a.TOGGLE_SIDEBAR: {
-      return state.set('sidebarOpen', !state.get('sidebarOpen'));
+    case a.OPEN_SIDEBAR: {
+      return state.set('sidebarOpen', true);
     }
-    case a.SAVE_SETTINGS: {
+    case a.CLOSE_SIDEBAR: {
       return state.set('sidebarOpen', false);
     }
     case a.DELETE_TOURNAMENT: {

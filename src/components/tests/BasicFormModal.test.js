@@ -8,7 +8,7 @@ it('renders basic form modal', () => {
   const header = 'Test Header';
   const resetForm = jest.fn();
   const onFormSubmit = jest.fn();
-  const onExit = jest.fn();
+  const onClose = jest.fn();
   const onLoad = jest.fn();
   const submitButton = (
     <button id="submit-btn" onClick={onFormSubmit}>
@@ -24,7 +24,7 @@ it('renders basic form modal', () => {
         onLoad,
         onFormSubmit,
         resetForm,
-        onExit,
+        onClose,
       }}
     />
   );
@@ -35,5 +35,5 @@ it('renders basic form modal', () => {
 
   document.getElementById('submit-btn').click();
   expect(onFormSubmit.mock.calls.length).toBe(1);
-  expect(resetForm.mock.calls.length).toBe(2);
+  expect(resetForm.mock.calls.length).toBe(1);
 });

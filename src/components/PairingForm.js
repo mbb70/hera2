@@ -26,7 +26,7 @@ class PairingFormComponent extends PureComponent {
     const resetForm = this.props.resetPairsForm;
     const onFormSubmit = this.handleFormSubmit;
     const onLoad = this.handleLoadForm;
-    const onExit = this.props.onExit;
+    const onClose = this.props.onClose;
     const invalid = this.props.editing;
     const leftButton = (
       <div className="d-flex mr-auto">
@@ -60,7 +60,7 @@ class PairingFormComponent extends PureComponent {
       resetForm,
       onFormSubmit,
       onLoad,
-      onExit,
+      onClose,
     };
     return (
       <BasicFormModal {...modalParams}>

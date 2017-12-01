@@ -16,7 +16,7 @@ class ResponsiveSidebar extends PureComponent {
         sidebar={<AppNav />}
         open={this.props.open}
         styles={this.sidebarStyles}
-        onSetOpen={this.props.toggleSidebar}
+        onSetOpen={this.props.openSidebar}
       >
         <TopNav />
         {this.props.children}

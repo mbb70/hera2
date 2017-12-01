@@ -21,11 +21,11 @@ class FaqForm extends PureComponent {
     const header = 'Frequently Asked Questions';
     const cancelText = 'Close';
     const resetForm = () => {};
-    const onExit = this.props.onExit;
+    const onClose = this.props.onClose;
     const onFormSubmit = undefined;
     return (
       <BasicFormModal
-        {...{ entryPoint, header, cancelText, resetForm, onFormSubmit, onExit }}
+        {...{ entryPoint, header, cancelText, resetForm, onFormSubmit, onClose }}
       >
         <FaqH>What is this?</FaqH>
         <p>

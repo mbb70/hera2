@@ -13,7 +13,7 @@ const mapStateToProps = root => ({
 const mapDispatchToProps = e.dumbDispatch(e, [
   'updateSearch',
   'switchView',
-  'toggleSidebar',
+  'openSidebar',
 ]);
 export default connect(mapStateToProps, mapDispatchToProps)(
   toJS(TopNavComponent)

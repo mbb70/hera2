@@ -15,7 +15,8 @@ const TOGGLE_DROPPED_FILTER = 'hera/uistate/TOGGLE_DROPPED_FILTER';
 const TOGGLE_SORT_TYPE = 'hera/uistate/TOGGLE_SORT_TYPE';
 const UPDATE_SEARCH = 'hera/uistate/UPDATE_SEARCH';
 const SWITCH_VIEW = 'hera/uistate/SWITCH_VIEW';
-const TOGGLE_SIDEBAR = 'hera/uistate/TOGGLE_SIDEBAR';
+const OPEN_SIDEBAR = 'hera/uistate/OPEN_SIDEBAR';
+const CLOSE_SIDEBAR = 'hera/uistate/CLOSE_SIDEBAR';
 
 const TOGGLE_PAIR_EDITING = 'hera/pairingform/TOGGLE_PAIR_EDITING';
 const LOCK_PAIRS = 'hera/pairingform/LOCK_PAIRS';
@@ -35,7 +36,8 @@ const uiStateActions = {
   TOGGLE_DROPPED_FILTER,
   UPDATE_SEARCH,
   SWITCH_VIEW,
-  TOGGLE_SIDEBAR,
+  OPEN_SIDEBAR,
+  CLOSE_SIDEBAR,
   TOGGLE_SORT_TYPE,
 };
 
@@ -119,8 +121,12 @@ export function updateSearch(searchText) {
   return { type: UPDATE_SEARCH, searchText };
 }
 
-export function toggleSidebar() {
-  return { type: TOGGLE_SIDEBAR };
+export function openSidebar() {
+  return { type: OPEN_SIDEBAR };
+}
+
+export function closeSidebar() {
+  return { type: CLOSE_SIDEBAR };
 }
 
 export function togglePairEditing() {

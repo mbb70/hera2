@@ -22,7 +22,7 @@ class TournamentComponent extends PureComponent {
     return (
       <ResponsiveSidebar
         open={this.props.uiState.sidebarOpen}
-        toggleSidebar={this.props.toggleSidebar}
+        openSidebar={this.props.closeSidebar}
       >
         <ErrorBoundary>
           {this.props.uiState.playerView ? <PlayerCards /> : <MatchCards />}

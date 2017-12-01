@@ -99,7 +99,7 @@ class ExporterForm extends PureComponent {
     const resetForm = this.handleResetForm;
     const onLoad = this.handleFormLoad;
     const onFormSubmit = () => {};
-    const onExit = this.props.onExit;
+    const onClose = this.props.onClose;
     const downloadName = `${this.props.tournamentState.tournamentName}.${this
       .state.downloadType}`;
     const submitButton = (
@@ -121,7 +121,7 @@ class ExporterForm extends PureComponent {
           onFormSubmit,
           onLoad,
           resetForm,
-          onExit,
+          onClose,
         }}
       >
         <FormGroup>

@@ -26,7 +26,7 @@ class TopNavComponent extends PureComponent {
   render() {
     return (
       <Navbar full inverse sticky="top" light style={this.navbarStyle}>
-        <LinkButton onClick={this.props.toggleSidebar}>
+        <LinkButton onClick={this.props.openSidebar}>
           <span className="navbar-toggler-icon" />
         </LinkButton>
         <NavbarBrand className="px-2 d-sm-block d-none">

@@ -12,19 +12,22 @@ class BasicFormModal extends PureComponent {
     open: false,
   };
 
-  toggleForm = () => {
-    this.props.resetForm();
-    this.setState({ open: !this.state.open });
+  closeForm = () => {
+    if (this.props.onClose) {
+      this.props.onClose();
+    }
+    this.setState({ open: false });
   };
 
   handleFormSubmit = e => {
-    this.toggleForm();
+    this.closeForm();
     this.props.onFormSubmit();
     e.preventDefault();
   };
 
   handleLoadForm = () => {
-    this.toggleForm();
+    this.props.resetForm();
+    this.setState({ open: true });
     if (this.props.onLoad) {
       this.props.onLoad();
     }
@@ -48,7 +51,7 @@ class BasicFormModal extends PureComponent {
       submitButton = React.cloneElement(this.props.submitButton, {
         onClick: () => {
           this.props.submitButton.props.onClick();
-          this.toggleForm();
+          this.closeForm();
         },
       });
     }
@@ -59,10 +62,9 @@ class BasicFormModal extends PureComponent {
           {...this.props.additionalModalParams}
           autoFocus={false}
           isOpen={this.state.open}
-          toggle={this.toggleForm}
-          onExit={this.props.onExit}
+          toggle={this.closeForm}
         >
-          <ModalHeader toggle={this.toggleForm}>
+          <ModalHeader toggle={this.closeForm}>
             {this.props.header}
           </ModalHeader>
           <ModalBody>
@@ -74,7 +76,7 @@ class BasicFormModal extends PureComponent {
               className={classNames({
                 'hidden-xxs-down': this.props.leftButton,
               })}
-              onClick={this.toggleForm}
+              onClick={this.closeForm}
             >
               {this.props.cancelText || 'Cancel'}
             </Button>

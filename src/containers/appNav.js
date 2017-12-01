@@ -26,7 +26,7 @@ const mapDispatchToProps = e.dumbDispatch(e, [
   'toggleDroppedFilter',
   'toggleSortType',
   'switchView',
-  'toggleSidebar',
+  'closeSidebar',
 ]);
 
 export default connect(mapStateToProps, mapDispatchToProps)(

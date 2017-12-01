@@ -13,7 +13,7 @@ const mapStateToProps = root => ({
 const mapDispatchToProps = e.dumbDispatch(e, [
   'createTournament',
   'switchTournament',
-  'toggleSidebar',
+  'closeSidebar',
 ]);
 export default connect(mapStateToProps, mapDispatchToProps)(
   toJS(TournamentComponent)

@@ -31,7 +31,7 @@ class SettingsForm extends PureComponent {
     const submitText = 'Save';
     const resetForm = this.resetForm;
     const onFormSubmit = this.handleFormSubmit;
-    const onExit = this.props.onExit;
+    const onClose = this.props.onClose;
     const invalid = !this.valid();
     const fields = [
       {
@@ -67,7 +67,7 @@ class SettingsForm extends PureComponent {
           submitText,
           resetForm,
           onFormSubmit,
-          onExit,
+          onClose,
         }}
       >
         {fields.map(({ field, label, valid, type }) => (
