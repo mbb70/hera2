@@ -51,7 +51,10 @@ export default function reducer(globalState, action) {
       return state.set('sidebarOpen', false);
     }
     case a.CLEAR_TOURNAMENT: {
-      return state.set('sidebarOpen', false);
+      return state
+        .set('sidebarOpen', false)
+        .set('playerView', true)
+        .set('searchText', '');
     }
     default:
       return state;
