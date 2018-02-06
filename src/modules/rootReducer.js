@@ -13,13 +13,14 @@ export function newInitialState() {
 }
 
 function migrate(state) {
-  if (state.get('version') === 1) {
-    state = newInitialState()
-      .set('tournament', state)
+  let newState = state;
+  if (newState.get('version') === 1) {
+    newState = newInitialState()
+      .set('tournament', newState)
       .set('version', 2);
   }
-  if (state.get('version') === 2) {
-    state = state
+  if (newState.get('version') === 2) {
+    newState = newState
       .updateIn(['tournament', 'matches'], matches =>
         matches.map(m =>
           m.set('winner', m.get('winner') === -1 ? '0' : m.get('winner'))
@@ -27,7 +28,7 @@ function migrate(state) {
       )
       .set('version', 3);
   }
-  return state;
+  return newState;
 }
 
 export function getInitialState() {
