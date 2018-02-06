@@ -20,7 +20,7 @@ export default function reducer(globalState, action) {
       return state.set('playerView', true);
     }
     case a.PAIR_PLAYERS: {
-      return state.set('playerView', false)
+      return state.set('playerView', false);
     }
     case a.FINISH_ROUND: {
       return state.set('playerView', true).set('sidebarOpen', false);

@@ -65,9 +65,7 @@ class BasicFormModal extends PureComponent {
           isOpen={this.state.open}
           toggle={this.closeForm}
         >
-          <ModalHeader toggle={this.closeForm}>
-            {this.props.header}
-          </ModalHeader>
+          <ModalHeader toggle={this.closeForm}>{this.props.header}</ModalHeader>
           <ModalBody>
             <Form onSubmit={this.handleFormSubmit}>{this.props.children}</Form>
           </ModalBody>

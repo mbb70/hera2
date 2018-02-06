@@ -90,7 +90,8 @@ class MatchForm extends PureComponent {
     const winnerSelected = this.getWinnerIndex(match.winner);
     const scoreSelected = this.getIndexFromScore(match.score);
     const invalid =
-      winnerSelected === undefined || (winnerSelected !== 1 && scoreSelected === undefined);
+      winnerSelected === undefined ||
+      (winnerSelected !== 1 && scoreSelected === undefined);
     const drop = (match.drop || []).map(pId => (pId === p1.id ? 0 : 1));
     return (
       <BasicFormModal

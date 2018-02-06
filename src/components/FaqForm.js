@@ -25,7 +25,14 @@ class FaqForm extends PureComponent {
     const onFormSubmit = undefined;
     return (
       <BasicFormModal
-        {...{ entryPoint, header, cancelText, resetForm, onFormSubmit, onClose }}
+        {...{
+          entryPoint,
+          header,
+          cancelText,
+          resetForm,
+          onFormSubmit,
+          onClose,
+        }}
       >
         <FaqH>What is this?</FaqH>
         <p>
