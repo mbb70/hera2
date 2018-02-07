@@ -17,8 +17,7 @@ export function newInitialState() {
   });
 }
 
-export default function reducer(globalState, action) {
-  const state = globalState.get('pairingForm');
+export default function reducer(state, action, globalState) {
   switch (action.type) {
     case a.TOGGLE_PAIR_EDITING: {
       return state.set('editing', !state.get('editing'));

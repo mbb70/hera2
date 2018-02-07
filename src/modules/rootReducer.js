@@ -57,9 +57,10 @@ const reducers = [
   { name: 'pairingForm', sliceReducer: pairingForm },
 ];
 export default function reducer(oldState = getInitialState(), action) {
-  const newState = reducers.reduce((state, { name, sliceReducer }) => {
-    const newLocalState = sliceReducer(state, action);
-    return state.set(name, newLocalState);
+  const newState = reducers.reduce((globalState, { name, sliceReducer }) => {
+    const localState = globalState.get(name);
+    const newLocalState = sliceReducer(localState, action, globalState);
+    return globalState.set(name, newLocalState);
   }, oldState);
   saveState(newState);
   return newState;

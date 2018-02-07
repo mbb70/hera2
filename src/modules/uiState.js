@@ -13,8 +13,7 @@ export function newInitialState() {
   });
 }
 
-export default function reducer(globalState, action) {
-  const state = globalState.get('ui');
+export default function reducer(state, action, globalState) {
   switch (action.type) {
     case a.CREATE_TOURNAMENT: {
       return state.set('playerView', true);

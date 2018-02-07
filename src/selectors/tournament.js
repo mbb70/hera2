@@ -9,7 +9,10 @@ const getCurrentTournament = state =>
 const getPlayers = state => state.getIn(['tournament', 'players']);
 const getRounds = state => state.getIn(['tournament', 'rounds']);
 const getMatches = state => state.getIn(['tournament', 'matches']);
-const getSettings = state => state.getIn(['tournament', 'settings']);
+const getSettings = state => {
+  console.log(state.toJS());
+  return state.getIn(['tournament', 'settings']);
+}
 
 const getLockedTables = state => state.getIn(['pairingForm', 'lockedTables']);
 const getPairs = state => state.getIn(['pairingForm', 'pairs']);

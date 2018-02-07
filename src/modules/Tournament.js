@@ -19,8 +19,7 @@ export function newInitialState() {
   });
 }
 
-export default function reducer(globalState, action) {
-  const state = globalState.get('tournament');
+export default function reducer(state, action, globalState) {
   switch (action.type) {
     case a.CLEAR_TOURNAMENT: {
       return state.set('currentTournament', undefined);
