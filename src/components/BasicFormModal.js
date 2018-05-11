@@ -62,7 +62,7 @@ class BasicFormModal extends PureComponent {
         <Modal
           {...this.props.additionalModalParams}
           autoFocus={false}
-          isOpen={this.state.open}
+          isOpen={this.state.open || this.props.isOpen}
           toggle={this.closeForm}
         >
           <ModalHeader toggle={this.closeForm}>{this.props.header}</ModalHeader>

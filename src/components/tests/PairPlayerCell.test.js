@@ -9,8 +9,7 @@ it('renders pair player cell', () => {
   const component = (
     <PairPlayerCell
       editing
-      pId="0"
-      name="p0"
+      player={players[0]}
       players={players}
       onChange={changeFn}
     />
@@ -19,10 +18,4 @@ it('renders pair player cell', () => {
   const select = document.querySelector('select');
   changeEvent(select, { value: '0' });
   expect(changeFn.mock.calls[0][0]).toBe('0');
-});
-
-it('renders pair player cell', () => {
-  const players = [{ id: '0', name: 'p0' }, { id: '1', name: 'p1' }];
-  const component = <PairPlayerCell pId="0" name="p0" players={players} />;
-  renderIntoDiv(component);
 });

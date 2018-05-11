@@ -48,9 +48,9 @@ it('locked pairs stick players', () => {
   const shuffleFn = arr => [].concat(arr).reverse();
   state = dispatch(state, store, r.rePairPlayers(shuffleFn));
   expect(state.getIn(['pairingForm', 'pairs']).toJS()).toEqual([
-    ['5', '7'],
-    ['6', '3'],
     ['2', '4'],
+    ['6', '3'],
+    ['5', '7'],
   ]);
 });
 

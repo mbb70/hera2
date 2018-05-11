@@ -9,6 +9,7 @@
   "rules": {
     "global-require": "off",
     "no-throw-literal": "off",
+    "no-else-return": "off",
     "no-mixed-operators": ["error", { "allowSamePrecedence" : true }],
     "arrow-parens": ["error", "as-needed", { "requireForBlockBody": false }],
     "react/sort-comp": "off",

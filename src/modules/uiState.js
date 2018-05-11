@@ -13,7 +13,7 @@ export function newInitialState() {
   });
 }
 
-export default function reducer(state, action, globalState) {
+export default function reducer(state, action) {
   switch (action.type) {
     case a.CREATE_TOURNAMENT: {
       return state.set('playerView', true);

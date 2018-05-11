@@ -19,7 +19,7 @@ export function newInitialState() {
   });
 }
 
-export default function reducer(state, action, globalState) {
+export default function reducer(state, action) {
   switch (action.type) {
     case a.CLEAR_TOURNAMENT: {
       return state.set('currentTournament', undefined);
@@ -59,7 +59,6 @@ export default function reducer(state, action, globalState) {
         .setIn(
           ['players', id],
           Hutils.generatePlayer({
-            draws: 5000,
             name: 'Bye',
             bye: true,
             tournamentId,

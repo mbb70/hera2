@@ -17,51 +17,41 @@ class PairingFormComponent extends PureComponent {
     this.props.rePairPlayers(Hutils.shuffle);
   };
 
+  getLeftButton = () => (
+    <div className="d-flex mr-auto">
+      <Button
+        type="button"
+        color="primary"
+        style={{ marginRight: '0.25rem' }}
+        onClick={this.handleLoadForm}
+      >
+        Re-pair
+      </Button>
+      <Button
+        type="button"
+        color="primary"
+        onClick={this.props.togglePairEditing}
+      >
+        {this.props.editing ? 'Done' : 'Edit'}
+      </Button>
+    </div>
+  );
+
   render() {
-    const entryPoint = (
-      <LinkButton onClick={this.handlePairPlayers}>Start New Round</LinkButton>
-    );
-    const header = 'Select Pairings';
-    const submitText = 'Start Match';
-    const resetForm = this.props.resetPairsForm;
-    const onFormSubmit = this.handleFormSubmit;
-    const onLoad = this.handleLoadForm;
-    const onClose = this.props.onClose;
-    const invalid = this.props.editing;
-    const leftButton = (
-      <div className="d-flex mr-auto">
-        <Button
-          type="button"
-          color="primary"
-          style={{ marginRight: '0.25rem' }}
-          onClick={onLoad}
-        >
-          Re-pair
-        </Button>
-        <Button
-          type="button"
-          color="primary"
-          onClick={this.props.togglePairEditing}
-        >
-          {this.props.editing ? 'Done' : 'Edit'}
-        </Button>
-      </div>
-    );
-
     const filteredPlayers = Object.values(this.props.activeUnlockedPlayers);
-
     const modalParams = {
       additionalModalParams: { size: 'lg' },
-      invalid,
-      entryPoint,
-      header,
-      submitText,
-      leftButton,
-      resetForm,
-      onFormSubmit,
-      onLoad,
-      onClose,
+      header: 'Select Pairings',
+      submitText: 'Start Match',
+      invalid: this.props.editing,
+      leftButton: this.getLeftButton(),
+      resetForm: this.props.resetPairsForm,
+      onFormSubmit: this.handleFormSubmit,
+      onLoad: this.handleLoadForm,
+      onClose: this.props.onClose,
+      entryPoint: <LinkButton>Start New Round</LinkButton>,
     };
+
     return (
       <BasicFormModal {...modalParams}>
         <table style={{ width: '100%' }}>
@@ -91,13 +81,12 @@ class PairingFormComponent extends PureComponent {
                     </td>
                   )}
                   {[pId, opId].map(id => {
-                    const name = this.props.activePlayers[id].name;
+                    const player = this.props.activePlayers[id];
                     return (
                       <td key={id}>
                         <PairPlayerCell
                           editing={this.props.editing && !locked}
-                          pId={id}
-                          name={name}
+                          player={player}
                           players={filteredPlayers}
                           onChange={this.props.swapPairPlayers}
                         />

@@ -10,7 +10,12 @@ import * as r from './modules/events';
 import rootReducer, { newInitialState } from './modules/rootReducer';
 import Tournament from './containers/tournament';
 import Hutils from './utils/hutils';
-import { dispatch, getPairedTournament, getPlayedMatches } from './testUtils';
+import {
+  dispatch,
+  getPairedTournament,
+  getTournamentState,
+  getPlayedMatches,
+} from './testUtils';
 
 const identityFn = a => a;
 
@@ -109,10 +114,10 @@ it('pairs players', () => {
     .valueSeq()
     .map(m => [m.get('p1'), m.get('p2')]);
   expect(matchPairs.toJS()).toEqual([
-    ['9', '2'],
-    ['8', '3'],
-    ['7', '4'],
-    ['6', '5'],
+    ['9', '3'],
+    ['8', '4'],
+    ['7', '5'],
+    ['1', '2'],
   ]);
 });
 
@@ -130,15 +135,47 @@ it('pairs bye', () => {
   const byeMatch = state
     .getIn(['tournament', 'matches'])
     .valueSeq()
-    .find(m => m.get('p2') === byeId);
+    .find(m => m.get('p1') === byeId);
   const otherMatch = state
     .getIn(['tournament', 'matches'])
-    .valueSeq()
     .find(m => m.get('p2') !== byeId);
   expect(byeMatch.get('score')).toBe('2 - 0');
   expect(byeMatch.get('active')).toBeFalsy();
   expect(otherMatch.get('score')).toBe('0 - 0');
   expect(otherMatch.get('active')).toBeTruthy();
+});
+
+it('doesnt pair player with bye twice', () => {
+  let state = getPlayedMatches(7);
+  const store = mockStore(state);
+  state = dispatch(state, store, r.finishRound());
+  const matches = state.getIn(['tournament', 'matches']);
+  const byeId = state.getIn(['tournament', 'settings', '1', 'byePlayerId']);
+  const byeMatch = matches.find(m => m.get('p1') === byeId);
+  const byedPlayerId = byeMatch.get('p2');
+  state = dispatch(state, store, r.rePairPlayers(identityFn));
+  const pairs = state.getIn(['pairingForm', 'pairs']);
+  const byedPair = pairs.find(p => p.get(0) === byeId);
+  expect(byedPair.get(1)).not.toEqual(byedPlayerId);
+});
+
+it('bye goes to lowest scorer who has not had bye', () => {
+  let state = getTournamentState(3);
+  const store = mockStore(state);
+  const settings = state.getIn(['tournament', 'settings', '1']);
+  const byeId = settings.get('byePlayerId');
+  state = state.updateIn(['tournament', 'players'], players =>
+    players.map(p => {
+      if (p.get('bye')) return p;
+      if (p.get('id') === '2') {
+        return p.set('wins', 1);
+      }
+      return p.setIn(['playedIds', byeId, true]);
+    })
+  );
+  state = dispatch(state, store, r.rePairPlayers(identityFn));
+  const pairs = state.getIn(['pairingForm', 'pairs']);
+  expect(pairs.toJS()).toEqual([['4', '3'], ['1', '2']]);
 });
 
 function saveSettings(state, store, settings) {

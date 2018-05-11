@@ -5,8 +5,9 @@ class PairPlayerCell extends PureComponent {
     if (this.props.editing) {
       return (
         <select
-          value={this.props.pId}
-          onChange={e => this.props.onChange(e.target.value, this.props.pId)}
+          value={this.props.player.id}
+          onChange={e =>
+            this.props.onChange(e.target.value, this.props.player.id)}
         >
           {this.props.players.map(p => (
             <option key={p.id} value={p.id}>
@@ -16,7 +17,7 @@ class PairPlayerCell extends PureComponent {
         </select>
       );
     }
-    return this.props.name;
+    return <span>{`${this.props.player.name}`}</span>;
   }
 }
 
