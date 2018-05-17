@@ -5,7 +5,8 @@ import ModalHeader from 'reactstrap/lib/ModalHeader';
 import ModalFooter from 'reactstrap/lib/ModalFooter';
 import Modal from 'reactstrap/lib/Modal';
 import Form from 'reactstrap/lib/Form';
-import Button from 'reactstrap/lib/Button';
+import styles from '../styles';
+import Button from '../blocks/Button';
 
 class BasicFormModal extends PureComponent {
   state = {
@@ -64,6 +65,7 @@ class BasicFormModal extends PureComponent {
           autoFocus={false}
           isOpen={this.state.open || this.props.isOpen}
           toggle={this.closeForm}
+          className={this.className}
         >
           <ModalHeader toggle={this.closeForm}>{this.props.header}</ModalHeader>
           <ModalBody>
@@ -85,6 +87,21 @@ class BasicFormModal extends PureComponent {
       </div>
     );
   }
+
+  className = styles.css({
+    '.modal-header button.close': {
+      color: styles.colors.offWhite,
+    },
+    '.modal-body': {
+      backgroundColor: styles.colors.offDarkBlue,
+      border: 0,
+    },
+    '.modal-header, .modal-footer': {
+      backgroundColor: '#485563',
+      borderRadius: 0,
+      border: 0,
+    },
+  });
 }
 
 export default BasicFormModal;

@@ -8,6 +8,7 @@ import PairingForm from '../containers/pairingForm';
 import ExporterForm from '../containers/exporterForm';
 import FaqForm from './FaqForm';
 import LinkButton from './LinkButton';
+import styles from '../styles';
 
 connect();
 
@@ -74,9 +75,9 @@ class AppNavComponent extends PureComponent {
     rows.push(<FaqForm onClose={this.props.closeSidebar} />);
 
     return (
-      <div className="p-3 app-nav">
+      <div className={`p-3 ${this.className}`}>
         <Nav navbar>
-          <div className="app-nav-title">
+          <div className={this.titleClassName}>
             <h5>{this.props.settings.tournamentName}</h5>
             <hr className="my-1" />
           </div>
@@ -89,6 +90,17 @@ class AppNavComponent extends PureComponent {
       </div>
     );
   }
+
+  className = styles.css({
+    backgroundColor: styles.colors.offWhite,
+    height: '100%',
+    hr: {
+      width: '100%',
+    },
+  });
+  titleClassName = styles.css({
+    color: styles.colors.offDarkBlue,
+  });
 }
 
 export default AppNavComponent;

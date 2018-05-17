@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import Button from 'reactstrap/lib/Button';
+import Button from '../blocks/Button';
 import BasicFormModal from './BasicFormModal';
 import PairPlayerCell from './PairPlayerCell';
 import LinkButton from './LinkButton';

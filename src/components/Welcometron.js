@@ -1,13 +1,14 @@
 import React, { PureComponent } from 'react';
 import Form from 'reactstrap/lib/Form';
-import Label from 'reactstrap/lib/Label';
 import Jumbotron from 'reactstrap/lib/Jumbotron';
-import Button from 'reactstrap/lib/Button';
-import Container from 'reactstrap/lib/Container';
 import Row from 'reactstrap/lib/Row';
 import Col from 'reactstrap/lib/Col';
+import Label from '../blocks/Label';
+import Button from '../blocks/Button';
+import Container from '../blocks/Container';
 import ValidatedFormGroup from './ValidatedFormGroup';
 import vu from '../utils/validationUtils';
+import styles from '../styles';
 
 class Welcometron extends PureComponent {
   state = {
@@ -29,7 +30,7 @@ class Welcometron extends PureComponent {
       ([, v1], [, v2]) => v2 - v1
     );
     return (
-      <Jumbotron>
+      <Jumbotron className={this.className}>
         <Container>
           <Row>
             <Col md="9">
@@ -74,6 +75,11 @@ class Welcometron extends PureComponent {
       </Jumbotron>
     );
   }
+
+  className = styles.css({
+    color: styles.colors.darkBlue,
+    borderRadius: 0,
+  });
 }
 
 export default Welcometron;

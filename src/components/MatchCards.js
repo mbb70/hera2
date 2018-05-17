@@ -5,6 +5,7 @@ import Container from 'reactstrap/lib/Container';
 import Row from 'reactstrap/lib/Row';
 import Col from 'reactstrap/lib/Col';
 import MatchForm from './MatchForm';
+import styles from '../styles';
 
 connect();
 
@@ -15,7 +16,7 @@ class MatchCardsComponent extends PureComponent {
         {this.props.filteredRounds.map(r => {
           const matches = r.matches.map(mId => this.props.filteredMatches[mId]);
           return (
-            <Row className="round-row" key={r.id}>
+            <Row className={this.roundRowClassName} key={r.id}>
               <Col>
                 <h3 style={{ textAlign: 'center' }} className="m-3">
                   Round {r.number}
@@ -37,6 +38,13 @@ class MatchCardsComponent extends PureComponent {
       </Container>
     );
   }
+
+  roundRowClassName = styles.css({
+    marginBottom: '2em',
+    '&:last-child': {
+      marginBottom: 0,
+    },
+  });
 }
 
 export default MatchCardsComponent;

@@ -1,15 +1,30 @@
 import React, { PureComponent } from 'react';
-import Button from 'reactstrap/lib/Button';
+import { cx } from 'emotion';
+import Button from '../blocks/Button';
+import styles from '../styles';
 
 class LinkButton extends PureComponent {
   render() {
-    const style = { padding: 0, ...this.props.style };
     return (
-      <Button {...this.props} style={style} color="link">
+      <Button
+        {...this.props}
+        className={cx(this.props.className, this.className)}
+        color="link"
+      >
         {this.props.children}
       </Button>
     );
   }
+
+  className = styles.css({
+    color: styles.colors.orange,
+    padding: 0,
+    '&:hover': {
+      color: styles.colors.orange,
+      cursor: 'pointer',
+      textDecoration: 'none',
+    },
+  });
 }
 
 export default LinkButton;

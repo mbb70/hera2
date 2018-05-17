@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from 'reactstrap/lib/Button';
+import Button from '../../blocks/Button';
 import '../../setupTests';
 import ButtonRow from '../ButtonRow';
 import { renderIntoDiv } from './ComponentTestUtils';

@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import Row from 'reactstrap/lib/Row';
 import Col from 'reactstrap/lib/Col';
-import Button from 'reactstrap/lib/Button';
-import Label from 'reactstrap/lib/Label';
 import FormGroup from 'reactstrap/lib/FormGroup';
+import Button from '../blocks/Button';
+import Label from '../blocks/Label';
 import BasicFormModal from './BasicFormModal';
 import ValidatedInput from './ValidatedInput';
 import ValidatedFormGroup from './ValidatedFormGroup';
@@ -131,7 +131,7 @@ class PlayerHistoryForm extends PureComponent {
                 <ValidatedInput
                   type={type}
                   field={field}
-                  validFn={validFn}
+                  valid={validFn}
                   value={player[field]}
                   onChange={this.handleFieldUpdate}
                 />

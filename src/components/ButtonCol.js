@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import Row from 'reactstrap/lib/Row';
 import Col from 'reactstrap/lib/Col';
+import styles from '../styles';
 
 class ButtonCol extends PureComponent {
   isActive = i => {
@@ -12,7 +13,7 @@ class ButtonCol extends PureComponent {
 
   render() {
     return (
-      <Col className="my-1 no-gutters button-col">
+      <Col className={`my-1 no-gutters ${this.className}`}>
         {React.Children.map(this.props.children, (c, i) => (
           <Row>
             {React.cloneElement(c, {
@@ -24,6 +25,16 @@ class ButtonCol extends PureComponent {
       </Col>
     );
   }
+
+  className = styles.css({
+    button: {
+      width: '100%',
+      border: 0,
+      '&.active': {
+        boxShadow: 'inset 0 0 10px #000 !important',
+      },
+    },
+  });
 }
 
 export default ButtonCol;

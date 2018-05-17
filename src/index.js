@@ -11,8 +11,6 @@ import rootReducer from './modules/rootReducer';
 import Tournament from './containers/tournament';
 import serviceWorkerRegistration from './registerServiceWorker';
 
-import './index.css';
-
 const store =
   process.env.NODE_ENV === 'production'
     ? createStore(rootReducer)

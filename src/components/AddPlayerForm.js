@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
-import Label from 'reactstrap/lib/Label';
 import FormGroup from 'reactstrap/lib/FormGroup';
-import Input from 'reactstrap/lib/Input';
+import ValidatedInput from './ValidatedInput';
 import BasicFormModal from './BasicFormModal';
 import PlayerCard from './PlayerCard';
+import Label from '../blocks/Label';
 
 class AddPlayerForm extends PureComponent {
   state = {
@@ -14,10 +14,9 @@ class AddPlayerForm extends PureComponent {
     this.setState({ names: [''] });
   };
 
-  handleKeyPress = e => {
+  handleKeyPress = (f, value, e) => {
     const newnames = [...this.state.names];
     const index = +e.target.dataset.key;
-    const value = e.target.value;
     if (index === newnames.length - 1 && newnames[index] === '') {
       newnames.push('');
     }
@@ -52,7 +51,7 @@ class AddPlayerForm extends PureComponent {
         <FormGroup>
           <Label>Names</Label>
           {this.state.names.map((name, i) => (
-            <Input
+            <ValidatedInput
               autoFocus={this.state.names.length === 1}
               key={i}
               data-key={i}
