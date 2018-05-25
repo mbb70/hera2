@@ -178,6 +178,22 @@ it('bye goes to lowest scorer who has not had bye', () => {
   expect(pairs.toJS()).toEqual([['4', '3'], ['1', '2']]);
 });
 
+it('always assign win to bye opponent', () => {
+  let state = getTournamentState(1);
+  const store = mockStore(state);
+  const settings = state.getIn(['tournament', 'settings', '1']);
+  const byeId = settings.get('byePlayerId');
+  const pId = state.getIn(['tournament', 'players']).find(v => v.get('id') !== byeId).get('id');
+
+  state = dispatch(state, store, r.pairPlayers([[byeId, pId]]));
+  let byeMatch = state.getIn(['tournament', 'matches']).first();
+  expect(byeMatch.get('winner')).toEqual(pId);
+
+  state = dispatch(state, store, r.pairPlayers([[pId, byeId]]));
+  byeMatch = state.getIn(['tournament', 'matches']).first();
+  expect(byeMatch.get('winner')).toEqual(pId);
+});
+
 function saveSettings(state, store, settings) {
   store.dispatch(r.saveSettings(settings));
   const action = store.getActions()[store.getActions().length - 1];
