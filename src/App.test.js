@@ -183,7 +183,10 @@ it('always assign win to bye opponent', () => {
   const store = mockStore(state);
   const settings = state.getIn(['tournament', 'settings', '1']);
   const byeId = settings.get('byePlayerId');
-  const pId = state.getIn(['tournament', 'players']).find(v => v.get('id') !== byeId).get('id');
+  const pId = state
+    .getIn(['tournament', 'players'])
+    .find(v => v.get('id') !== byeId)
+    .get('id');
 
   state = dispatch(state, store, r.pairPlayers([[byeId, pId]]));
   let byeMatch = state.getIn(['tournament', 'matches']).first();

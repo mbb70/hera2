@@ -18,21 +18,27 @@ it('migrates v1', () => {
 
 it('migrates v2', () => {
   const state = newInitialState();
-  const oldState = state
-    .set('version', 2)
-    .setIn(['tournament', 'matches'], fromJS({
-      '1' : {
+  const oldState = state.set('version', 2).setIn(
+    ['tournament', 'matches'],
+    fromJS({
+      1: {
         winner: -1,
       },
-      '2' : {
-        winner : '2',
+      2: {
+        winner: '2',
       },
-    }));
+    })
+  );
   window.localStorage.setItem('state/state', JSON.stringify(oldState));
   const savedState = getInitialState();
   const matchDraw = savedState.getIn(['tournament', 'matches', '1', 'winner']);
   expect(matchDraw).toBe('0');
-  const matchWinner = savedState.getIn(['tournament', 'matches', '2', 'winner']);
+  const matchWinner = savedState.getIn([
+    'tournament',
+    'matches',
+    '2',
+    'winner',
+  ]);
   expect(matchWinner).toBe('2');
 });
 
