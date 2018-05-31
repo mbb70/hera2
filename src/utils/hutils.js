@@ -87,11 +87,10 @@ function constructPairing(players, settings, shuffleFn) {
 }
 
 function constructBestPairingWithBye(players, byeUser, settings, shuffleFn) {
-  const unByedPlayersByScore = players
+  const lowestUnbyedScorers = players
     .filter(p => !p.getIn(['playedIds', byeUser.get('id')]))
-    .groupBy(p => getScore(p, settings));
-  const lowScore = unByedPlayersByScore.keySeq().min();
-  const lowestUnbyedScorers = unByedPlayersByScore.get(lowScore);
+    .groupBy(p => getScore(p, settings))
+    .min();
 
   const possiblePairings = lowestUnbyedScorers.map(lowScorer => {
     const lowScorerId = lowScorer.get('id');
