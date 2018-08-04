@@ -7,8 +7,8 @@ import { getPlayedMatches } from '../../testUtils';
 function renderMatchForm() {
   const updateFn = jest.fn();
   const state = getPlayedMatches(5);
-  const match = state.getIn(['tournament', 'matches', '1']).toJS();
-  const players = state.getIn(['tournament', 'players']).toJS();
+  const match = state.tournament.getIn(['matches', '1']).toJS();
+  const players = state.tournament.get('players').toJS();
   const component = (
     <MatchForm match={match} players={players} updateMatch={updateFn} />
   );

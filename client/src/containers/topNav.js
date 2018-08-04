@@ -7,7 +7,7 @@ import * as e from '../modules/events';
 const mapStateToProps = root => ({
   rounds: currentRounds(root),
   settings: currentSettings(root),
-  uiState: root.get('ui'),
+  uiState: root.ui,
 });
 
 const mapDispatchToProps = e.dumbDispatch(e, [

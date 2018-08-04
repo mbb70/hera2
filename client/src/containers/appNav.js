@@ -14,7 +14,7 @@ const mapStateToProps = root => ({
   matches: currentMatches(root),
   activeRound: currentActiveRound(root),
   settings: currentSettings(root),
-  uiState: root.get('ui'),
+  uiState: root.ui,
 });
 
 const mapDispatchToProps = e.dumbDispatch(e, [

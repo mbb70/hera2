@@ -14,8 +14,8 @@ function renderMatchDetails(players, match, player, op) {
 
 it('renders match details draw', () => {
   const state = getPlayedMatches(5);
-  const match = state.getIn(['tournament', 'matches', '1']).toJS();
-  const players = state.getIn(['tournament', 'players']).toJS();
+  const match = state.tournament.getIn(['matches', '1']).toJS();
+  const players = state.tournament.get('players').toJS();
   const player = players[1];
   const op = players[2];
   const o = renderMatchDetails(players, match, player, op);
@@ -24,8 +24,8 @@ it('renders match details draw', () => {
 
 it('renders match details won', () => {
   const state = getPlayedMatches(5);
-  const match = state.getIn(['tournament', 'matches', '2']).toJS();
-  const players = state.getIn(['tournament', 'players']).toJS();
+  const match = state.tournament.getIn(['matches', '2']).toJS();
+  const players = state.tournament.get('players').toJS();
   const player = players[3];
   const op = players[4];
   const o = renderMatchDetails(players, match, player, op);
@@ -34,8 +34,8 @@ it('renders match details won', () => {
 
 it('renders match details lost', () => {
   const state = getPlayedMatches(5);
-  const match = state.getIn(['tournament', 'matches', '2']).toJS();
-  const players = state.getIn(['tournament', 'players']).toJS();
+  const match = state.tournament.getIn(['matches', '2']).toJS();
+  const players = state.tournament.get('players').toJS();
   const player = players[4];
   const op = players[3];
   const o = renderMatchDetails(players, match, player, op);
@@ -44,8 +44,8 @@ it('renders match details lost', () => {
 
 it('renders match details ongoing', () => {
   const state = getPlayedMatches(5);
-  const match = state.getIn(['tournament', 'matches', '2']).toJS();
-  const players = state.getIn(['tournament', 'players']).toJS();
+  const match = state.tournament.getIn(['matches', '2']).toJS();
+  const players = state.tournament.get('players').toJS();
   match.winner = undefined;
   const player = players[3];
   const op = players[4];

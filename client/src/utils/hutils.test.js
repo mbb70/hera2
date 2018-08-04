@@ -16,8 +16,8 @@ it('gets pojo scores', () => {
   let state = getPlayedMatches(10);
   const store = mockStore(state);
   state = dispatch(state, store, r.finishRound('1'));
-  const player = state.getIn(['tournament', 'players', '2']);
-  const settings = state.getIn(['tournament', 'settings', '1']);
+  const player = state.tournament.getIn(['players', '2']);
+  const settings = state.tournament.getIn(['settings', '1']);
   const score = Hutils.getScorePojo(player.toJS(), settings.toJS());
   expect(score).toBe(1);
 });

@@ -16,16 +16,16 @@ function renderMatchCard(players, match) {
 
 it('renders draw', () => {
   const state = getPlayedMatches(5);
-  const match = state.getIn(['tournament', 'matches', '1']).toJS();
-  const players = state.getIn(['tournament', 'players']).toJS();
+  const match = state.tournament.getIn(['matches', '1']).toJS();
+  const players = state.tournament.get('players').toJS();
   const matchStatus = renderMatchCard(players, match);
   expect(matchStatus).toBe('Draw');
 });
 
 it('renders win', () => {
   const state = getPlayedMatches(5);
-  const match = state.getIn(['tournament', 'matches', '1']).toJS();
-  const players = state.getIn(['tournament', 'players']).toJS();
+  const match = state.tournament.getIn(['matches', '1']).toJS();
+  const players = state.tournament.get('players').toJS();
   match.winner = '2';
   match.score = '2 - 0';
   const matchStatus = renderMatchCard(players, match);
@@ -34,8 +34,8 @@ it('renders win', () => {
 
 it('renders ongoing', () => {
   const state = getPlayedMatches(5);
-  const match = state.getIn(['tournament', 'matches', '1']).toJS();
-  const players = state.getIn(['tournament', 'players']).toJS();
+  const match = state.tournament.getIn(['matches', '1']).toJS();
+  const players = state.tournament.get('players').toJS();
   match.winner = undefined;
   const matchStatus = renderMatchCard(players, match);
   expect(matchStatus).toBe('Ongoing');

@@ -5,6 +5,7 @@ global.localStorage = {
     ls[key] = value;
     return true;
   },
+  removeItem: key => delete ls[key]
 };
 const localStorage = global.localStorage;
 export default localStorage;

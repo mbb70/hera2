@@ -19,10 +19,10 @@ it('filters players by search text', () => {
 
   const allPlayers = currentFilteredPlayers(state);
   expect(allPlayers.count()).toBe(10);
-  expect(state.getIn(['ui', 'searchText'])).toBe('');
+  expect(state.ui.get('searchText')).toBe('');
 
   state = dispatch(state, store, r.updateSearch('1'));
-  expect(state.getIn(['ui', 'searchText'])).toBe('1');
+  expect(state.ui.get('searchText')).toBe('1');
 
   const filteredPlayers = currentFilteredPlayers(state);
   expect(filteredPlayers.count()).toBe(2);

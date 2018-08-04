@@ -6,8 +6,8 @@ import * as e from '../modules/events';
 
 const mapStateToProps = root => ({
   settings: currentSettings(root),
-  tournaments: root.getIn(['tournament', 'tournaments']),
-  uiState: root.get('ui'),
+  tournaments: root.tournament.get('tournaments'),
+  uiState: root.ui,
 });
 
 const mapDispatchToProps = e.dumbDispatch(e, [

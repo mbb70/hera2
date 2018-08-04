@@ -9,27 +9,27 @@ const mockStore = configureMockStore();
 it('toggles side bar', () => {
   let state = newInitialState();
   const store = mockStore(state);
-  expect(state.getIn(['ui', 'sidebarOpen'])).toBeFalsy();
+  expect(state.ui.get('sidebarOpen')).toBeFalsy();
   state = dispatch(state, store, r.openSidebar());
-  expect(state.getIn(['ui', 'sidebarOpen'])).toBeTruthy();
+  expect(state.ui.get('sidebarOpen')).toBeTruthy();
   state = dispatch(state, store, r.closeSidebar());
-  expect(state.getIn(['ui', 'sidebarOpen'])).toBeFalsy();
+  expect(state.ui.get('sidebarOpen')).toBeFalsy();
 });
 
 it('switches view', () => {
   let state = newInitialState();
   const store = mockStore(state);
-  expect(state.getIn(['ui', 'playerView'])).toBeTruthy();
+  expect(state.ui.get('playerView')).toBeTruthy();
   state = dispatch(state, store, r.switchView(false));
-  expect(state.getIn(['ui', 'playerView'])).toBeFalsy();
+  expect(state.ui.get('playerView')).toBeFalsy();
   state = dispatch(state, store, r.switchView(true));
-  expect(state.getIn(['ui', 'playerView'])).toBeTruthy();
+  expect(state.ui.get('playerView')).toBeTruthy();
 });
 
 it('filters users', () => {
   let state = newInitialState();
   const store = mockStore(state);
-  expect(state.getIn(['ui', 'searchText'])).toBe('');
+  expect(state.ui.get('searchText')).toBe('');
   state = dispatch(state, store, r.updateSearch('A'));
-  expect(state.getIn(['ui', 'searchText'])).toBe('A');
+  expect(state.ui.get('searchText')).toBe('A');
 });

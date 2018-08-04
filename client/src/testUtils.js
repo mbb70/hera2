@@ -33,9 +33,8 @@ export function getTournamentState(nPlayers) {
 export function getPairedTournament(nPlayers) {
   let state = getTournamentState(nPlayers);
   const store = mockStore(state);
-  const playerIds = state.getIn(['tournament', 'players']).keySeq();
-  const byePlayerId = state.getIn([
-    'tournament',
+  const playerIds = state.tournament.get('players').keySeq();
+  const byePlayerId = state.tournament.getIn([
     'settings',
     '1',
     'byePlayerId',
@@ -54,7 +53,7 @@ export function getPairedTournament(nPlayers) {
 export function getPlayedMatches(nPlayers) {
   let state = getPairedTournament(nPlayers);
   const store = mockStore(state);
-  state.getIn(['tournament', 'matches']).forEach((m, i) => {
+  state.tournament.get('matches').forEach((m, i) => {
     const update = {
       id: i,
       winner: i === '1' ? '0' : m.get('p1'),

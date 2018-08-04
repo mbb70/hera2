@@ -10,7 +10,7 @@ import { toJS } from '../components/toJS';
 import * as e from '../modules/events';
 
 const mapStateToProps = root => {
-  const pairingFormState = root.get('pairingForm');
+  const pairingFormState = root.pairingForm;
   return {
     activePlayers: currentActivePlayers(root),
     activeUnlockedPlayers: currentActiveUnlockedPlayers(root),

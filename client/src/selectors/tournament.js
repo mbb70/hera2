@@ -3,20 +3,19 @@ import { Map } from 'immutable';
 import vu from '../utils/validationUtils';
 import Hutils from '../utils/hutils';
 
-const getCurrentTournament = state =>
-  state.getIn(['tournament', 'currentTournament']);
+const getCurrentTournament = state => state.tournament.get('currentTournament');
 
-const getPlayers = state => state.getIn(['tournament', 'players']);
-const getRounds = state => state.getIn(['tournament', 'rounds']);
-const getMatches = state => state.getIn(['tournament', 'matches']);
-const getSettings = state => state.getIn(['tournament', 'settings']);
+const getPlayers = state => state.tournament.get('players');
+const getRounds = state => state.tournament.get('rounds');
+const getMatches = state => state.tournament.get('matches');
+const getSettings = state => state.tournament.get('settings');
 
-const getLockedTables = state => state.getIn(['pairingForm', 'lockedTables']);
-const getPairs = state => state.getIn(['pairingForm', 'pairs']);
+const getLockedTables = state => state.pairingForm.get('lockedTables');
+const getPairs = state => state.pairingForm.get('pairs');
 
-const getSearchText = state => state.getIn(['ui', 'searchText']);
-const getHideDropped = state => state.getIn(['ui', 'hideDropped']);
-const getSortByScore = state => state.getIn(['ui', 'sortByScore']);
+const getSearchText = state => state.ui.get('searchText');
+const getHideDropped = state => state.ui.get('hideDropped');
+const getSortByScore = state => state.ui.get('sortByScore');
 
 export const currentLockedPlayerMap = createSelector(
   [getLockedTables, getPairs],

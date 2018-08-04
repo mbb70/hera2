@@ -35,8 +35,12 @@ it('renders app nav', () => {
 
 it('renders app nav with dropped players and sorting', () => {
   const state = getPlayedMatches(4)
-    .setIn(['ui', 'playerView'], true)
-    .setIn(['tournament', 'players', '2', 'dropped'], true);
+  state.ui = state
+    .ui
+    .set('playerView', true)
+  state.tournament = state
+    .tournament
+    .setIn(['players', '2', 'dropped'], true);
   const links = renderAndGetLinks(state);
   expect(links).toEqual([
     'Finish Round',
@@ -52,10 +56,15 @@ it('renders app nav with dropped players and sorting', () => {
 
 it('renders app nav with dropped players and sorting', () => {
   const state = getPlayedMatches(4)
-    .setIn(['ui', 'playerView'], true)
-    .setIn(['ui', 'sortByScore'], true)
-    .setIn(['ui', 'hideDropped'], true)
-    .setIn(['tournament', 'players', '2', 'dropped'], true);
+  state.ui = state
+    .ui
+    .set('playerView', true)
+    .set('sortByScore', true)
+    .set('hideDropped', true)
+  state.tournament = state
+    .tournament
+    .setIn(['players', '2', 'dropped'], true);
+
   const links = renderAndGetLinks(state);
   expect(links).toEqual([
     'Finish Round',
