@@ -34,11 +34,7 @@ export function getPairedTournament(nPlayers) {
   let state = getTournamentState(nPlayers);
   const store = mockStore(state);
   const playerIds = state.tournament.get('players').keySeq();
-  const byePlayerId = state.tournament.getIn([
-    'settings',
-    '1',
-    'byePlayerId',
-  ]);
+  const byePlayerId = state.tournament.getIn(['settings', '1', 'byePlayerId']);
   const needsBye = nPlayers % 2 !== 0;
   const pairs = playerIds
     .filter(p => needsBye || p !== byePlayerId)

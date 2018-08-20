@@ -14,7 +14,7 @@ it('toggle pair editing', () => {
   state = dispatch(state, store, r.togglePairEditing());
   expect(state.pairingForm.get('editing')).toBeTruthy();
   state = dispatch(state, store, r.togglePairEditing());
-  expect(state.pairingForm.getIn('editing')).toBeFalsy();
+  expect(state.pairingForm.get('editing')).toBeFalsy();
 });
 
 it('locks pairs', () => {

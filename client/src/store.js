@@ -1,26 +1,30 @@
 import { createStore } from 'redux';
+import { fromJS, isImmutable } from 'immutable';
 
-import { createMigrate, persistStore, persistReducer } from 'redux-persist'
-import immutableTransform from 'redux-persist-transform-immutable'
+import { createTransform, createMigrate, persistStore, persistReducer } from 'redux-persist';
 
-import storage from 'redux-persist/lib/storage'
+import storage from 'redux-persist/lib/storage';
 import rootReducer from './modules/rootReducer';
 
 export const migrations = {
-  2: (state) => {
-    state.tournament = state
-      .tournament
-      .update('matches', matches =>
-        matches.map(m =>
-          m.set('winner', m.get('winner') === -1 ? '0' : m.get('winner'))
-        )
-      );
+  2: state => {
+    state.tournament = state.tournament.update('matches', matches =>
+      matches.map(m =>
+        m.set('winner', m.get('winner') === -1 ? '0' : m.get('winner'))
+      )
+    );
     return state;
   },
 };
 
 const persistConfig = {
-  transforms: [immutableTransform()],
+  transforms: [
+    createTransform(
+      (state, key) => isImmutable(state) ? state.toJS() : state,
+      (outboundState, key) => fromJS(outboundState),
+      {}
+    )
+  ],
   key: 'root',
   version: 3,
   storage,
@@ -37,7 +41,6 @@ const store =
           window.__REDUX_DEVTOOLS_EXTENSION__()
       );
 
-const persistor = persistStore(store)
+const persistor = persistStore(store);
 
 export { store, persistor };
-

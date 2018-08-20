@@ -97,11 +97,7 @@ it('pairs players', () => {
   const store = mockStore(state);
   state = createTournament(state, store, 't1');
   state = addPlayers(state, store, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']);
-  state = pairPlayers(
-    state,
-    store,
-    state.tournament.get('players').keySeq()
-  );
+  state = pairPlayers(state, store, state.tournament.get('players').keySeq());
   expect(state.tournament.getIn(['rounds', '1']).toJS()).toEqual({
     id: '1',
     matches: ['1', '2', '3', '4'],
@@ -109,8 +105,7 @@ it('pairs players', () => {
     active: true,
     tournamentId: '1',
   });
-  const matchPairs = state
-    .tournament
+  const matchPairs = state.tournament
     .get('matches')
     .valueSeq()
     .map(m => [m.get('p1'), m.get('p2')]);
@@ -127,19 +122,13 @@ it('pairs bye', () => {
   const store = mockStore(state);
   state = createTournament(state, store, 't1');
   state = addPlayers(state, store, ['a', 'b', 'c', 'd', 'e', 'f', 'g']);
-  state = pairPlayers(
-    state,
-    store,
-    state.tournament.get('players').keySeq()
-  );
+  state = pairPlayers(state, store, state.tournament.get('players').keySeq());
   const byeId = state.tournament.getIn(['settings', '1', 'byePlayerId']);
-  const byeMatch = state
-    .tournament
+  const byeMatch = state.tournament
     .get('matches')
     .valueSeq()
     .find(m => m.get('p1') === byeId);
-  const otherMatch = state
-    .tournament
+  const otherMatch = state.tournament
     .get('matches')
     .find(m => m.get('p2') !== byeId);
   expect(byeMatch.get('score')).toBe('2 - 0');
@@ -186,8 +175,7 @@ it('always assign win to bye opponent', () => {
   const store = mockStore(state);
   const settings = state.tournament.getIn(['settings', '1']);
   const byeId = settings.get('byePlayerId');
-  const pId = state
-    .tournament
+  const pId = state.tournament
     .get('players')
     .find(v => v.get('id') !== byeId)
     .get('id');
